@@ -8,3 +8,4 @@ get-tools-version:
     cmake --version
     clang --version
     clangd --version
+    ninja --version
