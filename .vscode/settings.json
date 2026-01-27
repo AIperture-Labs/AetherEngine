@@ -1,5 +1,6 @@
 {
-    "cmake.configureOnOpen": true,
+    "cmake.configureOnOpen": false,
+    "cmake.configureOnEdit": false,
     "cmake.buildDirectory": "${workspaceFolder}/out/build",
     "cmake.generator": "Ninja",
     "[cpp]": {
