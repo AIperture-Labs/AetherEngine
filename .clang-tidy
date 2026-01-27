@@ -1,0 +1,18 @@
+# Configuration of clang-tidy
+# =============================
+#
+# Documentation: https://clang.llvm.org/extra/clang-tidy/
+#
+# TODO: finish the settings
+
+---
+Checks: >
+  modernize-*,
+  cppcoreguidelines-*
+WarningsAsErrors: false
+HeaderFilterRegex: "^(.*/src/|.*/include/mon_projet/)"
+FormatStyle: Google
+AnalyzeTemporaryDtors: false
+CheckOptions:
+  - key: modernize-use-trailing-return-type
+    value: "0"
