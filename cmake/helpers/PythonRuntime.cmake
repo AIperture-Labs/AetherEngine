@@ -1,6 +1,8 @@
 # Copyright (c) 2026 AIperture-Labs <xavier.beheydt@gmail.com>
 # Doc: https://cmake.org/cmake/help/v4.1/index.html
 
+# TODO: add bugfix ans securoty update in configuratin
+
 
 set(AETHER_ENGINE_PYTHON_CACHE_DIR "${AETHER_ENGINE_CACHE_DIR}/python")
 set(AETHER_ENGINE_PYTHON_VERSION "3.14" CACHE STRING "Python version used by the project.")
@@ -28,15 +30,28 @@ if(WIN32)
             ERROR_VARIABLE __error
             OUTPUT_QUIET
         )
-        message(STATUS "[python-install] Output: ${__output}")
         if(NOT __result EQUAL 0)
             message(FATAL_ERROR "[python-install] Failed with code ${__result}\nOutput: ${__output}\nError: ${__error}")
         endif()
         message(STATUS "[python-install] Finished.")
     endif()
 
-    # UV Project settings
-    set(AETHER_ENGINE_PYTHON_EXE "${AETHER_ENGINE_UV_COMMAND} run python")
+    # Set Python executable path for FindPython module
+    # Note: FindPython expects a path to the executable, not a command
+    # UV installs Python in a subdirectory like cpython-3.14.2-windows-x86_64-none
+    file(GLOB AETHER_ENGINE_PYTHON_EXE "${AETHER_ENGINE_PYTHON_RUNTIME_DIR}/*${AETHER_ENGINE_PYTHON_VERSION}*/python.exe")
+    
+    if(NOT AETHER_ENGINE_PYTHON_EXE)
+        message(FATAL_ERROR "[python-install] Python executable not found in ${AETHER_ENGINE_PYTHON_RUNTIME_DIR}")
+    endif()
+    
+    # Set for FindPython COMPONENT Interpreter
+    set(Python_EXECUTABLE "${AETHER_ENGINE_PYTHON_EXE}" CACHE FILEPATH "Path to Python interpreter" FORCE)
+    message(STATUS "[python-install] Python executable set to: ${AETHER_ENGINE_PYTHON_EXE}")
+    
+    # UV run command for scripts
+    set(AETHER_ENGINE_UV_PYTHON_RUN "${AETHER_ENGINE_UV_COMMAND} run python")
+    
 elseif(UNIX)
     # TODO:
     message(WARNING "MacOS and Linux to implement...")
