@@ -1,0 +1,1720 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8df871cf..f9fff65e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,47 +1,49 @@
+-PROJECT(yasm)
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
+-if (COMMAND cmake_policy)
++project(yasm)
++cmake_minimum_required(VERSION 3.5...4.1)
++if(COMMAND cmake_policy)
+     cmake_policy(SET CMP0003 NEW)
+-endif (COMMAND cmake_policy)
++endif(COMMAND cmake_policy)
+ 
+-OPTION(BUILD_SHARED_LIBS "Build shared libraries" ON)
++option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+ 
+ # Where to look first for cmake modules
+-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
++set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+ 
+-INCLUDE(YasmMacros)
+-INCLUDE(VersionGen)
++set(YASM_PROJECT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+ 
+-OPTION(ENABLE_NLS "Enable message translations" OFF)
++include(YasmMacros)
++include(VersionGen)
+ 
+-OPTION(YASM_BUILD_TESTS "Enable building of tests" ON)
++option(ENABLE_NLS "Enable message translations" OFF)
+ 
+-IF(YASM_BUILD_TESTS)
+-    ENABLE_TESTING()
+-ENDIF(YASM_BUILD_TESTS)
++option(YASM_BUILD_TESTS "Enable building of tests" ON)
++
++if(YASM_BUILD_TESTS)
++    enable_testing()
++endif(YASM_BUILD_TESTS)
+ 
+ # Default build type to debug if not set
+-IF(NOT CMAKE_BUILD_TYPE)
+-  SET(CMAKE_BUILD_TYPE Debug CACHE STRING
+-      "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
+-      FORCE)
+-ENDIF(NOT CMAKE_BUILD_TYPE)
++if(NOT CMAKE_BUILD_TYPE)
++    set(CMAKE_BUILD_TYPE Debug CACHE STRING
++        "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
++        FORCE)
++endif(NOT CMAKE_BUILD_TYPE)
+ 
+-VERSION_GEN(PACKAGE_VERSION "${CMAKE_BINARY_DIR}/YASM-VERSION-FILE" "1.3.0")
++version_gen(PACKAGE_VERSION "${CMAKE_BINARY_DIR}/YASM-VERSION-FILE" "1.3.0")
+ 
+-set (PACKAGE_STRING "yasm ${PACKAGE_VERSION}")
++set(PACKAGE_STRING "yasm ${PACKAGE_VERSION}")
+ 
+-INCLUDE_DIRECTORIES(AFTER ${CMAKE_BINARY_DIR} ${yasm_SOURCE_DIR})
++include_directories(AFTER ${CMAKE_BINARY_DIR} ${yasm_SOURCE_DIR})
+ 
+-INCLUDE(ConfigureChecks.cmake)
++include(ConfigureChecks.cmake)
+ 
+-ADD_SUBDIRECTORY(tools)
+-ADD_SUBDIRECTORY(libyasm)
+-ADD_SUBDIRECTORY(modules)
+-ADD_SUBDIRECTORY(frontends)
++add_subdirectory(tools)
++add_subdirectory(libyasm)
++add_subdirectory(modules)
++add_subdirectory(frontends)
+ 
+-INSTALL(FILES
++install(FILES
+     libyasm.h
+     ${CMAKE_BINARY_DIR}/libyasm-stdint.h
+     DESTINATION include
+-    )
++)
+diff --git a/ConfigureChecks.cmake b/ConfigureChecks.cmake
+index 4b05d048..cf58b70a 100644
+--- a/ConfigureChecks.cmake
++++ b/ConfigureChecks.cmake
+@@ -1,74 +1,74 @@
+-INCLUDE(CheckCSourceCompiles)
+-INCLUDE(CheckCCompilerFlag)
+-INCLUDE(CheckFunctionExists)
+-INCLUDE(CheckIncludeFile)
+-INCLUDE(CheckSymbolExists)
+-INCLUDE(CheckTypeSize)
+-INCLUDE(CheckLibraryExists)
++include(CheckCSourceCompiles)
++include(CheckCCompilerFlag)
++include(CheckFunctionExists)
++include(CheckIncludeFile)
++include(CheckSymbolExists)
++include(CheckTypeSize)
++include(CheckLibraryExists)
+ 
+-FIND_PROGRAM(CPP_PROG NAMES cpp)
++find_program(CPP_PROG NAMES cpp)
+ 
+ # Platform-specific include files (POSIX, Win32)
+-CHECK_INCLUDE_FILE(locale.h HAVE_LOCALE_H)
+-CHECK_INCLUDE_FILE(libgen.h HAVE_LIBGEN_H)
+-CHECK_INCLUDE_FILE(unistd.h HAVE_UNISTD_H)
+-CHECK_INCLUDE_FILE(direct.h HAVE_DIRECT_H)
+-CHECK_INCLUDE_FILE(stdint.h HAVE_STDINT_H)
++check_include_file(locale.h HAVE_LOCALE_H)
++check_include_file(libgen.h HAVE_LIBGEN_H)
++check_include_file(unistd.h HAVE_UNISTD_H)
++check_include_file(direct.h HAVE_DIRECT_H)
++check_include_file(stdint.h HAVE_STDINT_H)
+ 
+-CHECK_SYMBOL_EXISTS(abort "stdlib.h" HAVE_ABORT)
++check_symbol_exists(abort "stdlib.h" HAVE_ABORT)
+ 
+-CHECK_FUNCTION_EXISTS(getcwd HAVE_GETCWD)
+-CHECK_FUNCTION_EXISTS(toascii HAVE_TOASCII)
++check_function_exists(getcwd HAVE_GETCWD)
++check_function_exists(toascii HAVE_TOASCII)
+ 
+-CHECK_LIBRARY_EXISTS(dl dlopen "" HAVE_LIBDL)
++check_library_exists(dl dlopen "" HAVE_LIBDL)
+ 
+-IF (HAVE_LIBDL)
+-    SET(LIBDL "dl")
+-ELSE (HAVE_LIBDL)
+-    SET(LIBDL "")
+-ENDIF (HAVE_LIBDL)
++if(HAVE_LIBDL)
++    set(LIBDL "dl")
++else()
++    set(LIBDL "")
++endif()
+ 
+-CONFIGURE_FILE(libyasm-stdint.h.cmake
+-               ${CMAKE_CURRENT_BINARY_DIR}/libyasm-stdint.h)
+-CONFIGURE_FILE(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
++configure_file(libyasm-stdint.h.cmake
++    ${CMAKE_CURRENT_BINARY_DIR}/libyasm-stdint.h)
++configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
+ 
+-ADD_DEFINITIONS(-DHAVE_CONFIG_H)
++add_definitions(-DHAVE_CONFIG_H)
+ 
+-INCLUDE(FindPythonInterp)
+-IF (NOT PYTHON_EXECUTABLE)
+-    MESSAGE(FATAL_ERROR "Could not find Python executable")
+-ENDIF (NOT PYTHON_EXECUTABLE)
++find_package(Python COMPONENTS Interpreter)
++if(NOT Python_EXECUTABLE)
++    message(FATAL_ERROR "Could not find Python executable")
++endif()
+ 
+-IF (CMAKE_COMPILER_IS_GNUCXX)
+-    CHECK_C_COMPILER_FLAG(-pipe C_ACCEPTS_PIPE)
+-    CHECK_C_COMPILER_FLAG(-ansi C_ACCEPTS_ANSI)
+-    CHECK_C_COMPILER_FLAG(-pedantic C_ACCEPTS_PEDANTIC)
+-    CHECK_C_COMPILER_FLAG(-Wall C_ACCEPTS_WALL)
+-    CHECK_C_COMPILER_FLAG(-Wno-unused-parameter C_ACCEPTS_WNOUNUSEDPARAM)
++if(CMAKE_COMPILER_IS_GNUCXX)
++    check_c_compiler_flag(-pipe C_ACCEPTS_PIPE)
++    check_c_compiler_flag(-ansi C_ACCEPTS_ANSI)
++    check_c_compiler_flag(-pedantic C_ACCEPTS_PEDANTIC)
++    check_c_compiler_flag(-Wall C_ACCEPTS_WALL)
++    check_c_compiler_flag(-Wno-unused-parameter C_ACCEPTS_WNOUNUSEDPARAM)
+ 
+-    IF (C_ACCEPTS_PIPE)
+-        ADD_DEFINITIONS(-pipe)
+-    ENDIF (C_ACCEPTS_PIPE)
++    if(C_ACCEPTS_PIPE)
++        add_definitions(-pipe)
++    endif(C_ACCEPTS_PIPE)
+ 
+-    IF (C_ACCEPTS_ANSI)
+-        ADD_DEFINITIONS(-ansi)
+-    ENDIF (C_ACCEPTS_ANSI)
++    if(C_ACCEPTS_ANSI)
++        add_definitions(-ansi)
++    endif(C_ACCEPTS_ANSI)
+ 
+-    IF (C_ACCEPTS_PEDANTIC)
+-        ADD_DEFINITIONS(-pedantic)
+-    ENDIF (C_ACCEPTS_PEDANTIC)
++    if(C_ACCEPTS_PEDANTIC)
++        add_definitions(-pedantic)
++    endif(C_ACCEPTS_PEDANTIC)
+ 
+-    IF (C_ACCEPTS_WALL)
+-        ADD_DEFINITIONS(-Wall)
+-    ENDIF (C_ACCEPTS_WALL)
++    if(C_ACCEPTS_WALL)
++        add_definitions(-Wall)
++    endif(C_ACCEPTS_WALL)
+ 
+-    IF (C_ACCEPTS_WNOUNUSEDPARAM)
+-        ADD_DEFINITIONS(-Wno-unused-parameter)
+-    ENDIF (C_ACCEPTS_WNOUNUSEDPARAM)
+-ENDIF (CMAKE_COMPILER_IS_GNUCXX)
++    if(C_ACCEPTS_WNOUNUSEDPARAM)
++        add_definitions(-Wno-unused-parameter)
++    endif(C_ACCEPTS_WNOUNUSEDPARAM)
++endif(CMAKE_COMPILER_IS_GNUCXX)
+ 
+ # Disable some annoying Visual Studio warnings
+-IF (MSVC)
+-    ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
+-    ADD_DEFINITIONS(-D_CRT_NONSTDC_NO_WARNINGS)
+-ENDIF (MSVC)
++if(MSVC)
++    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
++    add_definitions(-D_CRT_NONSTDC_NO_WARNINGS)
++endif(MSVC)
+diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
+index 5e4ef796..8e2019b6 100644
+--- a/cmake/CMakeLists.txt
++++ b/cmake/CMakeLists.txt
+@@ -1 +1 @@
+-ADD_SUBDIRECTORY(modules)
++add_subdirectory(modules)
+diff --git a/cmake/modules/CMakeLists.txt b/cmake/modules/CMakeLists.txt
+index e4351fc9..18794692 100644
+--- a/cmake/modules/CMakeLists.txt
++++ b/cmake/modules/CMakeLists.txt
+@@ -1,2 +1,2 @@
+-FILE(GLOB cmakeFiles "${CMAKE_CURRENT_SOURCE_DIR}/*.cmake")
++file(GLOB cmakeFiles "${CMAKE_CURRENT_SOURCE_DIR}/*.cmake")
+ 
+diff --git a/cmake/modules/VersionGen.cmake b/cmake/modules/VersionGen.cmake
+index f10ce33c..36ff2b67 100644
+--- a/cmake/modules/VersionGen.cmake
++++ b/cmake/modules/VersionGen.cmake
+@@ -2,77 +2,77 @@
+ #
+ # Copyright (c) 2011 Peter Johnson
+ 
+-macro (VERSION_GEN _version _version_file _default_version)
+-    set (_vn "v${_default_version}")
++macro(VERSION_GEN _version _version_file _default_version)
++    set(_vn "v${_default_version}")
+ 
+     # First see if there is a version file (included in release tarballs),
+     # then try git-describe, then default.
+-    if (EXISTS "${CMAKE_SOURCE_DIR}/version")
+-        file (STRINGS "${CMAKE_SOURCE_DIR}/version" _version_strs LIMIT_COUNT 1)
+-        list (GET _version_strs 0 _version_strs0)
+-        if (NOT (${_version_strs0} STREQUAL ""))
+-            set (_vn "v${_version_strs0}")
+-        endif (NOT (${_version_strs0} STREQUAL ""))
+-    elseif (EXISTS "${CMAKE_SOURCE_DIR}/.git")
+-        execute_process (COMMAND git describe --match "v[0-9]*" --abbrev=4 HEAD
+-                         RESULT_VARIABLE _git_result
+-                         OUTPUT_VARIABLE _git_vn
+-                         ERROR_QUIET
+-                         OUTPUT_STRIP_TRAILING_WHITESPACE)
++    if(EXISTS "${CMAKE_SOURCE_DIR}/version")
++        file(STRINGS "${CMAKE_SOURCE_DIR}/version" _version_strs LIMIT_COUNT 1)
++        list(GET _version_strs 0 _version_strs0)
++        if(NOT (${_version_strs0} STREQUAL ""))
++            set(_vn "v${_version_strs0}")
++        endif(NOT (${_version_strs0} STREQUAL ""))
++    elseif(EXISTS "${CMAKE_SOURCE_DIR}/.git")
++        execute_process(COMMAND git describe --match "v[0-9]*" --abbrev=4 HEAD
++            RESULT_VARIABLE _git_result
++            OUTPUT_VARIABLE _git_vn
++            ERROR_QUIET
++            OUTPUT_STRIP_TRAILING_WHITESPACE)
+ 
+-        if (_git_result EQUAL 0)
++        if(_git_result EQUAL 0)
+             # Special handling until we get a more recent tag on the master
+             # branch
+-            if (_git_vn MATCHES "^v0[.]1[.]0")
+-                execute_process (COMMAND git merge-base v${_default_version} HEAD
+-                                 OUTPUT_VARIABLE _merge_base
+-                                 ERROR_QUIET
+-                                 OUTPUT_STRIP_TRAILING_WHITESPACE)
++            if(_git_vn MATCHES "^v0[.]1[.]0")
++                execute_process(COMMAND git merge-base v${_default_version} HEAD
++                    OUTPUT_VARIABLE _merge_base
++                    ERROR_QUIET
++                    OUTPUT_STRIP_TRAILING_WHITESPACE)
+                 #message (STATUS "Merge base: ${_merge_base}")
+ 
+-                execute_process (COMMAND git rev-list ${_merge_base}..HEAD
+-                                 OUTPUT_VARIABLE _rev_list
+-                                 ERROR_QUIET)
+-                string (REGEX MATCHALL "[^\n]*\n" _rev_list_lines "${_rev_list}")
++                execute_process(COMMAND git rev-list ${_merge_base}..HEAD
++                    OUTPUT_VARIABLE _rev_list
++                    ERROR_QUIET)
++                string(REGEX MATCHALL "[^\n]*\n" _rev_list_lines "${_rev_list}")
+                 #message (STATUS "Rev list: ${_rev_list_lines}")
+-                list (LENGTH _rev_list_lines _vn1)
++                list(LENGTH _rev_list_lines _vn1)
+ 
+-                execute_process (COMMAND git rev-list --max-count=1 --abbrev-commit --abbrev=4 HEAD
+-                                 OUTPUT_VARIABLE _vn2
+-                                 ERROR_QUIET
+-                                 OUTPUT_STRIP_TRAILING_WHITESPACE)
++                execute_process(COMMAND git rev-list --max-count=1 --abbrev-commit --abbrev=4 HEAD
++                    OUTPUT_VARIABLE _vn2
++                    ERROR_QUIET
++                    OUTPUT_STRIP_TRAILING_WHITESPACE)
+ 
+-                set (_git_vn "v${_default_version}-${_vn1}-g${_vn2}")
+-            endif (_git_vn MATCHES "^v0[.]1[.]0")
++                set(_git_vn "v${_default_version}-${_vn1}-g${_vn2}")
++            endif(_git_vn MATCHES "^v0[.]1[.]0")
+ 
+             # Append -dirty if there are local changes
+-            execute_process (COMMAND git update-index -q --refresh)
+-            execute_process (COMMAND git diff-index --name-only HEAD --
+-                             OUTPUT_VARIABLE _git_vn_dirty)
+-            if (_git_vn_dirty)
+-                set (_git_vn "${_git_vn}-dirty")
+-            endif (_git_vn_dirty)
++            execute_process(COMMAND git update-index -q --refresh)
++            execute_process(COMMAND git diff-index --name-only HEAD --
++                OUTPUT_VARIABLE _git_vn_dirty)
++            if(_git_vn_dirty)
++                set(_git_vn "${_git_vn}-dirty")
++            endif(_git_vn_dirty)
+ 
+             # Substitute . for - in the result
+-            string (REPLACE "-" "." _vn "${_git_vn}")
+-        endif (_git_result EQUAL 0)
+-    endif (EXISTS "${CMAKE_SOURCE_DIR}/version")
++            string(REPLACE "-" "." _vn "${_git_vn}")
++        endif(_git_result EQUAL 0)
++    endif(EXISTS "${CMAKE_SOURCE_DIR}/version")
+ 
+     # Strip leading "v" from version
+     #message (STATUS "_vn: ${_vn}")
+-    string (REGEX REPLACE "^v*(.+)" "\\1" _vn "${_vn}")
++    string(REGEX REPLACE "^v*(.+)" "\\1" _vn "${_vn}")
+ 
+     # Update version file if required
+-    if (EXISTS ${_version_file})
+-        file (STRINGS ${_version_file} _version_strs LIMIT_COUNT 1)
+-        list (GET _version_strs 0 _vc)
+-    else (EXISTS ${_version_file})
+-        set (_vc "unset")
+-    endif (EXISTS ${_version_file})
+-    if (NOT ("${_vn}" STREQUAL "${_vc}"))
+-        file (WRITE ${_version_file} "${_vn}")
+-    endif (NOT ("${_vn}" STREQUAL "${_vc}"))
++    if(EXISTS ${_version_file})
++        file(STRINGS ${_version_file} _version_strs LIMIT_COUNT 1)
++        list(GET _version_strs 0 _vc)
++    else()
++        set(_vc "unset")
++    endif()
++    if(NOT ("${_vn}" STREQUAL "${_vc}"))
++        file(WRITE ${_version_file} "${_vn}")
++    endif(NOT ("${_vn}" STREQUAL "${_vc}"))
+ 
+     # Set output version variable
+-    set (${_version} ${_vn})
+-endmacro (VERSION_GEN)
++    set(${_version} ${_vn})
++endmacro(VERSION_GEN)
+diff --git a/cmake/modules/YasmMacros.cmake b/cmake/modules/YasmMacros.cmake
+index ab1be00e..c0ad96f7 100644
+--- a/cmake/modules/YasmMacros.cmake
++++ b/cmake/modules/YasmMacros.cmake
+@@ -16,16 +16,16 @@
+ # manually building the target.
+ # The name of the target can be specified using TESTNAME <testname>, if it is
+ # not given the macro will default to the <name>
+-macro (YASM_ADD_UNIT_TEST _test_NAME)
++macro(yasm_add_unit_test _test_NAME)
+     set(_srcList ${ARGN})
+     set(_targetName ${_test_NAME})
+-    if( ${ARGV1} STREQUAL "TESTNAME" )
++    if(${ARGV1} STREQUAL "TESTNAME")
+         set(_targetName ${ARGV2})
+-        LIST(REMOVE_AT _srcList 0 1)
+-    endif( ${ARGV1} STREQUAL "TESTNAME" )
+-    yasm_add_test_executable( ${_test_NAME} ${_srcList} )
+-    add_test( ${_targetName} ${EXECUTABLE_OUTPUT_PATH}/${_test_NAME} )
+-endmacro (YASM_ADD_UNIT_TEST)
++        list(REMOVE_AT _srcList 0 1)
++    endif(${ARGV1} STREQUAL "TESTNAME")
++    yasm_add_test_executable(${_test_NAME} ${_srcList})
++    add_test(${_targetName} ${EXECUTABLE_OUTPUT_PATH}/${_test_NAME})
++endmacro()
+ 
+ # add an test executable
+ # it will be built with RPATH pointing to the build dir
+@@ -33,57 +33,53 @@ endmacro (YASM_ADD_UNIT_TEST)
+ # target if the option YASM_BUILD_TESTS is enabled. Otherwise the rules for
+ # the target are created but not built by default. You can build them by
+ # manually building the target.
+-macro (YASM_ADD_TEST_EXECUTABLE _target_NAME)
++macro(yasm_add_test_executable _target_NAME)
+ 
+-   set(_add_executable_param)
++    set(_add_executable_param)
+ 
+-   if (NOT YASM_BUILD_TESTS)
+-      set(_add_executable_param EXCLUDE_FROM_ALL)
+-   endif (NOT YASM_BUILD_TESTS)
++    if(NOT YASM_BUILD_TESTS)
++        set(_add_executable_param EXCLUDE_FROM_ALL)
++    endif(NOT YASM_BUILD_TESTS)
+ 
+-   set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
++    set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
+ 
+-   set(_SRCS ${ARGN})
+-   add_executable(${_target_NAME} ${_add_executable_param} ${_SRCS})
++    set(_SRCS ${ARGN})
++    add_executable(${_target_NAME} ${_add_executable_param} ${_SRCS})
+ 
+-   set_target_properties(${_target_NAME} PROPERTIES
+-                         SKIP_BUILD_RPATH FALSE
+-                         BUILD_WITH_INSTALL_RPATH FALSE)
++    set_target_properties(${_target_NAME} PROPERTIES
++        SKIP_BUILD_RPATH FALSE
++        BUILD_WITH_INSTALL_RPATH FALSE)
+ 
+-endmacro (YASM_ADD_TEST_EXECUTABLE)
++endmacro()
+ 
+-macro (YASM_ADD_MODULE _module_NAME)
++macro(yasm_add_module _module_NAME)
+     list(APPEND YASM_MODULES_SRC ${ARGN})
+     list(APPEND YASM_MODULES ${_module_NAME})
+-endmacro (YASM_ADD_MODULE)
++endmacro()
+ 
+-macro (YASM_GENPERF _in_NAME _out_NAME)
+-    get_target_property(_tmp_GENPERF_EXE genperf LOCATION)
++macro(yasm_genperf _in_NAME _out_NAME)
+     add_custom_command(
+         OUTPUT ${_out_NAME}
+-        COMMAND ${_tmp_GENPERF_EXE} ${_in_NAME} ${_out_NAME}
+-        DEPENDS ${_tmp_GENPERF_EXE}
++        COMMAND $<TARGET_FILE:genperf> ${_in_NAME} ${_out_NAME}
++        DEPENDS genperf
+         MAIN_DEPENDENCY ${_in_NAME}
+-        )
+-endmacro (YASM_GENPERF)
++    )
++endmacro()
+ 
+-macro (YASM_RE2C _in_NAME _out_NAME)
+-    get_target_property(_tmp_RE2C_EXE re2c LOCATION)
++macro(yasm_re2c _in_NAME _out_NAME)
+     add_custom_command(
+         OUTPUT ${_out_NAME}
+-        COMMAND ${_tmp_RE2C_EXE} ${ARGN} -o ${_out_NAME} ${_in_NAME}
+-        DEPENDS ${_tmp_RE2C_EXE}
++        COMMAND $<TARGET_FILE:re2c> ${ARGN} -o ${_out_NAME} ${_in_NAME}
++        DEPENDS re2c
+         MAIN_DEPENDENCY ${_in_NAME}
+-        )
+-endmacro (YASM_RE2C)
++    )
++endmacro()
+ 
+-macro (YASM_GENMACRO _in_NAME _out_NAME _var_NAME)
+-    get_target_property(_tmp_GENMACRO_EXE genmacro LOCATION)
++macro(yasm_genmacro _in_NAME _out_NAME _var_NAME)
+     add_custom_command(
+         OUTPUT ${_out_NAME}
+-        COMMAND ${_tmp_GENMACRO_EXE} ${_out_NAME} ${_var_NAME} ${_in_NAME}
+-        DEPENDS ${_tmp_GENMACRO_EXE}
++        COMMAND $<TARGET_FILE:genmacro> ${_out_NAME} ${_var_NAME} ${_in_NAME}
++        DEPENDS genmacro
+         MAIN_DEPENDENCY ${_in_NAME}
+-        )
+-endmacro (YASM_GENMACRO)
+-
++    )
++endmacro()
+diff --git a/frontends/CMakeLists.txt b/frontends/CMakeLists.txt
+index 9858b616..afc94aa9 100644
+--- a/frontends/CMakeLists.txt
++++ b/frontends/CMakeLists.txt
+@@ -1,3 +1,3 @@
+-ADD_SUBDIRECTORY(yasm)
+-ADD_SUBDIRECTORY(tasm)
+-ADD_SUBDIRECTORY(vsyasm)
++add_subdirectory(yasm)
++add_subdirectory(tasm)
++add_subdirectory(vsyasm)
+diff --git a/frontends/tasm/CMakeLists.txt b/frontends/tasm/CMakeLists.txt
+index e275ab84..e5638dcc 100644
+--- a/frontends/tasm/CMakeLists.txt
++++ b/frontends/tasm/CMakeLists.txt
+@@ -1,37 +1,37 @@
+-INCLUDE_DIRECTORIES(
++include_directories(
+     ${CMAKE_CURRENT_BINARY_DIR}
+     ${yasm_SOURCE_DIR}/frontends/yasm
+-    )
++)
+ 
+-ADD_CUSTOM_COMMAND(
++add_custom_command(
+     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/license.c
+     COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/frontends/yasm/genstring.py
+-        license_msg
+-        ${CMAKE_CURRENT_BINARY_DIR}/license.c
+-        ${CMAKE_SOURCE_DIR}/COPYING
+-    MAIN_DEPENDENCY ${CMAKE_SOURCE_DIR}/COPYING
++    license_msg
++    ${CMAKE_CURRENT_BINARY_DIR}/license.c
++    ${YASM_PROJECT_DIRDIR}/COPYING
++    MAIN_DEPENDENCY ${YASM_PROJECT_DIR}/COPYING
+     DEPENDS ${CMAKE_SOURCE_DIR}/frontends/yasm/genstring.py
+-    )
++)
+ 
+-SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
++set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+ 
+-IF(BUILD_SHARED_LIBS)
+-    ADD_EXECUTABLE(ytasm
++if(BUILD_SHARED_LIBS)
++    add_executable(ytasm
+         tasm.c
+         tasm-options.c
+         ${yasm_SOURCE_DIR}/frontends/yasm/yasm-plugin.c
+-        )
+-    TARGET_LINK_LIBRARIES(ytasm libyasm ${LIBDL})
+-ELSE(BUILD_SHARED_LIBS)
+-    ADD_EXECUTABLE(ytasm
++    )
++    target_link_libraries(ytasm libyasm ${LIBDL})
++else()
++    add_executable(ytasm
+         tasm.c
+         tasm-options.c
+-        )
+-    TARGET_LINK_LIBRARIES(ytasm yasmstd libyasm)
+-ENDIF(BUILD_SHARED_LIBS)
++    )
++    target_link_libraries(ytasm yasmstd libyasm)
++endif()
+ 
+-SET_SOURCE_FILES_PROPERTIES(tasm.c PROPERTIES
++set_source_files_properties(tasm.c PROPERTIES
+     OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/license.c
+-    )
++)
+ 
+-INSTALL(TARGETS ytasm RUNTIME DESTINATION bin)
++install(TARGETS ytasm RUNTIME DESTINATION bin)
+diff --git a/frontends/vsyasm/CMakeLists.txt b/frontends/vsyasm/CMakeLists.txt
+index 6815b18d..ddc97955 100644
+--- a/frontends/vsyasm/CMakeLists.txt
++++ b/frontends/vsyasm/CMakeLists.txt
+@@ -1,37 +1,37 @@
+-INCLUDE_DIRECTORIES(
++include_directories(
+     ${CMAKE_CURRENT_BINARY_DIR}
+     ${yasm_SOURCE_DIR}/frontends/yasm
+-    )
++)
+ 
+-ADD_CUSTOM_COMMAND(
++add_custom_command(
+     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/license.c
+     COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/frontends/yasm/genstring.py
+-        license_msg
+-        ${CMAKE_CURRENT_BINARY_DIR}/license.c
+-        ${CMAKE_SOURCE_DIR}/COPYING
+-    MAIN_DEPENDENCY ${CMAKE_SOURCE_DIR}/COPYING
++    license_msg
++    ${CMAKE_CURRENT_BINARY_DIR}/license.c
++    ${YASM_PROJECT_DIRDIR}/COPYING
++    MAIN_DEPENDENCY ${YASM_PROJECT_DIR}/COPYING
+     DEPENDS ${CMAKE_SOURCE_DIR}/frontends/yasm/genstring.py
+-    )
++)
+ 
+-SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
++set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+ 
+-IF(BUILD_SHARED_LIBS)
+-    ADD_EXECUTABLE(vsyasm
++if(BUILD_SHARED_LIBS)
++    add_executable(vsyasm
+         vsyasm.c
+         ${yasm_SOURCE_DIR}/frontends/yasm/yasm-options.c
+         ${yasm_SOURCE_DIR}/frontends/yasm/yasm-plugin.c
+-        )
+-    TARGET_LINK_LIBRARIES(vsyasm libyasm ${LIBDL})
+-ELSE(BUILD_SHARED_LIBS)
+-    ADD_EXECUTABLE(vsyasm
++    )
++    target_link_libraries(vsyasm libyasm ${LIBDL})
++else()
++    add_executable(vsyasm
+         vsyasm.c
+         ${yasm_SOURCE_DIR}/frontends/yasm/yasm-options.c
+-        )
+-    TARGET_LINK_LIBRARIES(vsyasm yasmstd libyasm)
+-ENDIF(BUILD_SHARED_LIBS)
++    )
++    target_link_libraries(vsyasm yasmstd libyasm)
++endif()
+ 
+-SET_SOURCE_FILES_PROPERTIES(vsyasm.c PROPERTIES
++set_source_files_properties(vsyasm.c PROPERTIES
+     OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/license.c
+-    )
++)
+ 
+-INSTALL(TARGETS vsyasm RUNTIME DESTINATION bin)
++install(TARGETS vsyasm RUNTIME DESTINATION bin)
+diff --git a/frontends/yasm/CMakeLists.txt b/frontends/yasm/CMakeLists.txt
+index b11d7f82..8ca917ca 100644
+--- a/frontends/yasm/CMakeLists.txt
++++ b/frontends/yasm/CMakeLists.txt
+@@ -1,34 +1,34 @@
+-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
++include_directories(${CMAKE_CURRENT_BINARY_DIR})
+ 
+-ADD_CUSTOM_COMMAND(
++add_custom_command(
+     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/license.c
+     COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/genstring.py
+-        license_msg
+-        ${CMAKE_CURRENT_BINARY_DIR}/license.c
+-        ${CMAKE_SOURCE_DIR}/COPYING
+-    MAIN_DEPENDENCY ${CMAKE_SOURCE_DIR}/COPYING
++    license_msg
++    ${CMAKE_CURRENT_BINARY_DIR}/license.c
++    ${YASM_PROJECT_DIRDIR}/COPYING
++    MAIN_DEPENDENCY ${YASM_PROJECT_DIR}/COPYING
+     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/genstring.py
+-    )
++)
+ 
+-SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
++set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+ 
+-IF(BUILD_SHARED_LIBS)
+-    ADD_EXECUTABLE(yasm
++if(BUILD_SHARED_LIBS)
++    add_executable(yasm
+         yasm.c
+         yasm-options.c
+         yasm-plugin.c
+-        )
+-    TARGET_LINK_LIBRARIES(yasm libyasm ${LIBDL})
+-ELSE(BUILD_SHARED_LIBS)
+-    ADD_EXECUTABLE(yasm
++    )
++    target_link_libraries(yasm libyasm ${LIBDL})
++else()
++    add_executable(yasm
+         yasm.c
+         yasm-options.c
+-        )
+-    TARGET_LINK_LIBRARIES(yasm yasmstd libyasm)
+-ENDIF(BUILD_SHARED_LIBS)
++    )
++    target_link_libraries(yasm yasmstd libyasm)
++endif()
+ 
+-SET_SOURCE_FILES_PROPERTIES(yasm.c PROPERTIES
++set_source_files_properties(yasm.c PROPERTIES
+     OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/license.c
+-    )
++)
+ 
+-INSTALL(TARGETS yasm RUNTIME DESTINATION bin)
++install(TARGETS yasm RUNTIME DESTINATION bin)
+diff --git a/libyasm/CMakeLists.txt b/libyasm/CMakeLists.txt
+index bd9b7b28..c0759d60 100644
+--- a/libyasm/CMakeLists.txt
++++ b/libyasm/CMakeLists.txt
+@@ -1,6 +1,6 @@
+-SET(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
++set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+ 
+-ADD_LIBRARY(libyasm
++add_library(libyasm
+     assocdat.c
+     bitvect.c
+     bc-align.c
+@@ -30,25 +30,25 @@ ADD_LIBRARY(libyasm
+     value.c
+     xmalloc.c
+     xstrdup.c
+-    )
+-IF(BUILD_SHARED_LIBS)
+-    SET_TARGET_PROPERTIES(libyasm PROPERTIES
++)
++if(BUILD_SHARED_LIBS)
++    set_target_properties(libyasm PROPERTIES
+         OUTPUT_NAME "yasm"
+         COMPILE_FLAGS -DYASM_LIB_SOURCE
+-        )
+-ELSE(BUILD_SHARED_LIBS)
+-    SET_TARGET_PROPERTIES(libyasm PROPERTIES
++    )
++else()
++    set_target_properties(libyasm PROPERTIES
+         COMPILE_FLAGS -DYASM_LIB_SOURCE
+-        )
+-ENDIF(BUILD_SHARED_LIBS)
++    )
++endif()
+ 
+-INSTALL(TARGETS libyasm
++install(TARGETS libyasm
+     RUNTIME DESTINATION bin
+     LIBRARY DESTINATION lib
+     ARCHIVE DESTINATION lib
+-    )
++)
+ 
+-INSTALL(FILES
++install(FILES
+     arch.h
+     assocdat.h
+     bitvect.h
+@@ -77,4 +77,4 @@ INSTALL(FILES
+     valparam.h
+     value.h
+     DESTINATION include/libyasm
+-    )
++)
+diff --git a/modules/CMakeLists.txt b/modules/CMakeLists.txt
+index e3f8eb11..76a7cb3a 100644
+--- a/modules/CMakeLists.txt
++++ b/modules/CMakeLists.txt
+@@ -1,103 +1,103 @@
+-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
++include_directories(${CMAKE_CURRENT_BINARY_DIR})
+ 
+-INCLUDE(arch/CMakeLists.txt)
+-INCLUDE(listfmts/CMakeLists.txt)
+-INCLUDE(parsers/CMakeLists.txt)
+-INCLUDE(preprocs/CMakeLists.txt)
+-INCLUDE(dbgfmts/CMakeLists.txt)
+-INCLUDE(objfmts/CMakeLists.txt)
++include(arch/CMakeLists.txt)
++include(listfmts/CMakeLists.txt)
++include(parsers/CMakeLists.txt)
++include(preprocs/CMakeLists.txt)
++include(dbgfmts/CMakeLists.txt)
++include(objfmts/CMakeLists.txt)
+ 
+-MESSAGE(STATUS "Standard modules: ${YASM_MODULES}")
++message(STATUS "Standard modules: ${YASM_MODULES}")
+ 
+ #
+ # Generate init_plugin.c
+ # This file provides the yasm_init_plugin() function for yasmstd.
+ #
+ 
+-SET(INIT_PLUGIN_C ${CMAKE_CURRENT_BINARY_DIR}/init_plugin.c)
+-SET(INIT_PLUGIN_C_REV 1)
++set(INIT_PLUGIN_C ${CMAKE_CURRENT_BINARY_DIR}/init_plugin.c)
++set(INIT_PLUGIN_C_REV 1)
+ 
+ # Don't regen if no changes; default to regen
+-SET(regen_init_plugin_c TRUE)
+-IF(EXISTS ${INIT_PLUGIN_C})
+-    FILE(READ ${INIT_PLUGIN_C} _old_init_plugin_c)
+-    STRING(REGEX MATCHALL "[^\n]*\n" _lines "${_old_init_plugin_c}")
++set(regen_init_plugin_c TRUE)
++if(EXISTS ${INIT_PLUGIN_C})
++    file(READ ${INIT_PLUGIN_C} _old_init_plugin_c)
++    string(REGEX MATCHALL "[^\n]*\n" _lines "${_old_init_plugin_c}")
+     #MESSAGE(STATUS "Lines: ${_lines}")
+ 
+-    LIST(GET _lines 0 _line0)
+-    STRING(REGEX MATCH "([A-Za-z][A-Za-z0-9_]+[ ]?)+" _old_modules "${_line0}")
++    list(GET _lines 0 _line0)
++    string(REGEX MATCH "([A-Za-z][A-Za-z0-9_]+[ ]?)+" _old_modules "${_line0}")
+     #MESSAGE(STATUS "Old modules: ${_old_modules}")
+-    STRING(REPLACE ";" " " _modules_str "${YASM_MODULES}")
+-    STRING(COMPARE EQUAL "${_old_modules}" "${_modules_str} " _modules_match)
++    string(REPLACE ";" " " _modules_str "${YASM_MODULES}")
++    string(COMPARE EQUAL "${_old_modules}" "${_modules_str} " _modules_match)
+ 
+-    LIST(GET _lines 1 _line1)
+-    STRING(REGEX MATCH "rev [0-9]+" _old_modules_rev "${_line1}")
++    list(GET _lines 1 _line1)
++    string(REGEX MATCH "rev [0-9]+" _old_modules_rev "${_line1}")
+     #MESSAGE(STATUS "Old modules rev: ${_old_modules_rev}")
+-    STRING(COMPARE EQUAL "${_old_modules_rev}" "rev ${INIT_PLUGIN_C_REV}"
+-           _modules_rev_match)
++    string(COMPARE EQUAL "${_old_modules_rev}" "rev ${INIT_PLUGIN_C_REV}"
++        _modules_rev_match)
+ 
+-    IF(_modules_match AND _modules_rev_match)
+-        SET(regen_init_plugin_c FALSE)
+-    ENDIF(_modules_match AND _modules_rev_match)
+-ENDIF(EXISTS ${INIT_PLUGIN_C})
++    if(_modules_match AND _modules_rev_match)
++        set(regen_init_plugin_c FALSE)
++    endif(_modules_match AND _modules_rev_match)
++endif()
+ 
+-IF(regen_init_plugin_c)
+-    MESSAGE(STATUS "Generating standard plugin initialization file")
+-    STRING(REPLACE ";" " " _modules_str "${YASM_MODULES}")
+-    FILE(WRITE ${INIT_PLUGIN_C} "/* ${_modules_str} \n")
+-    FILE(APPEND ${INIT_PLUGIN_C} "   rev ${INIT_PLUGIN_C_REV}\n")
+-    FILE(APPEND ${INIT_PLUGIN_C} " */\n\n")
+-    FILE(APPEND ${INIT_PLUGIN_C} "#include <libyasm.h>\n")
+-    FILE(APPEND ${INIT_PLUGIN_C} "#include <libyasm/module.h>\n\n")
+-    FOREACH(module ${YASM_MODULES})
+-        STRING(REGEX MATCHALL "[a-zA-Z][a-zA-Z0-9]+" _modulepath ${module})
+-        LIST(GET _modulepath 0 _type)
+-        LIST(GET _modulepath 1 _keyword)
+-        FILE(APPEND ${INIT_PLUGIN_C}
+-             "extern yasm_${_type}_module yasm_${_keyword}_LTX_${_type};\n")
+-    ENDFOREACH(module)
+-    IF(BUILD_SHARED_LIBS)
+-        FILE(APPEND ${INIT_PLUGIN_C} "\n#ifdef _MSC_VER\n")
+-        FILE(APPEND ${INIT_PLUGIN_C} "__declspec(dllexport)\n")
+-        FILE(APPEND ${INIT_PLUGIN_C} "#endif\n")
+-    ENDIF(BUILD_SHARED_LIBS)
+-    FILE(APPEND ${INIT_PLUGIN_C} "void\n")
+-    FILE(APPEND ${INIT_PLUGIN_C} "yasm_init_plugin(void)\n")
+-    FILE(APPEND ${INIT_PLUGIN_C} "{\n")
+-    FOREACH(module ${YASM_MODULES})
+-        STRING(REGEX MATCHALL "[a-zA-Z][a-zA-Z0-9]+" _modulepath ${module})
+-        LIST(GET _modulepath 0 _type)
+-        LIST(GET _modulepath 1 _keyword)
+-        SET(_data "yasm_${_keyword}_LTX_${_type}")
+-        STRING(TOUPPER "${_type}" _type)
+-        FILE(APPEND ${INIT_PLUGIN_C}
+-             "    yasm_register_module(YASM_MODULE_${_type}, \"${_keyword}\", &${_data});\n")
+-    ENDFOREACH(module)
+-    FILE(APPEND ${INIT_PLUGIN_C} "}\n") 
+-ELSE(regen_init_plugin_c)
+-    MESSAGE(STATUS "Not regenerating static modules file (unchanged)")
+-ENDIF(regen_init_plugin_c)
++if(regen_init_plugin_c)
++    message(STATUS "Generating standard plugin initialization file")
++    string(REPLACE ";" " " _modules_str "${YASM_MODULES}")
++    file(WRITE ${INIT_PLUGIN_C} "/* ${_modules_str} \n")
++    file(APPEND ${INIT_PLUGIN_C} "   rev ${INIT_PLUGIN_C_REV}\n")
++    file(APPEND ${INIT_PLUGIN_C} " */\n\n")
++    file(APPEND ${INIT_PLUGIN_C} "#include <libyasm.h>\n")
++    file(APPEND ${INIT_PLUGIN_C} "#include <libyasm/module.h>\n\n")
++    foreach(module ${YASM_MODULES})
++        string(REGEX MATCHALL "[a-zA-Z][a-zA-Z0-9]+" _modulepath ${module})
++        list(GET _modulepath 0 _type)
++        list(GET _modulepath 1 _keyword)
++        file(APPEND ${INIT_PLUGIN_C}
++            "extern yasm_${_type}_module yasm_${_keyword}_LTX_${_type};\n")
++    endforeach()
++    if(BUILD_SHARED_LIBS)
++        file(APPEND ${INIT_PLUGIN_C} "\n#ifdef _MSC_VER\n")
++        file(APPEND ${INIT_PLUGIN_C} "__declspec(dllexport)\n")
++        file(APPEND ${INIT_PLUGIN_C} "#endif\n")
++    endif()
++    file(APPEND ${INIT_PLUGIN_C} "void\n")
++    file(APPEND ${INIT_PLUGIN_C} "yasm_init_plugin(void)\n")
++    file(APPEND ${INIT_PLUGIN_C} "{\n")
++    foreach(module ${YASM_MODULES})
++        string(REGEX MATCHALL "[a-zA-Z][a-zA-Z0-9]+" _modulepath ${module})
++        list(GET _modulepath 0 _type)
++        list(GET _modulepath 1 _keyword)
++        set(_data "yasm_${_keyword}_LTX_${_type}")
++        string(TOUPPER "${_type}" _type)
++        file(APPEND ${INIT_PLUGIN_C}
++            "    yasm_register_module(YASM_MODULE_${_type}, \"${_keyword}\", &${_data});\n")
++    endforeach()
++    file(APPEND ${INIT_PLUGIN_C} "}\n")
++else()
++    message(STATUS "Not regenerating static modules file (unchanged)")
++endif()
+ 
+-SET_SOURCE_FILES_PROPERTIES(init_plugin.c GENERATED)
++set_source_files_properties(init_plugin.c GENERATED)
+ 
+-SET(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
++set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+ 
+-IF(BUILD_SHARED_LIBS)
+-    ADD_LIBRARY(yasmstd MODULE
++if(BUILD_SHARED_LIBS)
++    add_library(yasmstd MODULE
+         init_plugin.c
+         ${YASM_MODULES_SRC}
+-        )
+-    TARGET_LINK_LIBRARIES(yasmstd libyasm)
++    )
++    target_link_libraries(yasmstd libyasm)
+ 
+-    IF(WIN32)
+-        INSTALL(TARGETS yasmstd LIBRARY DESTINATION bin)
+-    ELSE(WIN32)
+-        INSTALL(TARGETS yasmstd LIBRARY DESTINATION lib)
+-    ENDIF(WIN32)
+-ELSE(BUILD_SHARED_LIBS)
+-    ADD_LIBRARY(yasmstd
++    if(WIN32)
++        install(TARGETS yasmstd LIBRARY DESTINATION bin)
++    else()
++        install(TARGETS yasmstd LIBRARY DESTINATION lib)
++    endif()
++else()
++    add_library(yasmstd
+         init_plugin.c
+         ${YASM_MODULES_SRC}
+-        )
+-    TARGET_LINK_LIBRARIES(yasmstd libyasm)
+-ENDIF(BUILD_SHARED_LIBS)
++    )
++    target_link_libraries(yasmstd libyasm)
++endif()
+diff --git a/modules/arch/CMakeLists.txt b/modules/arch/CMakeLists.txt
+index ea65fbd0..16c6d7b3 100644
+--- a/modules/arch/CMakeLists.txt
++++ b/modules/arch/CMakeLists.txt
+@@ -1,2 +1,2 @@
+-INCLUDE(arch/lc3b/CMakeLists.txt)
+-INCLUDE(arch/x86/CMakeLists.txt)
++include(arch/lc3b/cmakelists.txt)
++include(arch/x86/CMakeLists.txt)
+diff --git a/modules/arch/lc3b/CMakeLists.txt b/modules/arch/lc3b/CMakeLists.txt
+index 0d5df705..e10dd19e 100644
+--- a/modules/arch/lc3b/CMakeLists.txt
++++ b/modules/arch/lc3b/CMakeLists.txt
+@@ -1,11 +1,11 @@
+-YASM_RE2C(
++yasm_re2c(
+     ${CMAKE_CURRENT_SOURCE_DIR}/arch/lc3b/lc3bid.re
+     ${CMAKE_CURRENT_BINARY_DIR}/lc3bid.c
+     -s
+-    )
++)
+ 
+-YASM_ADD_MODULE(arch_lc3b
++yasm_add_module(arch_lc3b
+     arch/lc3b/lc3barch.c
+     arch/lc3b/lc3bbc.c
+     lc3bid.c
+-    )
++)
+diff --git a/modules/arch/x86/CMakeLists.txt b/modules/arch/x86/CMakeLists.txt
+index d15c9948..48339051 100644
+--- a/modules/arch/x86/CMakeLists.txt
++++ b/modules/arch/x86/CMakeLists.txt
+@@ -1,50 +1,50 @@
+-ADD_CUSTOM_COMMAND(
++add_custom_command(
+     OUTPUT
+-        ${CMAKE_CURRENT_BINARY_DIR}/x86insns.c
+-        ${CMAKE_CURRENT_BINARY_DIR}/x86insn_gas.gperf
+-        ${CMAKE_CURRENT_BINARY_DIR}/x86insn_nasm.gperf
++    ${CMAKE_CURRENT_BINARY_DIR}/x86insns.c
++    ${CMAKE_CURRENT_BINARY_DIR}/x86insn_gas.gperf
++    ${CMAKE_CURRENT_BINARY_DIR}/x86insn_nasm.gperf
+     COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/arch/x86/gen_x86_insn.py
+-           ${CMAKE_CURRENT_BINARY_DIR}/x86insns.c
+-           ${CMAKE_CURRENT_BINARY_DIR}/x86insn_gas.gperf
+-           ${CMAKE_CURRENT_BINARY_DIR}/x86insn_nasm.gperf
++    ${CMAKE_CURRENT_BINARY_DIR}/x86insns.c
++    ${CMAKE_CURRENT_BINARY_DIR}/x86insn_gas.gperf
++    ${CMAKE_CURRENT_BINARY_DIR}/x86insn_nasm.gperf
+     MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/arch/x86/gen_x86_insn.py
+-    )
++)
+ 
+-YASM_GENPERF(
++yasm_genperf(
+     ${CMAKE_CURRENT_SOURCE_DIR}/arch/x86/x86cpu.gperf
+     ${CMAKE_CURRENT_BINARY_DIR}/x86cpu.c
+-    )
++)
+ 
+-YASM_GENPERF(
++yasm_genperf(
+     ${CMAKE_CURRENT_SOURCE_DIR}/arch/x86/x86regtmod.gperf
+     ${CMAKE_CURRENT_BINARY_DIR}/x86regtmod.c
+-    )
++)
+ 
+-YASM_GENPERF(
++yasm_genperf(
+     ${CMAKE_CURRENT_BINARY_DIR}/x86insn_nasm.gperf
+     ${CMAKE_CURRENT_BINARY_DIR}/x86insn_nasm.c
+-    )
++)
+ 
+-YASM_GENPERF(
++yasm_genperf(
+     ${CMAKE_CURRENT_BINARY_DIR}/x86insn_gas.gperf
+     ${CMAKE_CURRENT_BINARY_DIR}/x86insn_gas.c
+-    )
++)
+ 
+-YASM_ADD_MODULE(arch_x86
++yasm_add_module(arch_x86
+     arch/x86/x86arch.c
+     arch/x86/x86bc.c
+     arch/x86/x86expr.c
+     arch/x86/x86id.c
+     x86cpu.c
+     x86regtmod.c
+-    )
++)
+ 
+-SET(insn_DEPS
++set(insn_DEPS
+     ${CMAKE_CURRENT_BINARY_DIR}/x86insn_nasm.c
+     ${CMAKE_CURRENT_BINARY_DIR}/x86insn_gas.c
+     ${CMAKE_CURRENT_BINARY_DIR}/x86insns.c
+-    )
++)
+ 
+-SET_SOURCE_FILES_PROPERTIES(arch/x86/x86id.c PROPERTIES
++set_source_files_properties(arch/x86/x86id.c PROPERTIES
+     OBJECT_DEPENDS "${insn_DEPS}"
+-    )
++)
+diff --git a/modules/dbgfmts/CMakeLists.txt b/modules/dbgfmts/CMakeLists.txt
+index 93c29fe8..6e4fd1d9 100644
+--- a/modules/dbgfmts/CMakeLists.txt
++++ b/modules/dbgfmts/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-INCLUDE(dbgfmts/codeview/CMakeLists.txt)
+-INCLUDE(dbgfmts/dwarf2/CMakeLists.txt)
+-INCLUDE(dbgfmts/null/CMakeLists.txt)
+-INCLUDE(dbgfmts/stabs/CMakeLists.txt)
++include(dbgfmts/codeview/CMakeLists.txt)
++include(dbgfmts/dwarf2/CMakeLists.txt)
++include(dbgfmts/null/CMakeLists.txt)
++include(dbgfmts/stabs/CMakeLists.txt)
+diff --git a/modules/dbgfmts/codeview/CMakeLists.txt b/modules/dbgfmts/codeview/CMakeLists.txt
+index 3ecd9fa5..748f2166 100644
+--- a/modules/dbgfmts/codeview/CMakeLists.txt
++++ b/modules/dbgfmts/codeview/CMakeLists.txt
+@@ -1,5 +1,5 @@
+-YASM_ADD_MODULE(dbgfmt_cv8
++yasm_add_module(dbgfmt_cv8
+     dbgfmts/codeview/cv-dbgfmt.c
+     dbgfmts/codeview/cv-symline.c
+     dbgfmts/codeview/cv-type.c
+-    )
++)
+diff --git a/modules/dbgfmts/dwarf2/CMakeLists.txt b/modules/dbgfmts/dwarf2/CMakeLists.txt
+index 671910ee..54bdfe60 100644
+--- a/modules/dbgfmts/dwarf2/CMakeLists.txt
++++ b/modules/dbgfmts/dwarf2/CMakeLists.txt
+@@ -1,6 +1,6 @@
+-YASM_ADD_MODULE(dbgfmt_dwarf2
++yasm_add_module(dbgfmt_dwarf2
+     dbgfmts/dwarf2/dwarf2-dbgfmt.c
+     dbgfmts/dwarf2/dwarf2-line.c
+     dbgfmts/dwarf2/dwarf2-aranges.c
+     dbgfmts/dwarf2/dwarf2-info.c
+-    )
++)
+diff --git a/modules/dbgfmts/null/CMakeLists.txt b/modules/dbgfmts/null/CMakeLists.txt
+index 9f85b2fd..54231ec0 100644
+--- a/modules/dbgfmts/null/CMakeLists.txt
++++ b/modules/dbgfmts/null/CMakeLists.txt
+@@ -1,3 +1,3 @@
+-YASM_ADD_MODULE(dbgfmt_null
++yasm_add_module(dbgfmt_null
+     dbgfmts/null/null-dbgfmt.c
+-    )
++)
+diff --git a/modules/dbgfmts/stabs/CMakeLists.txt b/modules/dbgfmts/stabs/CMakeLists.txt
+index bd3b0268..bcb872ed 100644
+--- a/modules/dbgfmts/stabs/CMakeLists.txt
++++ b/modules/dbgfmts/stabs/CMakeLists.txt
+@@ -1,3 +1,3 @@
+-YASM_ADD_MODULE(dbgfmt_stabs
++yasm_add_module(dbgfmt_stabs
+     dbgfmts/stabs/stabs-dbgfmt.c
+-    )
++)
+diff --git a/modules/listfmts/CMakeLists.txt b/modules/listfmts/CMakeLists.txt
+index ce3c92a0..93f8d576 100644
+--- a/modules/listfmts/CMakeLists.txt
++++ b/modules/listfmts/CMakeLists.txt
+@@ -1 +1 @@
+-INCLUDE(listfmts/nasm/CMakeLists.txt)
++include(listfmts/nasm/CMakeLists.txt)
+diff --git a/modules/listfmts/nasm/CMakeLists.txt b/modules/listfmts/nasm/CMakeLists.txt
+index 9d54f82f..e3279bda 100644
+--- a/modules/listfmts/nasm/CMakeLists.txt
++++ b/modules/listfmts/nasm/CMakeLists.txt
+@@ -1,3 +1,3 @@
+-YASM_ADD_MODULE(listfmt_nasm
++yasm_add_module(listfmt_nasm
+     listfmts/nasm/nasm-listfmt.c
+-    )
++)
+diff --git a/modules/objfmts/CMakeLists.txt b/modules/objfmts/CMakeLists.txt
+index c00a3a04..3367df3e 100644
+--- a/modules/objfmts/CMakeLists.txt
++++ b/modules/objfmts/CMakeLists.txt
+@@ -1,9 +1,9 @@
+-INCLUDE(objfmts/dbg/CMakeLists.txt)
+-INCLUDE(objfmts/bin/CMakeLists.txt)
+-INCLUDE(objfmts/elf/CMakeLists.txt)
+-INCLUDE(objfmts/coff/CMakeLists.txt)
+-INCLUDE(objfmts/macho/CMakeLists.txt)
+-INCLUDE(objfmts/rdf/CMakeLists.txt)
+-#INCLUDE(objfmts/win32/CMakeLists.txt)
+-#INCLUDE(objfmts/win64/CMakeLists.txt)
+-INCLUDE(objfmts/xdf/CMakeLists.txt)
++include(objfmts/dbg/CMakeLists.txt)
++include(objfmts/bin/CMakeLists.txt)
++include(objfmts/elf/CMakeLists.txt)
++include(objfmts/coff/CMakeLists.txt)
++include(objfmts/macho/CMakeLists.txt)
++include(objfmts/rdf/CMakeLists.txt)
++#include(objfmts/win32/CMakeLists.txt)
++#include(objfmts/win64/CMakeLists.txt)
++include(objfmts/xdf/CMakeLists.txt)
+diff --git a/modules/objfmts/bin/CMakeLists.txt b/modules/objfmts/bin/CMakeLists.txt
+index a3d396a5..c8836596 100644
+--- a/modules/objfmts/bin/CMakeLists.txt
++++ b/modules/objfmts/bin/CMakeLists.txt
+@@ -1,3 +1,3 @@
+-YASM_ADD_MODULE(objfmt_bin
++yasm_add_module(objfmt_bin
+     objfmts/bin/bin-objfmt.c
+-    )
++)
+diff --git a/modules/objfmts/coff/CMakeLists.txt b/modules/objfmts/coff/CMakeLists.txt
+index 5f63d4f7..66d1d1ca 100644
+--- a/modules/objfmts/coff/CMakeLists.txt
++++ b/modules/objfmts/coff/CMakeLists.txt
+@@ -1,27 +1,27 @@
+-YASM_GENMACRO(
++yasm_genmacro(
+     ${CMAKE_CURRENT_SOURCE_DIR}/objfmts/coff/win64-nasm.mac
+     ${CMAKE_CURRENT_BINARY_DIR}/win64-nasm.c
+     win64_nasm_stdmac
+-    )
++)
+ 
+-YASM_GENMACRO(
++yasm_genmacro(
+     ${CMAKE_CURRENT_SOURCE_DIR}/objfmts/coff/win64-gas.mac
+     ${CMAKE_CURRENT_BINARY_DIR}/win64-gas.c
+     win64_gas_stdmac
+-    )
++)
+ 
+-SET(coff_DEPS
++set(coff_DEPS
+     ${CMAKE_CURRENT_BINARY_DIR}/win64-nasm.c
+     ${CMAKE_CURRENT_BINARY_DIR}/win64-gas.c
+-    )
++)
+ 
+-SET_SOURCE_FILES_PROPERTIES(objfmts/coff/coff-objfmt.c PROPERTIES
++set_source_files_properties(objfmts/coff/coff-objfmt.c PROPERTIES
+     OBJECT_DEPENDS "${coff_DEPS}"
+-    )
++)
+ 
+-YASM_ADD_MODULE(objfmt_coff
++yasm_add_module(objfmt_coff
+     objfmts/coff/coff-objfmt.c
+     objfmts/coff/win64-except.c
+-    )
++)
+ list(APPEND YASM_MODULES objfmt_win32)
+ list(APPEND YASM_MODULES objfmt_win64)
+diff --git a/modules/objfmts/dbg/CMakeLists.txt b/modules/objfmts/dbg/CMakeLists.txt
+index ba5193fa..a93577af 100644
+--- a/modules/objfmts/dbg/CMakeLists.txt
++++ b/modules/objfmts/dbg/CMakeLists.txt
+@@ -1,3 +1,3 @@
+-YASM_ADD_MODULE(objfmt_dbg
++yasm_add_module(objfmt_dbg
+     objfmts/dbg/dbg-objfmt.c
+-    )
++)
+diff --git a/modules/objfmts/elf/CMakeLists.txt b/modules/objfmts/elf/CMakeLists.txt
+index 444e9a8b..201bc155 100644
+--- a/modules/objfmts/elf/CMakeLists.txt
++++ b/modules/objfmts/elf/CMakeLists.txt
+@@ -1,10 +1,10 @@
+-YASM_ADD_MODULE(objfmt_elf
++yasm_add_module(objfmt_elf
+     objfmts/elf/elf.c
+     objfmts/elf/elf-objfmt.c
+     objfmts/elf/elf-x86-x86.c
+     objfmts/elf/elf-x86-amd64.c
+     objfmts/elf/elf-x86-x32.c
+-    )
++)
+ list(APPEND YASM_MODULES objfmt_elf32)
+ list(APPEND YASM_MODULES objfmt_elf64)
+ list(APPEND YASM_MODULES objfmt_elfx32)
+diff --git a/modules/objfmts/macho/CMakeLists.txt b/modules/objfmts/macho/CMakeLists.txt
+index cb5f4934..67203246 100644
+--- a/modules/objfmts/macho/CMakeLists.txt
++++ b/modules/objfmts/macho/CMakeLists.txt
+@@ -1,5 +1,5 @@
+-YASM_ADD_MODULE(objfmt_macho
++yasm_add_module(objfmt_macho
+     objfmts/macho/macho-objfmt.c
+-    )
++)
+ list(APPEND YASM_MODULES objfmt_macho32)
+ list(APPEND YASM_MODULES objfmt_macho64)
+diff --git a/modules/objfmts/rdf/CMakeLists.txt b/modules/objfmts/rdf/CMakeLists.txt
+index 6cf9157d..cf911fbe 100644
+--- a/modules/objfmts/rdf/CMakeLists.txt
++++ b/modules/objfmts/rdf/CMakeLists.txt
+@@ -1,3 +1,3 @@
+-YASM_ADD_MODULE(objfmt_rdf
++yasm_add_module(objfmt_rdf
+     objfmts/rdf/rdf-objfmt.c
+-    )
++)
+diff --git a/modules/objfmts/xdf/CMakeLists.txt b/modules/objfmts/xdf/CMakeLists.txt
+index 681ec2b0..9c1c5464 100644
+--- a/modules/objfmts/xdf/CMakeLists.txt
++++ b/modules/objfmts/xdf/CMakeLists.txt
+@@ -1,3 +1,3 @@
+-YASM_ADD_MODULE(objfmt_xdf
++yasm_add_module(objfmt_xdf
+     objfmts/xdf/xdf-objfmt.c
+-    )
++)
+diff --git a/modules/parsers/CMakeLists.txt b/modules/parsers/CMakeLists.txt
+index db1e371f..e6157ec7 100644
+--- a/modules/parsers/CMakeLists.txt
++++ b/modules/parsers/CMakeLists.txt
+@@ -1,2 +1,2 @@
+-INCLUDE(parsers/gas/CMakeLists.txt)
+-INCLUDE(parsers/nasm/CMakeLists.txt)
++include(parsers/gas/CMakeLists.txt)
++include(parsers/nasm/CMakeLists.txt)
+diff --git a/modules/parsers/gas/CMakeLists.txt b/modules/parsers/gas/CMakeLists.txt
+index d4ecb3ea..91dcf2a3 100644
+--- a/modules/parsers/gas/CMakeLists.txt
++++ b/modules/parsers/gas/CMakeLists.txt
+@@ -1,12 +1,12 @@
+-YASM_RE2C(
++yasm_re2c(
+     ${CMAKE_CURRENT_SOURCE_DIR}/parsers/gas/gas-token.re
+     ${CMAKE_CURRENT_BINARY_DIR}/gas-token.c
+     -b
+-    )
++)
+ 
+-YASM_ADD_MODULE(parser_gas
++yasm_add_module(parser_gas
+     parsers/gas/gas-parser.c
+     parsers/gas/gas-parse.c
+     parsers/gas/gas-parse-intel.c
+     gas-token.c
+-    )
++)
+diff --git a/modules/parsers/nasm/CMakeLists.txt b/modules/parsers/nasm/CMakeLists.txt
+index 7a060d29..90771519 100644
+--- a/modules/parsers/nasm/CMakeLists.txt
++++ b/modules/parsers/nasm/CMakeLists.txt
+@@ -1,21 +1,21 @@
+-YASM_GENMACRO(
++yasm_genmacro(
+     ${CMAKE_CURRENT_SOURCE_DIR}/parsers/nasm/nasm-std.mac
+     ${CMAKE_CURRENT_BINARY_DIR}/nasm-macros.c
+     nasm_standard_mac
+-    )
++)
+ 
+-SET_SOURCE_FILES_PROPERTIES(parsers/nasm/nasm-parser.c PROPERTIES
++set_source_files_properties(parsers/nasm/nasm-parser.c PROPERTIES
+     OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/nasm-macros.c
+-    )
++)
+ 
+ YASM_RE2C(
+     ${CMAKE_CURRENT_SOURCE_DIR}/parsers/nasm/nasm-token.re
+     ${CMAKE_CURRENT_BINARY_DIR}/nasm-token.c
+     -b
+-    )
++)
+ 
+ YASM_ADD_MODULE(parser_nasm
+     parsers/nasm/nasm-parser.c
+     parsers/nasm/nasm-parse.c
+     nasm-token.c
+-    )
++)
+diff --git a/modules/preprocs/CMakeLists.txt b/modules/preprocs/CMakeLists.txt
+index 59640272..e39f6ecd 100644
+--- a/modules/preprocs/CMakeLists.txt
++++ b/modules/preprocs/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-INCLUDE(preprocs/nasm/CMakeLists.txt)
+-INCLUDE(preprocs/raw/CMakeLists.txt)
+-INCLUDE(preprocs/cpp/CMakeLists.txt)
+-INCLUDE(preprocs/gas/CMakeLists.txt)
++include(preprocs/nasm/CMakeLists.txt)
++include(preprocs/raw/CMakeLists.txt)
++include(preprocs/cpp/CMakeLists.txt)
++include(preprocs/gas/CMakeLists.txt)
+diff --git a/modules/preprocs/cpp/CMakeLists.txt b/modules/preprocs/cpp/CMakeLists.txt
+index 202787cb..a65fd7fb 100644
+--- a/modules/preprocs/cpp/CMakeLists.txt
++++ b/modules/preprocs/cpp/CMakeLists.txt
+@@ -1,3 +1,3 @@
+-YASM_ADD_MODULE(preproc_cpp
++yasm_add_module(preproc_cpp
+     preprocs/cpp/cpp-preproc.c
+-    )
++)
+diff --git a/modules/preprocs/gas/CMakeLists.txt b/modules/preprocs/gas/CMakeLists.txt
+index e8d09148..a8e4c7fa 100644
+--- a/modules/preprocs/gas/CMakeLists.txt
++++ b/modules/preprocs/gas/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-YASM_ADD_MODULE(preproc_gas
++yasm_add_module(preproc_gas
+     preprocs/gas/gas-preproc.c
+     preprocs/gas/gas-eval.c
+-    )
++)
+diff --git a/modules/preprocs/nasm/CMakeLists.txt b/modules/preprocs/nasm/CMakeLists.txt
+index e10a9dd1..a3991e0e 100644
+--- a/modules/preprocs/nasm/CMakeLists.txt
++++ b/modules/preprocs/nasm/CMakeLists.txt
+@@ -1,25 +1,25 @@
++
+ add_executable(genversion preprocs/nasm/genversion.c)
+-get_target_property(_tmp_GENVERSION_EXE genversion LOCATION)
+ add_custom_command(
+     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/version.mac
+-    COMMAND ${_tmp_GENVERSION_EXE} ${CMAKE_CURRENT_BINARY_DIR}/version.mac
+-    DEPENDS ${_tmp_GENVERSION_EXE}
+-    )
++    COMMAND $<TARGET_FILE:genversion> ${CMAKE_CURRENT_BINARY_DIR}/version.mac
++    DEPENDS genversion
++)
+ 
+-YASM_GENMACRO(
++yasm_genmacro(
+     ${CMAKE_CURRENT_BINARY_DIR}/version.mac
+     ${CMAKE_CURRENT_BINARY_DIR}/nasm-version.c
+     nasm_version_mac
+-    )
++)
+ 
+-SET_SOURCE_FILES_PROPERTIES(preprocs/nasm/nasm-preproc.c PROPERTIES
++set_source_files_properties(preprocs/nasm/nasm-preproc.c PROPERTIES
+     OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/nasm-version.c
+-    )
++)
+ 
+-YASM_ADD_MODULE(preproc_nasm
++yasm_add_module(preproc_nasm
+     preprocs/nasm/nasm-preproc.c
+     preprocs/nasm/nasm-pp.c
+     preprocs/nasm/nasmlib.c
+     preprocs/nasm/nasm-eval.c
+-    )
++)
+ 
+diff --git a/modules/preprocs/raw/CMakeLists.txt b/modules/preprocs/raw/CMakeLists.txt
+index fc345386..89b5a7ef 100644
+--- a/modules/preprocs/raw/CMakeLists.txt
++++ b/modules/preprocs/raw/CMakeLists.txt
+@@ -1,3 +1,3 @@
+-YASM_ADD_MODULE(preproc_raw
++yasm_add_module(preproc_raw
+     preprocs/raw/raw-preproc.c
+-    )
++)
+diff --git a/plugins/dbg/CMakeLists.txt b/plugins/dbg/CMakeLists.txt
+index 3d4fe681..05f53ccd 100644
+--- a/plugins/dbg/CMakeLists.txt
++++ b/plugins/dbg/CMakeLists.txt
+@@ -1,56 +1,56 @@
+-PROJECT(dbgmod)
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
++project(dbgmod)
++cmake_minimum_required(VERSION 2.4)
+ 
+-SET (YASM_POSSIBLE_PATHS
++set(YASM_POSSIBLE_PATHS
+     "$ENV{ProgramFiles}/Yasm/Bin"
+     /usr/bin
+     /usr/local/bin
+-    )
++)
+ 
+-FIND_PROGRAM(YASM_PATH yasm
++find_program(YASM_PATH yasm
+     PATHS ${YASM_POSSIBLE_PATHS}
+-    )
++)
+ 
+-SET (YASM_POSSIBLE_INCLUDE_PATHS
++set(YASM_POSSIBLE_INCLUDE_PATHS
+     "${YASM_PATH}"
+     "${YASM_PATH}/../include"
+     "$ENV{ProgramFiles}/Yasm/Include"
+     /usr/include
+     /usr/local/include
+-    )
++)
+ 
+-FIND_PATH(YASM_INCLUDE_PATH NAMES libyasm.h
++find_path(YASM_INCLUDE_PATH NAMES libyasm.h
+     DOC "The path to the libyasm include files"
+     PATHS ${YASM_POSSIBLE_INCLUDE_PATHS}
+-    )
++)
+ 
+-IF (NOT YASM_INCLUDE_PATH)
+-    MESSAGE(FATAL_ERROR "Could not find yasm include files")
+-ENDIF (NOT YASM_INCLUDE_PATH)
++if(NOT YASM_INCLUDE_PATH)
++    message(FATAL_ERROR "Could not find yasm include files")
++endif(NOT YASM_INCLUDE_PATH)
+ 
+-INCLUDE_DIRECTORIES(${YASM_INCLUDE_PATH})
++include_directories(${YASM_INCLUDE_PATH})
+ 
+-SET (YASM_POSSIBLE_LIB_PATHS
++set(YASM_POSSIBLE_LIB_PATHS
+     "${YASM_PATH}"
+     "${YASM_PATH}/../lib"
+     "${YASM_INCLUDE_PATH}/../lib"
+     "$ENV{ProgramFiles}/Yasm/Lib"
+     /usr/lib
+     /usr/local/lib
+-    )
++)
+ 
+-FIND_LIBRARY(YASM_LIBRARY
++find_library(YASM_LIBRARY
+     NAMES yasm
+     DOC "The path to the libyasm library"
+     PATHS ${YASM_POSSIBLE_LIB_PATHS}
+-    )
++)
+ 
+-IF (NOT YASM_LIBRARY)
+-    MESSAGE(FATAL_ERROR "Could not find yasm library")
+-ENDIF (NOT YASM_LIBRARY)
++if(NOT yasm_library)
++    message(FATAL_ERROR "Could not find yasm library")
++endif(NOT YASM_LIBRARY)
+ 
+-ADD_LIBRARY(dbgmod MODULE
++add_library(dbgmod MODULE
+     init_plugin.c
+     dbg-objfmt.c
+-    )
+-TARGET_LINK_LIBRARIES(dbgmod ${YASM_LIBRARY})
++)
++target_link_libraries(dbgmod ${YASM_LIBRARY})
+diff --git a/plugins/x86/CMakeLists.txt b/plugins/x86/CMakeLists.txt
+index d0e10dae..389f6782 100644
+--- a/plugins/x86/CMakeLists.txt
++++ b/plugins/x86/CMakeLists.txt
+@@ -1,139 +1,139 @@
+-PROJECT(x86mod)
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
++project(x86mod)
++cmake_minimum_required(VERSION 2.4)
+ 
+-SET(YASM_SOURCE_DIR "${PROJECT_SOURCE_DIR}/../.."
++set(YASM_SOURCE_DIR "${PROJECT_SOURCE_DIR}/../.."
+     CACHE STRING "Location of Yasm source")
+ 
+-IF (NOT YASM_SOURCE_DIR)
+-    MESSAGE(FATAL_ERROR "YASM_SOURCE_DIR must be defined")
+-ENDIF (NOT YASM_SOURCE_DIR)
++if(NOT YASM_SOURCE_DIR)
++    message(FATAL_ERROR "YASM_SOURCE_DIR must be defined")
++endif(NOT YASM_SOURCE_DIR)
+ 
+-SET(SOURCE_DIR "${YASM_SOURCE_DIR}/modules/arch/x86")
++set(SOURCE_DIR "${YASM_SOURCE_DIR}/modules/arch/x86")
+ 
+-SET (YASM_POSSIBLE_PATHS
++set(YASM_POSSIBLE_PATHS
+     "$ENV{ProgramFiles}/Yasm/Bin"
+     /usr/bin
+     /usr/local/bin
+-    )
++)
+ 
+-FIND_PROGRAM(YASM_PATH yasm
++find_program(YASM_PATH yasm
+     PATHS ${YASM_POSSIBLE_PATHS}
+-    )
++)
+ 
+-SET (GENPERF_POSSIBLE_PATHS
++set(GENPERF_POSSIBLE_PATHS
+     ${YASM_SOURCE_DIR}/objdir/tools/genperf
+     ${YASM_SOURCE_DIR}/objdir/tools/genperf/Debug
+     ${YASM_SOURCE_DIR}/objdir/tools/genperf/Release
+-    )
++)
+ 
+-FIND_PROGRAM(GENPERF_PATH genperf
++find_program(GENPERF_PATH genperf
+     DOC "The path to the yasm genperf executable"
+     PATHS ${GENPERF_POSSIBLE_PATHS}
+-    )
++)
+ 
+-IF (NOT GENPERF_PATH)
++if(NOT GENPERF_PATH)
+     MESSAGE(FATAL_ERROR "Could not find genperf executable")
+-ENDIF (NOT GENPERF_PATH)
++endif(NOT GENPERF_PATH)
+ 
+-SET (YASM_POSSIBLE_INCLUDE_PATHS
++set(YASM_POSSIBLE_INCLUDE_PATHS
+     "${YASM_PATH}"
+     "${YASM_PATH}/../include"
+     "$ENV{ProgramFiles}/Yasm/Include"
+     /usr/include
+     /usr/local/include
+-    )
++)
+ 
+-FIND_PATH(YASM_INCLUDE_PATH NAMES libyasm.h
++find_path(YASM_INCLUDE_PATH NAMES libyasm.h
+     DOC "The path to the libyasm include files"
+     PATHS ${YASM_POSSIBLE_INCLUDE_PATHS}
+-    )
++)
+ 
+-IF (NOT YASM_INCLUDE_PATH)
++if(NOT YASM_INCLUDE_PATH)
+     MESSAGE(FATAL_ERROR "Could not find yasm include files")
+-ENDIF (NOT YASM_INCLUDE_PATH)
++endif(NOT YASM_INCLUDE_PATH)
+ 
+-INCLUDE_DIRECTORIES(${YASM_INCLUDE_PATH})
+-INCLUDE_DIRECTORIES(${YASM_SOURCE_DIR})
++include_directories(${YASM_INCLUDE_PATH})
++include_directories(${YASM_SOURCE_DIR})
+ 
+-SET (YASM_POSSIBLE_LIB_PATHS
++set(YASM_POSSIBLE_LIB_PATHS
+     "${YASM_PATH}"
+     "${YASM_PATH}/../lib"
+     "${YASM_INCLUDE_PATH}/../lib"
+     "$ENV{ProgramFiles}/Yasm/Lib"
+     /usr/lib
+     /usr/local/lib
+-    )
++)
+ 
+-FIND_LIBRARY(YASM_LIBRARY
++find_library(YASM_LIBRARY
+     NAMES yasm
+     DOC "The path to the libyasm library"
+     PATHS ${YASM_POSSIBLE_LIB_PATHS}
+-    )
++)
+ 
+-IF (NOT YASM_LIBRARY)
+-    MESSAGE(FATAL_ERROR "Could not find yasm library")
+-ENDIF (NOT YASM_LIBRARY)
++if(NOT YASM_LIBRARY)
++    message(FATAL_ERROR "Could not find yasm library")
++endif(NOT YASM_LIBRARY)
+ 
+-INCLUDE(FindPythonInterp)
++include(FindPythonInterp)
+ 
+-IF (NOT PYTHON_EXECUTABLE)
+-    MESSAGE(FATAL_ERROR "Could not find Python executable")
+-ENDIF (NOT PYTHON_EXECUTABLE)
++if(not python_executable)
++    message(FATAL_ERROR "Could not find Python executable")
++endif(NOT PYTHON_EXECUTABLE)
+ 
+-INCLUDE_DIRECTORIES(${SOURCE_DIR})
+-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
++include_directories(${SOURCE_DIR})
++include_directories(${CMAKE_CURRENT_BINARY_DIR})
+ 
+-ADD_CUSTOM_COMMAND(
++add_custom_command(
+     OUTPUT
+-        ${CMAKE_CURRENT_BINARY_DIR}/x86insns.c
+-        ${CMAKE_CURRENT_BINARY_DIR}/x86insn_gas.gperf
+-        ${CMAKE_CURRENT_BINARY_DIR}/x86insn_nasm.gperf
++    ${CMAKE_CURRENT_BINARY_DIR}/x86insns.c
++    ${CMAKE_CURRENT_BINARY_DIR}/x86insn_gas.gperf
++    ${CMAKE_CURRENT_BINARY_DIR}/x86insn_nasm.gperf
+     COMMAND ${PYTHON_EXECUTABLE} ${SOURCE_DIR}/gen_x86_insn.py
+-           ${CMAKE_CURRENT_BINARY_DIR}/x86insns.c
+-           ${CMAKE_CURRENT_BINARY_DIR}/x86insn_gas.gperf
+-           ${CMAKE_CURRENT_BINARY_DIR}/x86insn_nasm.gperf
++    ${CMAKE_CURRENT_BINARY_DIR}/x86insns.c
++    ${CMAKE_CURRENT_BINARY_DIR}/x86insn_gas.gperf
++    ${CMAKE_CURRENT_BINARY_DIR}/x86insn_nasm.gperf
+     MAIN_DEPENDENCY ${SOURCE_DIR}/gen_x86_insn.py
+-    )
++)
+ 
+-macro (YASM_GENPERF _in_NAME _out_NAME)
++macro(YASM_GENPERF _in_NAME _out_NAME)
+     add_custom_command(
+         OUTPUT ${_out_NAME}
+         COMMAND ${GENPERF_PATH} ${_in_NAME} ${_out_NAME}
+         MAIN_DEPENDENCY ${_in_NAME}
+-        )
+-endmacro (YASM_GENPERF)
++    )
++endmacro(YASM_GENPERF)
+ 
+-YASM_GENPERF(
++yasm_genperf(
+     ${SOURCE_DIR}/x86cpu.gperf
+     ${CMAKE_CURRENT_BINARY_DIR}/x86cpu.c
+-    )
++)
+ 
+-YASM_GENPERF(
++yasm_genperf(
+     ${SOURCE_DIR}/x86regtmod.gperf
+     ${CMAKE_CURRENT_BINARY_DIR}/x86regtmod.c
+-    )
++)
+ 
+-YASM_GENPERF(
++yasm_genperf(
+     ${CMAKE_CURRENT_BINARY_DIR}/x86insn_nasm.gperf
+     ${CMAKE_CURRENT_BINARY_DIR}/x86insn_nasm.c
+-    )
++)
+ 
+-YASM_GENPERF(
++yasm_genperf(
+     ${CMAKE_CURRENT_BINARY_DIR}/x86insn_gas.gperf
+     ${CMAKE_CURRENT_BINARY_DIR}/x86insn_gas.c
+-    )
++)
+ 
+-SET(insn_DEPS
++set(insn_DEPS
+     ${CMAKE_CURRENT_BINARY_DIR}/x86insn_nasm.c
+     ${CMAKE_CURRENT_BINARY_DIR}/x86insn_gas.c
+     ${CMAKE_CURRENT_BINARY_DIR}/x86insns.c
+-    )
++)
+ 
+-SET_SOURCE_FILES_PROPERTIES(${SOURCE_DIR}/x86id.c PROPERTIES
++set_source_files_properties(${SOURCE_DIR}/x86id.c PROPERTIES
+     OBJECT_DEPENDS "${insn_DEPS}"
+-    )
++)
+ 
+-ADD_LIBRARY(x86mod MODULE
++add_library(x86mod MODULE
+     init_plugin.c
+     ${SOURCE_DIR}/x86arch.c
+     ${SOURCE_DIR}/x86bc.c
+@@ -141,5 +141,5 @@ ADD_LIBRARY(x86mod MODULE
+     ${SOURCE_DIR}/x86id.c
+     x86cpu.c
+     x86regtmod.c
+-    )
+-TARGET_LINK_LIBRARIES(x86mod ${YASM_LIBRARY})
++)
++target_link_libraries(x86mod ${YASM_LIBRARY})
+diff --git a/tools/CMakeLists.txt b/tools/CMakeLists.txt
+index 4b83d4eb..97d008ed 100644
+--- a/tools/CMakeLists.txt
++++ b/tools/CMakeLists.txt
+@@ -1,3 +1,3 @@
+-ADD_SUBDIRECTORY(genmacro)
+-ADD_SUBDIRECTORY(genperf)
+-ADD_SUBDIRECTORY(re2c)
++add_subdirectory(genmacro)
++add_subdirectory(genperf)
++add_subdirectory(re2c)
+diff --git a/tools/genmacro/CMakeLists.txt b/tools/genmacro/CMakeLists.txt
+index 27ba5996..ce6c15f7 100644
+--- a/tools/genmacro/CMakeLists.txt
++++ b/tools/genmacro/CMakeLists.txt
+@@ -1,3 +1,3 @@
+ add_executable(genmacro
+     genmacro.c
+-    )
++)
+diff --git a/tools/genperf/CMakeLists.txt b/tools/genperf/CMakeLists.txt
+index 6f50989e..d0e44775 100644
+--- a/tools/genperf/CMakeLists.txt
++++ b/tools/genperf/CMakeLists.txt
+@@ -4,5 +4,5 @@ add_executable(genperf
+     ../../libyasm/phash.c
+     ../../libyasm/xmalloc.c
+     ../../libyasm/xstrdup.c
+-    )
++)
+ set_target_properties(genperf PROPERTIES COMPILE_FLAGS -DYASM_LIB_DECL=)
+diff --git a/tools/re2c/CMakeLists.txt b/tools/re2c/CMakeLists.txt
+index 7125d496..4ef9d78a 100644
+--- a/tools/re2c/CMakeLists.txt
++++ b/tools/re2c/CMakeLists.txt
+@@ -8,4 +8,4 @@ add_executable(re2c
+     mbo_getopt.c
+     substr.c
+     translate.c
+-    )
++)
