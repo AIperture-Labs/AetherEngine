@@ -68,3 +68,16 @@ out/
 # Tracy
 tools/tracy
 .aider*
+
+# Temporary directories
+.tmp/
+.temp/
+temp/
+tmp/
+
+# UV Runtime
+runtimes/uv/
+configs/runtimes/uv/uv.toml
+
+# Python Runtime
+runtimes/python/
