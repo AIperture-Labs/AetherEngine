@@ -33,7 +33,7 @@ BraceWrapping:
   AfterControlStatement: true
   BeforeElse: true
 
-# Short statements → NEVER (lisibilité moteur)
+# Short statements → NEVER (engine readability)
 AllowShortBlocksOnASingleLine: Never
 AllowShortFunctionsOnASingleLine: None
 AllowShortIfStatementsOnASingleLine: Never
