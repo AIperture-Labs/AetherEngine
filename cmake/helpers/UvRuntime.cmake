@@ -24,7 +24,6 @@ if(WIN32)
             ERROR_VARIABLE __error
             OUTPUT_QUIET
         )
-        message(STATUS "[uv-install] Output: ${__output}")
         if(NOT __result EQUAL 0)
             message(FATAL_ERROR "[uv-install] Failed with code ${__result}\nOutput: ${__output}\nError: ${__error}")
         endif()
