@@ -10,7 +10,7 @@ Checks: >
   modernize-*,
   cppcoreguidelines-*
 WarningsAsErrors: false
-HeaderFilterRegex: "^(.*/src/|.*/include/mon_projet/)"
+HeaderFilterRegex: "^(./sources/**/*.hpp)"
 FormatStyle: Google
 AnalyzeTemporaryDtors: false
 CheckOptions:
