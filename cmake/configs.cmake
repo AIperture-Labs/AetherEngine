@@ -6,9 +6,9 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/configs")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/helpers")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
-set(BUILD_SHARED_LIBS ON CACHE BOOL "Build libraries as shared libraries")
 
-include(path_variables)
+include(options)
+include(paths)
 include(compilation)
 include(runtimes)
 include(extern)
