@@ -1,5 +1,12 @@
 # Copyright (c) 2026 AIperture-Labs <xavier.beheydt@gmail.com>
+# Docs: 
+#   - https://cmake.org/cmake/help/v4.1/index.html
+#   - https://cliutils.gitlab.io/modern-cmake/README.html
+#   - https://libjpeg-turbo.org/Documentation/Documentation
+#   - https://github.com/libjpeg-turbo/libjpeg-turbo
+#
 # Helper function for building libjpeg-turbo via ExternalProject
+
 
 include(ExternalProject)
 
@@ -18,7 +25,6 @@ This function sets the following cache variables for downstream targets:
   - TURBOJPEG_SHARED_LIBRARY: Shared TurboJPEG library
 
 #]=======================================================================]
-
 function(ConfigureLibjpegTurbo)
     message(STATUS "Configuring extern lib: libjpeg-turbo")
 
