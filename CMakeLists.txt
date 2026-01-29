@@ -1,5 +1,7 @@
 # Copyright (c) 2026 AIperture-Labs <xavier.beheydt@gmail.com>
-# Doc: https://cmake.org/cmake/help/v4.1/index.html
+# Docs: 
+#   - https://cmake.org/cmake/help/v4.1/index.html
+#   - https://cliutils.gitlab.io/modern-cmake/README.html
 
 cmake_minimum_required(VERSION 3.31..4.1)
 
@@ -9,9 +11,16 @@ project(
     LANGUAGES C CXX
 )
 
+# Configure CMake module paths
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/helpers")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
-include(configs)
+# Add cmake/modules to prefix path for CONFIG mode package discovery
+list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+
+include(Config)
+include(Dependencies)
 
 # add_subdirectory(${AETHER_ENGINE_SOURCE_DIR})
 # add_subdirectory(${AETHER_ENGINE_TESTS_DIR})

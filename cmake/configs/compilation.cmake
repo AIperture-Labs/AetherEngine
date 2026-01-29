@@ -1,5 +1,7 @@
 # Copyright (c) 2026 AIperture-Labs <xavier.beheydt@gmail.com>
-# Doc: https://cmake.org/cmake/help/v4.1/index.html
+# Docs: 
+#   - https://cmake.org/cmake/help/v4.1/index.html
+#   - https://cliutils.gitlab.io/modern-cmake/README.html
 
 # Export compile commands for tooling (e.g., clangd, clang-tidy, VSCode)
 option(CMAKE_EXPORT_COMPILE_COMMANDS "Export compile_commands.json for tools (clangd, clang-tidy, VSCode)" OFF)
