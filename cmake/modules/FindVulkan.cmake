@@ -42,6 +42,9 @@ There are corresponding imported targets for each of these.
 
   The DirectX Shader Compiler.
 
+``slangc``
+  The Slang Shader Compiler.
+
 The ``glslc`` and ``glslangValidator`` components are provided even
 if not explicitly requested (for backward compatibility).
 
@@ -110,6 +113,9 @@ This module defines :prop_tgt:`IMPORTED` targets if Vulkan has been found:
 
   Defined if SDK has the DirectX shader compiler CLI tool.
 
+``Vulkan::slangc``
+  Defined if SDK has the Slang shader compiler CLI tool.
+
 Result Variables
 ^^^^^^^^^^^^^^^^
 
@@ -164,6 +170,9 @@ This module defines the following variables:
 
   True, if the SDK has the DirectX shader compiler CLI tool.
 
+``Vulkan_slangc_FOUND``
+  True, if the SDK has the Slang shader compiler CLI tool.
+
 
 The module will also defines these cache variables:
 
@@ -204,6 +213,9 @@ The module will also defines these cache variables:
 
 ``Vulkan_dxc_EXECUTABLE``
   .. versionadded:: 3.25
+``Vulkan_SLANGC_EXECUTABLE``
+  Path to the Slang shader compiler CLI tool.
+
 
   Path to the DirectX shader compiler CLI tool.
 
