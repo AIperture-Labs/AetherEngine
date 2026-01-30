@@ -30,7 +30,7 @@ function(gh_release_download)
 
     # Manage argument if download is forced (from parsed arguments)
     set(_force_download "--skip-existing")
-    if(DEFINED RELEASE_FORCE_TO_DOWNLOAD)
+    if(DEFINED RELEASE_FORCE_DOWNLOAD)
         set(_force_download "--clobber")
     endif()
 
