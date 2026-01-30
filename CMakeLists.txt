@@ -20,6 +20,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 include(Config)
+include(CompilerWarnings)
 include(Dependencies)
 
 # add_subdirectory(${AETHER_ENGINE_SOURCE_DIR})
