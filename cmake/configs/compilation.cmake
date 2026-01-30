@@ -35,7 +35,7 @@ set(CMAKE_CXX_EXTENSIONS OFF CACHE BOOL "Enable compiler-specific extensions (GN
 # TODO: Re-evaluate enabling PIC after performance benchmarking in production builds.
 # Note: PIC (Position Independent Code) has a minor performance overhead (~3-5%) on x86_64,
 # but enables better address space layout randomization (ASLR). Consider enabling for security-critical deployments.
-set(CMAKE_POSITION_INDEPENDENT_CODE OFF CACHE BOOL "Generate Position Independent Code (PIC). Enables code to be loaded at any memory address. Currently OFF for performance.")
+option(CMAKE_POSITION_INDEPENDENT_CODE "Generate Position Independent Code (PIC). Enables code to be loaded at any memory address. Currently OFF for performance." OFF)
 
 # Link-Time Optimization: Analyzes and optimizes code across translation unit boundaries.
 # Trade-off: Increases compile time significantly but can improve runtime performance (5-15% depending on workload).
