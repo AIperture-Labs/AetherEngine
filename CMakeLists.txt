@@ -3,7 +3,7 @@
 #   - https://cmake.org/cmake/help/v4.1/index.html
 #   - https://cliutils.gitlab.io/modern-cmake/README.html
 
-cmake_minimum_required(VERSION 3.31..4.1)
+cmake_minimum_required(VERSION 3.31...4.1)
 
 project(
     AetherEngine
