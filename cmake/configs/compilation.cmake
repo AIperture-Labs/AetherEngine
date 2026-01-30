@@ -30,3 +30,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON CACHE BOOL "Require C++ Standard")
 
 # Disable compiler-specific extensions; enforce strict ISO C++ compliance.
 set(CMAKE_CXX_EXTENSIONS OFF CACHE BOOL "Enable compiler-specific extensions (GNU/MSVC). OFF = strict ISO C++.")
+
+# Code Generation ===================================================================================================
+# TODO: Re-evaluate enabling PIC after performance benchmarking in production builds.
+# Note: PIC (Position Independent Code) has a minor performance overhead (~3-5%) on x86_64,
+# but enables better address space layout randomization (ASLR). Consider enabling for security-critical deployments.
+set(CMAKE_POSITION_INDEPENDENT_CODE OFF CACHE BOOL "Generate Position Independent Code (PIC). Enables code to be loaded at any memory address. Currently OFF for performance.")
+
+# Link-Time Optimization: Analyzes and optimizes code across translation unit boundaries.
+# Trade-off: Increases compile time significantly but can improve runtime performance (5-15% depending on workload).
+# Useful for release builds; recommend disabling for debug builds to speed up iteration.
+option(CMAKE_INTERPROCEDURAL_OPTIMIZATION "Enable Link-Time Optimization (LTO) for better code optimization across compilation units" OFF)
