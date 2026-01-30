@@ -51,3 +51,6 @@ ConfigureLibjpegTurbo()
 find_package(Vulkan 1.4.335 CONFIG REQUIRED
     COMPONENTS glslc glslangValidator slangc
 )
+
+# doctest for unit tests
+add_subdirectory(${AETHER_ENGINE_EXTERN_DIR}/doctest)
