@@ -1,0 +1,4 @@
+# Copyright (c) 2026 AIperture-Labs <xavier.beheydt@gmail.com
+# Doc: https://docs.astral.sh/uv/reference/settings/
+
+cache-dir = "@AETHER_ENGINE_UV_CACHE_DIR@"

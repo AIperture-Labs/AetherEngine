@@ -1,0 +1,19 @@
+# Copyright (c) 2026 AIperture-Labs <xavier.beheydt@gmail.com>
+# Doc: https://toml.io/
+
+
+[doctest]
+tag = "v2.4.12"
+url = "https://github.com/AIperture-Labs/doctest"
+
+[libjpeg-turbo]
+tag = "3.1.3"
+url = "https://github.com/AIperture-Labs/libjpeg-turbo"
+
+[glm]
+tag = "1.0.3"
+url = "https://github.com/AIperture-Labs/glm"
+
+[yasm]
+branch = "xavierbeheydt/v1.3.0-cmake-modernization"
+url = "https://github.com/AIperture-Labs/yasm"
