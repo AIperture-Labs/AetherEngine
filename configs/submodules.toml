@@ -15,5 +15,5 @@ tag = "1.0.3"
 url = "https://github.com/AIperture-Labs/glm"
 
 [yasm]
-tag = "v1.3.0"
+branch = "xavierbeheydt/v1.3.0-cmake-modernization"
 url = "https://github.com/AIperture-Labs/yasm"
