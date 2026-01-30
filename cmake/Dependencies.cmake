@@ -35,7 +35,7 @@ uv_python_install(
 set(Python_EXECUTABLE "${Uv_Python_EXECUTABLE}")
 set(PYTHON_EXECUTABLE "${Uv_Python_EXECUTABLE}")
 
-# GLM
+# GLM - OpenGL Mathematics library
 message(STATUS "Configuring extern lib: GLM")
 add_subdirectory(${AETHER_ENGINE_EXTERN_DIR}/glm)
 
