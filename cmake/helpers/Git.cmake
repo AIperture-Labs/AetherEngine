@@ -88,10 +88,9 @@ Description
 ^^^^^^^^^^^
 
 This function updates and initializes all git submodules in the project recursively
-using ``git submodule update --init --recursive``. It only performs the update
-if the ``GIT_SUBMODULE`` option is enabled.
-
-If the submodule update fails, a fatal error is raised with the git error code.
+using ``git submodule update --init --recursive``. If the submodule update fails,
+a fatal error is raised with the git error code. This function does not take any arguments
+and always attempts to update submodules when called.
 
 Arguments
 ^^^^^^^^^
@@ -108,7 +107,6 @@ Example
 
 #]=======================================================================]
 function(git_submodules_update)
-    if(GIT_SUBMODULE)
         message(STATUS "Submodules update")
         execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
@@ -116,5 +114,4 @@ function(git_submodules_update)
         if(NOT GIT_SUBMOD_RESULT EQUAL "0")
             message(FATAL_ERROR "git submodule update --init --recursive failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
         endif()
-    endif()
 endfunction()
