@@ -60,7 +60,7 @@ function(setup_compile_commands_symlink)
         )
     else()
         message(STATUS
-            "Created symlink for compile_commands.json: ${CCDB_DST} -> ${CCDB_SRC}"
+            "[setup_compile_commands_symlink] Created symlink for compile_commands.json: ${CCDB_DST} -> ${CCDB_SRC}"
         )
     endif()
 endfunction()

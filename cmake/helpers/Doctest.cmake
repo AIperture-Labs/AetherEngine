@@ -15,11 +15,11 @@ function(add_doctest)
     )
 
     if(NOT DOCTEST_NAME)
-        message(FATAL_ERROR "add_doctest_bundle: NAME is required")
+        message(FATAL_ERROR "[add_doctest] NAME is required")
     endif()
 
     if(NOT DOCTEST_SOURCES)
-        message(FATAL_ERROR "add_doctest_bundle: SOURCES is required")
+        message(FATAL_ERROR "[add_doctest] SOURCES is required")
     endif()
 
     add_executable(${DOCTEST_NAME}

@@ -41,18 +41,18 @@ Output:
 #]=======================================================================]
 function(add_shaders_target TARGET)
     if(NOT TARGET Vulkan::glslangValidator)
-        message(WARNING "glslangValidator not found. Shader compilation disabled for ${TARGET}.")
+        message(WARNING "[add_shaders_target] glslangValidator not found. Shader compilation disabled for ${TARGET}.")
         return()
     endif()
 
     cmake_parse_arguments("SHADER" "" "CHAPTER_NAME" "SOURCES" ${ARGN})
     
     if(NOT SHADER_CHAPTER_NAME)
-        message(FATAL_ERROR "add_shaders_target: CHAPTER_NAME is required")
+        message(FATAL_ERROR "[add_shaders_target] CHAPTER_NAME is required")
     endif()
     
     if(NOT SHADER_SOURCES)
-        message(FATAL_ERROR "add_shaders_target: SOURCES is required")
+        message(FATAL_ERROR "[add_shaders_target] SOURCES is required")
     endif()
     
     set(SHADERS_DIR ${SHADER_CHAPTER_NAME}/shaders)
@@ -103,14 +103,14 @@ Output:
 #]=======================================================================]
 function(add_slang_shader_target TARGET)
     if(NOT TARGET Vulkan::slangc)
-        message(WARNING "slangc not found. Slang shader compilation disabled for ${TARGET}.")
+        message(WARNING "[add_slang_shader_target] slangc not found. Slang shader compilation disabled for ${TARGET}.")
         return()
     endif()
 
     cmake_parse_arguments("SHADER" "" "" "SOURCES" ${ARGN})
     
     if(NOT SHADER_SOURCES)
-        message(FATAL_ERROR "add_slang_shader_target: SOURCES is required")
+        message(FATAL_ERROR "[add_slang_shader_target] SOURCES is required")
     endif()
 
     # Use the current source directory relative to the project source
@@ -167,7 +167,7 @@ function(add_texture_target TARGET)
     cmake_parse_arguments("TEXTURE" "" "" "SOURCES" ${ARGN})
     
     if(NOT TEXTURE_SOURCES)
-        message(FATAL_ERROR "add_texture_target: SOURCES is required")
+        message(FATAL_ERROR "[add_texture_target] SOURCES is required")
     endif()
 
     # Use the current source directory relative to the project source

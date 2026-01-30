@@ -26,22 +26,22 @@ This function sets the following cache variables for downstream targets:
 
 #]=======================================================================]
 function(ConfigureLibjpegTurbo)
-    message(STATUS "Configuring extern lib: libjpeg-turbo")
+    message(STATUS "[ConfigureLibjpegTurbo] Configuring extern lib: libjpeg-turbo")
 
     # Set installation directory
     set(JPEG_INSTALL_DIR ${CMAKE_BINARY_DIR}/extern/libjpeg-turbo)
-    message(STATUS "  Install directory: ${JPEG_INSTALL_DIR}")
-    message(STATUS "  Source directory: ${AETHER_ENGINE_EXTERN_DIR}/libjpeg-turbo")
+    message(STATUS "[ConfigureLibjpegTurbo] Install directory: ${JPEG_INSTALL_DIR}")
+    message(STATUS "[ConfigureLibjpegTurbo] Source directory: ${AETHER_ENGINE_EXTERN_DIR}/libjpeg-turbo")
 
     # Log configuration options
-    message(STATUS "  Build configuration:")
-    message(STATUS "    Shared libraries: ${JPEG_ENABLE_SHARED}")
-    message(STATUS "    Static libraries: ${JPEG_ENABLE_STATIC}")
-    message(STATUS "    TurboJPEG API: ${JPEG_WITH_TURBOJPEG}")
-    message(STATUS "    SIMD optimizations: ${JPEG_WITH_SIMD}")
-    message(STATUS "    Arithmetic coding (enc/dec): ${JPEG_WITH_ARITH_ENC}/${JPEG_WITH_ARITH_DEC}")
+    message(STATUS "[ConfigureLibjpegTurbo] Build configuration:")
+    message(STATUS "[ConfigureLibjpegTurbo]   Shared libraries: ${JPEG_ENABLE_SHARED}")
+    message(STATUS "[ConfigureLibjpegTurbo]   Static libraries: ${JPEG_ENABLE_STATIC}")
+    message(STATUS "[ConfigureLibjpegTurbo]   TurboJPEG API: ${JPEG_WITH_TURBOJPEG}")
+    message(STATUS "[ConfigureLibjpegTurbo]   SIMD optimizations: ${JPEG_WITH_SIMD}")
+    message(STATUS "[ConfigureLibjpegTurbo]   Arithmetic coding (enc/dec): ${JPEG_WITH_ARITH_ENC}/${JPEG_WITH_ARITH_DEC}")
     if(JPEG_WITH_JPEG7 OR JPEG_WITH_JPEG8)
-        message(STATUS "    API/ABI emulation: JPEG${JPEG_WITH_JPEG7}${JPEG_WITH_JPEG8}")
+        message(STATUS "[ConfigureLibjpegTurbo]   API/ABI emulation: JPEG${JPEG_WITH_JPEG7}${JPEG_WITH_JPEG8}")
     endif()
 
     # Build libjpeg-turbo using ExternalProject
@@ -86,16 +86,16 @@ function(ConfigureLibjpegTurbo)
     # Set paths for downstream targets (promote to parent scope)
 
     # Log configured paths
-    message(STATUS "  Output libraries will be available at:")
+    message(STATUS "[ConfigureLibjpegTurbo] Output libraries will be available at:")
     if(JPEG_ENABLE_STATIC)
-        message(STATUS "    Static: ${JPEG_LIBRARY}")
-        message(STATUS "    Static (TurboJPEG): ${TURBOJPEG_LIBRARY}")
+        message(STATUS "[ConfigureLibjpegTurbo]   Static: ${JPEG_LIBRARY}")
+        message(STATUS "[ConfigureLibjpegTurbo]   Static (TurboJPEG): ${TURBOJPEG_LIBRARY}")
     endif()
     if(JPEG_ENABLE_SHARED)
-        message(STATUS "    Shared: ${JPEG_SHARED_LIBRARY}")
-        message(STATUS "    Shared (TurboJPEG): ${TURBOJPEG_SHARED_LIBRARY}")
+        message(STATUS "[ConfigureLibjpegTurbo]   Shared: ${JPEG_SHARED_LIBRARY}")
+        message(STATUS "[ConfigureLibjpegTurbo]   Shared (TurboJPEG): ${TURBOJPEG_SHARED_LIBRARY}")
     endif()
-    message(STATUS "  Headers: ${JPEG_INCLUDE_DIR}")
+    message(STATUS "[ConfigureLibjpegTurbo] Headers: ${JPEG_INCLUDE_DIR}")
     set(JPEG_INCLUDE_DIR ${JPEG_INSTALL_DIR}/include CACHE PATH "libjpeg-turbo include directory")
     # Static libraries
     set(JPEG_LIBRARY ${JPEG_INSTALL_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}jpeg${CMAKE_STATIC_LIBRARY_SUFFIX} 

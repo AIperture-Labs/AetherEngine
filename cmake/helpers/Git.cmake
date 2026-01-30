@@ -67,7 +67,7 @@ function(git_patch)
     )
 
     if(NOT RESULT EQUAL 0)
-        message(FATAL_ERROR "Git patch failed: ${ERROR}")
+        message(FATAL_ERROR "[git_patch] Git patch failed: ${ERROR}")
     endif()
 endfunction()
 
@@ -107,11 +107,11 @@ Example
 
 #]=======================================================================]
 function(git_submodules_update)
-        message(STATUS "Submodules update")
+        message(STATUS "[git_submodules_update] Updating submodules...")
         execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
             RESULT_VARIABLE GIT_SUBMOD_RESULT)
         if(NOT GIT_SUBMOD_RESULT EQUAL "0")
-            message(FATAL_ERROR "git submodule update --init --recursive failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
+            message(FATAL_ERROR "[git_submodules_update] git submodule update --init --recursive failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
         endif()
 endfunction()
