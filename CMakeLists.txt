@@ -19,8 +19,14 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 # Add cmake/modules to prefix path for CONFIG mode package discovery
 list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
-include(Config)
+# Helper modules (must be included before Config since Config may use them)
 include(CompilerWarnings)
+include(CompileCommandsSymlink)
+
+# Configuration and options
+include(Config)
+
+# External dependencies
 include(Dependencies)
 
 # add_subdirectory(${AETHER_ENGINE_SOURCE_DIR})

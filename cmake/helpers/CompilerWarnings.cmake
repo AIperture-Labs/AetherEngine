@@ -4,39 +4,39 @@
 #   - https://cmake.org/cmake/help/v4.1/index.html
 #   - https://cliutils.gitlab.io/modern-cmake/README.html
 
-# ==============================================================================
-# enable_warnings(target)
-# ==============================================================================
-# Apply strict compiler warnings to a specific target.
-#
-# This function configures compiler-specific warning flags for a target,
-# ensuring consistent warning levels across different compilers (MSVC, GCC, Clang).
-# Warnings are treated as errors to enforce code quality standards.
-#
-# ARGUMENTS:
-#   target (required)
-#     The CMake target to apply warnings to (e.g., executable or library).
-#
-# COMPILER-SPECIFIC BEHAVIOR:
-#   MSVC (Microsoft Visual C++):
-#     - /W4   : Warning level 4 (highest severity)
-#     - /WX   : Treat all warnings as errors
-#
-#   GCC/Clang:
-#     - -Wall     : Enable all common warnings
-#     - -Wextra   : Enable extra warnings beyond -Wall
-#     - -Wpedantic: Enable strict ISO C/C++ compliance warnings
-#     - -Werror   : Treat all warnings as errors
-#
-# USAGE EXAMPLES:
-#   enable_warnings(my_executable)
-#   enable_warnings(my_library)
-#
-# NOTES:
-#   - Warnings are applied as PRIVATE to avoid propagating to dependent targets
-#   - Consider disabling -Werror for external dependencies via target properties
-#   - Use add_compile_definitions("DISABLE_PEDANTIC_WARNINGS") to suppress in specific files
-#
+#[=[
+enable_warnings(<target>)
+
+Apply strict compiler warnings to a specific target.
+
+This function configures compiler-specific warning flags for a target,
+ensuring consistent warning levels across different compilers (MSVC, GCC, Clang).
+Warnings are treated as errors to enforce code quality standards.
+
+Arguments:
+  ``<target>``
+    The CMake target to apply warnings to (e.g., executable or library).
+
+Compiler-specific Behavior:
+  ``MSVC`` (Microsoft Visual C++):
+    - ``/W4`` : Warning level 4 (highest severity)
+    - ``/WX`` : Treat all warnings as errors
+
+  ``GCC/Clang``:
+    - ``-Wall``      : Enable all common warnings
+    - ``-Wextra``    : Enable extra warnings beyond -Wall
+    - ``-Wpedantic`` : Enable strict ISO C/C++ compliance warnings
+    - ``-Werror``    : Treat all warnings as errors
+
+Usage:
+  enable_warnings(my_executable)
+  enable_warnings(my_library)
+
+Notes:
+  - Warnings are applied as PRIVATE to avoid propagating to dependent targets
+  - Consider disabling -Werror for external dependencies via target properties
+  - Use ``set_target_properties()`` to override specific warnings per target
+]=]
 function(enable_warnings target)
     if(MSVC)
         # MSVC compiler options

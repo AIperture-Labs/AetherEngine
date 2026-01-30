@@ -184,3 +184,12 @@ option(JPEG_WITH_FUZZ "Build fuzz targets" OFF)
 
 # Performance Options
 option(JPEG_FORCE_INLINE "Force function inlining for better performance" ON)
+
+# ==============================================================================================================
+# Tooling Configuration
+# ==============================================================================================================
+
+# Setup compile_commands.json symlink/copy if export is enabled
+if(CMAKE_EXPORT_COMPILE_COMMANDS)
+    setup_compile_commands_symlink()
+endif()
