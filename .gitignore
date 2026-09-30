@@ -86,7 +86,6 @@ runtimes/python/
 #  AGENTS.md and .agents/ are the tracked source of truth. CLAUDE.md, GEMINI.md and
 #  .claude/ are tracked symlinks pointing at them. Only the volatile contents of
 #  .agents/ are ignored.
-.agents/settings.local.json
 .agents/**/*.local.json
 
 # Git worktrees
