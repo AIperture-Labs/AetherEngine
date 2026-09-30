@@ -278,6 +278,8 @@ any of them — this list ages.
 - `Dependencies.cmake` hardcodes uv `0.9.27` and `FORCE_DOWNLOAD` instead of using
   `AETHER_ENGINE_UV_VERSION` and the `FORCE_DOWNLOAD_DEPS` option.
 - `README.md` still contains `# TODO` for the project structure and a FIXME on the test command.
+- **`just` fails to parse on Linux**: in `scripts/just/clean.just`, `clean-runtimes` depends on
+  `clean-uv` and `clean-python`, which only exist under `[windows]`, so every recipe errors out.
 - The `[windows]` clean recipes in `scripts/just/clean.just` use `rm -Force <dir>` without
   `-Recurse`, which PowerShell refuses on a non-empty directory. `just clean-all` therefore does
   not fully clean on Windows.

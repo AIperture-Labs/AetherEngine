@@ -17,22 +17,10 @@ clean-runtimes: clean-uv clean-python
 clean-uv:
     -rm -Force runtimes/uv
 
-[linux]
-clean-uv:
-    -rm -rf runtimes/uv
-
 [windows]
 clean-python:
     -rm -Force runtimes/python
 
-[linux]
-clean-python:
-    -rm -rf runtimes/python
-
 [windows]
 clean-builds:
     -rm -Force out
-
-[linux]
-clean-builds:
-    -rm -rf out
