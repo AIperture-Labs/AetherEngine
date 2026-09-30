@@ -14,9 +14,9 @@ agents-link:
 # Show what every agent alias currently resolves to
 [unix]
 agents-status:
-    ls -l AGENTS.md CLAUDE.md GEMINI.md .github/copilot-instructions.md .agents .claude
+    ls -l AGENTS.md CLAUDE.md GEMINI.md .agents .claude
 
 # Show what every agent alias currently resolves to
 [windows]
 agents-status:
-    Get-Item AGENTS.md, CLAUDE.md, GEMINI.md, .github/copilot-instructions.md, .agents, .claude | Select-Object Name, LinkType, Target
+    Get-Item AGENTS.md, CLAUDE.md, GEMINI.md, .agents, .claude | Select-Object Name, LinkType, Target

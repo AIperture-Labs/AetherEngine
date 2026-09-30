@@ -15,7 +15,6 @@ tomorrow inherits everything written today.
 | `AGENTS.md` | real file | the cross-tool standard (Codex, Cursor, Aider, Jules, …) |
 | `CLAUDE.md` | symlink → `AGENTS.md` | Claude Code |
 | `GEMINI.md` | symlink → `AGENTS.md` | Gemini CLI |
-| `.github/copilot-instructions.md` | symlink → `../AGENTS.md` | GitHub Copilot |
 | `.agents/` | real directory | this directory |
 | `.claude/` | symlink → `.agents/` | Claude Code |
 
@@ -37,12 +36,16 @@ symlink. For example Claude Code reads `.claude/skills/`, which resolves to `.ag
 ## Adding a tool
 
 ```bash
-ln -s AGENTS.md QWEN.md          # file alias
-ln -s .agents .qwen              # directory alias
+ln -s AGENTS.md QWEN.md                              # file alias
+ln -s .agents .qwen                                  # directory alias
+ln -s ../AGENTS.md .github/copilot-instructions.md   # nested alias, target relative to its dir
 ```
 
-Then record it in the table above, in the equivalent table in `../AGENTS.md`, and in the
-`agents-link` recipe in `../scripts/just/agents.just`.
+The nested example is how GitHub Copilot would be wired back in: `.github/` was removed from this
+repository, so the alias is not created by default.
+
+Then record it in the table above, in the equivalent table in `../AGENTS.md`, and in
+`../scripts/agents-link.sh` plus `../scripts/agents-link.ps1`.
 
 ## Recreating the links
 

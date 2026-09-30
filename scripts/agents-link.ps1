@@ -58,7 +58,6 @@ try {
     # File aliases -> AGENTS.md
     New-AgentAlias -Target 'AGENTS.md' -Alias 'CLAUDE.md'
     New-AgentAlias -Target 'AGENTS.md' -Alias 'GEMINI.md'
-    New-AgentAlias -Target 'AGENTS.md' -Alias '.github\copilot-instructions.md'
 
     # Directory aliases -> .agents\
     New-AgentAlias -Target '.agents' -Alias '.claude' -AsDirectory

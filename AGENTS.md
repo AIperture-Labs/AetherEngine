@@ -2,9 +2,9 @@
 
 Single source of truth for every AI coding agent working on **AetherEngine**.
 
-This file is tool-agnostic on purpose. `CLAUDE.md`, `GEMINI.md` and
-`.github/copilot-instructions.md` are symlinks to it, and `.claude/` is a symlink to `.agents/`.
-**Edit this file only** — never the aliases. See [Agent tooling layout](#11-agent-tooling-layout).
+This file is tool-agnostic on purpose. `CLAUDE.md` and `GEMINI.md` are symlinks to it, and
+`.claude/` is a symlink to `.agents/`. **Edit this file only** — never the aliases.
+See [Agent tooling layout](#11-agent-tooling-layout).
 
 ---
 
@@ -43,7 +43,6 @@ not assume any type, module or test exists. Work so far is build-system plumbing
 
 ```
 .agents/            Shared agent configuration (see §11); .claude/ symlinks here
-.github/            CI workflows and tool prompt files
 assets/             Shaders and textures (referenced by CMake, not created yet)
 cmake/
   Config.cmake         All user-facing options, language standards, AETHER_ENGINE_* paths
@@ -204,8 +203,8 @@ Do not, without an explicit request from the maintainer:
 2. Commit generated or downloaded content: `out/`, `.cache/`, `runtimes/`,
    `compile_commands.json`, `CMakeUserPresets.json`, `configs/runtimes/uv/uv.toml`.
 3. Push to `main`, force-push, rewrite history, or merge branches.
-4. Rename or restructure `CMakePresets.json` entries — preset names are referenced by `.vscode/`,
-   CI and muscle memory.
+4. Rename or restructure `CMakePresets.json` entries — the preset naming scheme is the project's
+   stable interface for building, and is referenced from documentation and by habit.
 5. Add, remove or swap a third-party dependency, or relax the warning flags in
    `CompilerWarnings.cmake`.
 6. Reformat, reorder or "clean up" files you are not otherwise changing. Keep diffs minimal and
@@ -263,17 +262,20 @@ link, never copying content.
 | `AGENTS.md` | real file | the cross-tool standard (Codex, Cursor, Aider, Jules, …) |
 | `CLAUDE.md` | symlink → `AGENTS.md` | Claude Code |
 | `GEMINI.md` | symlink → `AGENTS.md` | Gemini CLI |
-| `.github/copilot-instructions.md` | symlink → `../AGENTS.md` | GitHub Copilot |
 | `.agents/` | real directory | shared agent configuration (skills, commands, settings) |
 | `.claude/` | symlink → `.agents/` | Claude Code |
 
 To wire up another tool, add its expected path as a relative symlink, then record it in the table
-above and in `scripts/just/agents.just`:
+above, in `.agents/README.md`, and in `scripts/agents-link.sh` / `scripts/agents-link.ps1`:
 
 ```bash
-ln -s AGENTS.md QWEN.md          # file alias
-ln -s .agents .qwen              # directory alias
+ln -s AGENTS.md QWEN.md                              # file alias
+ln -s .agents .qwen                                  # directory alias
+ln -s ../AGENTS.md .github/copilot-instructions.md   # nested alias, target relative to its dir
 ```
+
+The nested example is how GitHub Copilot would be wired back in: `.github/` was removed from this
+repository, so the alias is not created by default.
 
 `just agents-link` recreates every alias idempotently. Run it after cloning if your platform or
 git configuration did not materialise the symlinks — notably **on Windows, where git checks out

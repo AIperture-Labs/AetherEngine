@@ -83,9 +83,14 @@ configs/runtimes/uv/uv.toml
 runtimes/python/
 
 # Agent tooling
-#  AGENTS.md and .agents/ are the tracked source of truth. CLAUDE.md, GEMINI.md,
-#  .github/copilot-instructions.md and .claude/ are tracked symlinks pointing at them.
-#  Only the volatile contents of .agents/ are ignored.
-.agents/worktrees/
+#  AGENTS.md and .agents/ are the tracked source of truth. CLAUDE.md, GEMINI.md and
+#  .claude/ are tracked symlinks pointing at them. Only the volatile contents of
+#  .agents/ are ignored.
 .agents/settings.local.json
 .agents/**/*.local.json
+
+# Git worktrees
+#  Agents and local experiments check these out inside the repository, typically under
+#  .agents/worktrees/ (reached as .claude/worktrees/). Matches any depth.
+worktrees/
+.worktrees/

@@ -49,7 +49,6 @@ printf 'Agent aliases in %s\n' "$repo_root"
 # File aliases -> AGENTS.md
 link AGENTS.md CLAUDE.md
 link AGENTS.md GEMINI.md
-link ../AGENTS.md .github/copilot-instructions.md
 
 # Directory aliases -> .agents/
 link .agents .claude
