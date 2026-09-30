@@ -89,7 +89,8 @@ runtimes/python/
 .agents/**/*.local.json
 
 # Git worktrees
-#  Agents and local experiments check these out inside the repository, typically under
-#  .agents/worktrees/ (reached as .claude/worktrees/). Matches any depth.
+#  Agents check these out under .agents/worktrees/ (reached as .claude/worktrees/).
+#  The generic patterns also catch worktrees created at any other depth.
+.agents/worktrees/
 worktrees/
 .worktrees/
