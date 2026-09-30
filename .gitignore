@@ -81,3 +81,11 @@ configs/runtimes/uv/uv.toml
 
 # Python Runtime
 runtimes/python/
+
+# Agent tooling
+#  AGENTS.md and .agents/ are the tracked source of truth. CLAUDE.md, GEMINI.md,
+#  .github/copilot-instructions.md and .claude/ are tracked symlinks pointing at them.
+#  Only the volatile contents of .agents/ are ignored.
+.agents/worktrees/
+.agents/settings.local.json
+.agents/**/*.local.json

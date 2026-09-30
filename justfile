@@ -4,6 +4,7 @@
 
 set windows-shell := ["powershell", "-c"]
 
+import "scripts/just/agents.just"
 import "scripts/just/dev-windows-bootstrap.just"
 import "scripts/just/tools.just"
 import "scripts/just/clean.just"
