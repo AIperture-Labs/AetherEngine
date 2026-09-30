@@ -181,17 +181,63 @@ no file carries an SPDX identifier yet; do not invent one.
 
 ## 7. Git conventions
 
-- **Conventional Commits**, optionally scoped, subject in English and in the imperative:
-  `feat(cmake): add UV package manager integration module`,
-  `fix(cmake): correct variable name for force download`,
-  `chore(submodules): switch submodules to AIperture-Labs forks`,
-  `refactor:`, `docs:`, `test:`, `build:`, `ci:`.
-- Branches: `feature/<topic>`, `examples/<topic>`, `wip/<topic>`, `fix/<topic>`. Work on a branch,
+### Commit messages
+
+Commit messages **must** follow Conventional Commits v1.0.0.
+Specification: <https://www.conventionalcommits.org/en/v1.0.0/>
+
+```
+<type>[optional scope][optional !]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+Required by the specification:
+
+- A `type` prefix, followed by an optional `scope` in parentheses, an optional `!`, then a
+  mandatory `: ` (colon and space) and the description.
+- `feat` for a new feature, `fix` for a bug fix. Other types are allowed and carry no semantic
+  versioning meaning.
+- A breaking change is signalled by `!` before the colon, by a `BREAKING CHANGE: <reason>` footer,
+  or both: `feat(cmake)!: drop the MSVC presets`.
+- Body and footers are each separated from what precedes them by one blank line.
+
+Project conventions on top of it:
+
+- Use one of these types only: `feat`, `fix`, `docs`, `refactor`, `perf`, `test`, `build`, `ci`,
+  `chore`, `revert`.
+- `scope` is lowercase and names the affected area: `cmake`, `submodules`, `glm`, `yasm`, `agents`.
+- The description is English, imperative, lowercase, with no trailing period.
+- The same convention applies to **pull request titles**, so that a squash merge produces a valid
+  commit message.
+
+Examples taken from this repository's history:
+
+```
+feat(cmake): add UV package manager integration module
+fix(cmake): correct variable name for force download in gh_release_download function
+chore(submodules): switch submodules to AIperture-Labs forks
+docs(cmake): clarify comment for GLM library
+refactor(cmake): simplify Dependencies.cmake using helper module
+```
+
+The history also contains non-compliant subjects: untyped ones, a misspelled `chores:` type, and
+French ones (see §2). They predate this file: do not imitate them, and do not rewrite history to
+fix them.
+
+### Branches and pull requests
+
+- Branches: `feature/<topic>`, `fix/<topic>`, `examples/<topic>`, `wip/<topic>`. Work on a branch,
   never commit directly to `main`.
-- Submodules point at **AIperture-Labs forks** (`origin` = fork, `upstream` = original project).
-  Pinned versions are recorded in `configs/submodules.toml`. To change a dependency: commit in the
-  fork, push it, then bump the submodule pointer here in its own `chore(<name>):` commit.
 - Changes land on `main` through pull requests.
+
+### Submodules
+
+Submodules point at **AIperture-Labs forks** (`origin` = fork, `upstream` = original project).
+Pinned versions are recorded in `configs/submodules.toml`. To change a dependency: commit in the
+fork, push it, then bump the submodule pointer here in its own `chore(<name>):` commit.
 
 ---
 
