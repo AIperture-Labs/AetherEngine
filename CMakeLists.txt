@@ -29,8 +29,17 @@ include(Config)
 # External dependencies
 include(Dependencies)
 
-# add_subdirectory(${AETHER_ENGINE_SOURCE_DIR})
-# add_subdirectory(${AETHER_ENGINE_TESTS_DIR})
+# Engine modules
+add_subdirectory(${AETHER_ENGINE_SOURCE_DIR})
+
+# Tests. enable_testing() has to be called from the top-level list file for ctest to pick the
+# suite up, so it stays here rather than in tests/CMakeLists.txt.
+if(BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(${AETHER_ENGINE_TESTS_DIR})
+endif()
+
+# TODO: wire these up as the corresponding trees land.
 # add_subdirectory(${AETHER_ENGINE_DOCS_DIR})
 # add_subdirectory(${AETHER_ENGINE_SHADERS_DIR})
 # add_subdirectory(${AETHER_ENGINE_TEXTURES_DIR})

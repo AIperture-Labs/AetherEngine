@@ -1,0 +1,26 @@
+// Copyright (c) 2026 AIperture-Labs <xavier.beheydt@gmail.com>
+//
+// Generated from version.hpp.in by CMake -- edit the template, not the generated copy.
+
+#pragma once
+
+#include <aether/core/export.hpp>
+
+namespace aether::core
+{
+
+/// Version of the engine these headers were generated from, as declared by ``project()``.
+inline constexpr int kVersionMajor = @AetherEngine_VERSION_MAJOR@;
+inline constexpr int kVersionMinor = @AetherEngine_VERSION_MINOR@;
+inline constexpr int kVersionPatch = @AetherEngine_VERSION_PATCH@;
+
+/// The same version rendered as "major.minor.patch".
+inline constexpr const char *kVersionString = "@AetherEngine_VERSION@";
+
+/// Version of the engine the caller is actually linked against.
+///
+/// Reported by the library rather than read from these headers, so that headers left over from a
+/// different build of the engine can be detected instead of silently disagreeing with it.
+[[nodiscard]] AETHER_CORE_API const char *versionString() noexcept;
+
+}  // namespace aether::core
