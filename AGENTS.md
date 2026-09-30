@@ -19,11 +19,14 @@ change should respect:
 | Aspect | Value |
 | --- | --- |
 | Languages | C 23 and C++ 23, strict ISO (no compiler extensions) |
-| Build system | CMake `3.31 … 4.1`, **presets only**, generator Ninja |
+| Build system | CMake, **presets only**, generator Ninja |
 | Task runner | [`just`](https://just.systems/man/en/) |
 | Dependencies | git submodules under `extern/`, pinned to AIperture-Labs forks |
-| Primary platform | Windows x64 (MSVC / clang-cl / clang); Linux is work in progress |
-| Toolchain extras | clangd, clang-format, clang-tidy, Vulkan SDK 1.4.335, uv + Python 3.14 |
+| Platforms | Cross-platform: Windows, Linux and macOS, with MSVC, clang-cl and clang toolchains |
+| Toolchain extras | clangd, clang-format, clang-tidy, Vulkan SDK, uv + Python |
+
+Required tool and SDK versions are defined by the build files (`cmake_minimum_required()`,
+`find_package()` calls, `cmake/Config.cmake`), never by this document — read them there.
 
 **Current status: bootstrap phase.** `sources/`, `tests/` and `docs/` are empty, and the matching
 `add_subdirectory()` calls in `CMakeLists.txt` are commented out. There is no engine code yet — do
@@ -111,7 +114,7 @@ Common `just` recipes (run `just --list` for the full set):
 | `just clean-all` | remove `.cache`, runtimes and build trees |
 | `just dev-bootstrap` | Windows only: winget install Git, Vulkan SDK, RenderDoc |
 
-Several recipes are annotated `[windows]` and simply do not exist on Linux.
+Recipes annotated with an OS attribute (`[windows]`, `[linux]`, …) only exist on that platform.
 
 ---
 
@@ -268,22 +271,21 @@ Do not, without an explicit request from the maintainer:
 Snapshot of real inconsistencies in the tree. Verify against the current files before relying on
 any of them — this list ages.
 
-- **Linux configure is not expected to work yet.** `cmake/Dependencies.cmake` unconditionally
-  downloads `uv-x86_64-pc-windows-msvc.zip` and installs Python from it, before any platform
-  check. Cross-platform support is active work; coordinate rather than patching around it.
+- `cmake/Dependencies.cmake` hardcodes the Windows uv archive (`uv-x86_64-pc-windows-msvc.zip`)
+  instead of selecting the archive for the host platform.
 - `cmake/Config.cmake` declares the option `GIT_SUBMODULE_UPDATE`, while `cmake/Dependencies.cmake`
   tests `GIT_SUBMODULES_UPDATE` (plural) — so the guard is always false and
   `git_submodules_update()` never runs from the build.
 - Standards disagree: CMake sets C/C++ **23**, while `.clang-format` declares `Standard: c++20`
   and `.clangd` adds `-std=c++20`.
-- `.clangd` hardcodes a Windows Vulkan include path (`-IC:/VulkanSDK/1.4.335.0/Include/`).
+- `.clangd` hardcodes an absolute, Windows-only Vulkan SDK include path.
 - `Config.cmake` defines `AETHER_ENGINE_ASSETS_DIR` (and shaders/textures under it) but `assets/`
   does not exist.
-- `Dependencies.cmake` hardcodes uv `0.9.27` and `FORCE_DOWNLOAD` instead of using
+- `Dependencies.cmake` hardcodes the uv version and `FORCE_DOWNLOAD` instead of using
   `AETHER_ENGINE_UV_VERSION` and the `FORCE_DOWNLOAD_DEPS` option.
 - `README.md` still contains `# TODO` for the project structure and a FIXME on the test command.
-- **`just` fails to parse on Linux**: in `scripts/just/clean.just`, `clean-runtimes` depends on
-  `clean-uv` and `clean-python`, which only exist under `[windows]`, so every recipe errors out.
+- In `scripts/just/clean.just`, `clean-runtimes` depends on `clean-uv` and `clean-python`, which
+  only have a `[windows]` variant, so the justfile fails to parse on any other platform.
 - The `[windows]` clean recipes in `scripts/just/clean.just` use `rm -Force <dir>` without
   `-Recurse`, which PowerShell refuses on a non-empty directory. `just clean-all` therefore does
   not fully clean on Windows.
@@ -294,6 +296,9 @@ any of them — this list ages.
 
 - Read before writing. This is a small, opinionated, heavily commented tree — match the
   surrounding style instead of importing conventions from elsewhere.
+- **Every change targets all platforms.** Keep code, CMake and scripts portable; isolate anything
+  platform-specific behind an explicit guard (`if(WIN32)`, `#if defined(_WIN32)`, a just OS
+  attribute, …) and provide the other platforms' path alongside it.
 - **Several agents may work on this repository in parallel.** Work in a git worktree or a
   dedicated branch, keep the change scoped, and do not touch unrelated files.
 - State plainly what you verified and what you assumed. If a command was not run, say so.
