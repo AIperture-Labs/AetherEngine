@@ -78,6 +78,18 @@ option(CMAKE_INTERPROCEDURAL_OPTIMIZATION "Enable Link-Time Optimization (LTO) f
 
 
 # ==============================================================================================================
+# Output Layout
+# ==============================================================================================================
+# Collect every build artefact in a single pair of directories. Tests link against the engine as
+# a shared library by default (BUILD_SHARED_LIBS is ON), and on Windows the loader only searches
+# the executable's own directory, so runtime artefacts have to sit next to each other.
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin" CACHE PATH "Output directory for executables and DLLs")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin" CACHE PATH "Output directory for shared libraries")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib" CACHE PATH "Output directory for static libraries and import libraries")
+
+
+# ==============================================================================================================
 # Conditional Logic Based on Options
 # ==============================================================================================================
 

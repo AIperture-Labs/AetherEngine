@@ -1,0 +1,8 @@
+# Copyright (c) 2026 AIperture-Labs <xavier.beheydt@gmail.com>
+# Docs:
+#   - https://cmake.org/cmake/help/v4.1/index.html
+#   - https://cliutils.gitlab.io/modern-cmake/README.html
+
+message(STATUS "Configuring ${CMAKE_CURRENT_SOURCE_DIR}")
+
+add_subdirectory(core)
