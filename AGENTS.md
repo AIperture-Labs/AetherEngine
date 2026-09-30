@@ -311,8 +311,13 @@ link, never copying content.
 | `.agents/` | real directory | shared agent configuration (skills, commands, settings) |
 | `.claude/` | symlink → `.agents/` | Claude Code |
 
+`.agents/` holds tool files reached through the directory aliases — for example Claude Code reads
+`.claude/skills/`, which resolves to `.agents/skills/`. It only contains a `.gitkeep` until such
+files are added; that file keeps the directory, and therefore the `.claude/` link, alive after a
+clone. `.agents/worktrees/` and `.agents/**/*.local.json` are gitignored.
+
 To wire up another tool, add its expected path as a relative symlink, commit it, and record it in
-the table above and in `.agents/README.md`:
+the table above:
 
 ```bash
 ln -s AGENTS.md QWEN.md                              # file alias
@@ -331,5 +336,3 @@ enabled** (which also needs Developer Mode). Enable it, then restore the aliases
 git config core.symlinks true
 git checkout -- CLAUDE.md GEMINI.md .claude
 ```
-
-See `.agents/README.md` for the contents of that directory.
