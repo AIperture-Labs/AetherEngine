@@ -36,13 +36,15 @@ not assume any type, module or test exists. Work so far is build-system plumbing
 
 ## 2. Language policy
 
-- **Conversation** with the maintainer happens in the maintainer's language (expect French).
-- **Everything that lands in the repository is English only**: code, identifiers, comments,
-  docstrings, documentation, README files, commit messages, branch names, PR titles and
-  descriptions, log and error strings, `TODO` / `FIXME` notes, CMake `message()` output.
-- The only exception is an explicit request from the maintainer for a specific file or artefact.
-- Some legacy commit messages are in French. They are history: do not imitate them, and do not
-  rewrite history to translate them.
+- **Conversation** happens in the language of the user you are talking to. Several people work on
+  this project; reply in whichever language each of them uses.
+- **Everything that lands in the repository is English only**, whatever the conversation language:
+  code, identifiers, comments, docstrings, documentation, README files, commit messages, branch
+  names, pull request titles and descriptions, review comments, log and error strings,
+  `TODO` / `FIXME` notes, CMake `message()` output.
+- The only exception is an explicit request from the user for a specific file or artefact.
+- Some legacy commit messages are not in English. They are history: do not imitate them, and do
+  not rewrite history to translate them.
 
 ---
 
@@ -229,7 +231,7 @@ refactor(cmake): simplify Dependencies.cmake using helper module
 ```
 
 The history also contains non-compliant subjects: untyped ones, a misspelled `chores:` type, and
-French ones (see §2). They predate this file: do not imitate them, and do not rewrite history to
+non-English ones (see §2). They predate this file: do not imitate them, and do not rewrite history to
 fix them.
 
 ### Branches and pull requests
@@ -248,7 +250,7 @@ fork, push it, then bump the submodule pointer here in its own `chore(<name>):` 
 
 ## 8. Hard rules
 
-Do not, without an explicit request from the maintainer:
+Do not, without an explicit request from the user:
 
 1. **Edit anything under `extern/`.** Those are submodules of separate fork repositories.
 2. Commit generated or downloaded content: `out/`, `.cache/`, `runtimes/`,
