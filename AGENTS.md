@@ -77,35 +77,20 @@ tests/               doctest unit tests (empty)
 
 ---
 
-## 4. Build, configure, test
+## 4. Build and tooling
 
-Presets are the only supported entry point. Never call bare `cmake -S . -B build`.
+CMake presets are the only supported entry point; never call bare `cmake -S . -B build`.
 
-Step-by-step procedures for each task live in `.agents/skills/`: `configure`, `build`, `test`,
-`format` and `lint`. Follow them when doing that task; this section is the summary.
+Before configuring, building, testing, formatting or linting, **load the matching skill** in
+`.agents/skills/` and follow it. The procedures live there, not here:
 
-```bash
-cmake --list-presets              # configure presets
-cmake --list-presets=build        # build presets
-
-cmake --preset x64-debug-clang                    # configure
-cmake --build --preset x64-debug-clang-verbose    # build
-```
-
-Preset naming: `x64-<debug|release|relwithdebinfo|minsizerel>-<clang|clang-cl|msvc>`.
-Hidden bases: `base`, `base-clang`, `base-clang-cl`, `base-msvc`, `verbose`.
-
-**Build presets only exist in the `-verbose` variant.** `cmake --build --preset x64-debug-clang`
-fails; use `x64-debug-clang-verbose`, or build the binary dir directly with
-`cmake --build out/build/x64-debug-clang`.
-
-Artifacts land in `out/build/<presetName>/`, installs in `out/install/<presetName>/`.
-`CMAKE_EXPORT_COMPILE_COMMANDS` is `ON` in the `base` preset, and
-`setup_compile_commands_symlink()` links `compile_commands.json` at the repository root for
-clangd. That link is gitignored — never commit it.
-
-Tests: `BUILD_TESTS` defaults to `OFF`, `tests/` is empty and there are no test presets, so
-`ctest` currently has nothing to run. The `ctest` snippet in `README.md` is still marked FIXME.
+| Task | Skill |
+| --- | --- |
+| Configure the build, choose a preset, pass options | `configure` |
+| Build everything or one target | `build` |
+| Run or add unit tests | `test` |
+| Format C/C++ sources | `format` |
+| Run static analysis | `lint` |
 
 Common `just` recipes (run `just --list` for the full set):
 
@@ -125,12 +110,8 @@ Recipes annotated with an OS attribute (`[windows]`, `[linux]`, …) only exist 
 
 ## 5. Code style
 
-Formatting and linting are configuration-driven. Run the tools; do not hand-tune layout.
-
-```bash
-clang-format -i <files>       # or: clang-format --dry-run --Werror <files>
-clang-tidy -p . <files>
-```
+Formatting and linting are configuration-driven: run them through the `format` and `lint` skills
+rather than hand-tuning layout. What the code must look like:
 
 `.clang-format` — Google base, and notably:
 
@@ -141,9 +122,6 @@ clang-tidy -p . <files>
 - `PointerAlignment` / `ReferenceAlignment`: **Right** (`Type *ptr`, `Type &ref`)
 - aligned consecutive assignments, declarations, operands and trailing comments
 - `SeparateDefinitionBlocks: Always`
-
-`.clang-tidy` — `modernize-*` and `cppcoreguidelines-*`, warnings are **not** errors,
-`modernize-use-trailing-return-type` disabled, header filter `sources/**/*.hpp`.
 
 `.clangd` — `UnusedIncludes: Strict` and `HeaderInsertion: IWYU`, so keep includes minimal and
 include what you use.
