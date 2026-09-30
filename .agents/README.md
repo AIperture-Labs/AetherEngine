@@ -44,29 +44,17 @@ ln -s ../AGENTS.md .github/copilot-instructions.md   # nested alias, target rela
 The nested example is how GitHub Copilot would be wired back in: `.github/` was removed from this
 repository, so the alias is not created by default.
 
-Then record it in the table above, in the equivalent table in `../AGENTS.md`, and in
-`../scripts/agents-link.sh` plus `../scripts/agents-link.ps1`.
+Then commit the link and record it in the table above and in the equivalent table in
+`../AGENTS.md`.
 
-## Recreating the links
+## Windows
 
-```bash
-just agents-link
-```
-
-The recipe is idempotent: it replaces existing links and refuses to clobber a real file or a
-non-empty real directory.
-
-### Windows
-
-Git does not materialise symlinks on Windows unless symlink support is enabled. Without it,
-`CLAUDE.md` is checked out as a plain text file containing the string `AGENTS.md`, and agents read
-nothing useful. Enable it once, then recreate the links:
+The links are committed, so git recreates them on clone and checkout. On Windows, however, git
+checks symlinks out as plain text files unless symlink support is enabled: `CLAUDE.md` then
+contains the string `AGENTS.md` and agents read nothing useful. Enable it (Developer Mode is also
+required), then restore the aliases from the index:
 
 ```powershell
 git config core.symlinks true
-just agents-link
+git checkout -- CLAUDE.md GEMINI.md .claude
 ```
-
-Creating symbolic links on Windows additionally requires Developer Mode or an elevated shell. The
-`agents-link` recipe falls back to directory junctions, which need no elevation, for the directory
-aliases.

@@ -106,8 +106,6 @@ Common `just` recipes (run `just --list` for the full set):
 | `just get-tools-version` | print versions of git, code, cmake, clang, clangd, ninja |
 | `just clean-all` | remove `.cache`, runtimes and build trees |
 | `just dev-bootstrap` | Windows only: winget install Git, Vulkan SDK, RenderDoc |
-| `just agents-link` | recreate the agent alias symlinks (see §11) |
-| `just agents-status` | show what every agent alias currently resolves to |
 
 Several recipes are annotated `[windows]` and simply do not exist on Linux.
 
@@ -311,8 +309,8 @@ link, never copying content.
 | `.agents/` | real directory | shared agent configuration (skills, commands, settings) |
 | `.claude/` | symlink → `.agents/` | Claude Code |
 
-To wire up another tool, add its expected path as a relative symlink, then record it in the table
-above, in `.agents/README.md`, and in `scripts/agents-link.sh` / `scripts/agents-link.ps1`:
+To wire up another tool, add its expected path as a relative symlink, commit it, and record it in
+the table above and in `.agents/README.md`:
 
 ```bash
 ln -s AGENTS.md QWEN.md                              # file alias
@@ -323,12 +321,13 @@ ln -s ../AGENTS.md .github/copilot-instructions.md   # nested alias, target rela
 The nested example is how GitHub Copilot would be wired back in: `.github/` was removed from this
 repository, so the alias is not created by default.
 
-`just agents-link` recreates every alias idempotently. Run it after cloning if your platform or
-git configuration did not materialise the symlinks — notably **on Windows, where git checks out
-symlinks as plain text files unless `core.symlinks` is enabled**:
+The symlinks are committed, so git recreates them on clone and checkout — nothing to run. The one
+exception is **Windows, where git checks symlinks out as plain text files unless `core.symlinks` is
+enabled** (which also needs Developer Mode). Enable it, then restore the aliases from the index:
 
 ```bash
-git config core.symlinks true    # then re-run: just agents-link
+git config core.symlinks true
+git checkout -- CLAUDE.md GEMINI.md .claude
 ```
 
 See `.agents/README.md` for the contents of that directory.
