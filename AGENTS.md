@@ -81,6 +81,9 @@ tests/               doctest unit tests (empty)
 
 Presets are the only supported entry point. Never call bare `cmake -S . -B build`.
 
+Step-by-step procedures for each task live in `.agents/skills/`: `configure`, `build`, `test`,
+`format` and `lint`. Follow them when doing that task; this section is the summary.
+
 ```bash
 cmake --list-presets              # configure presets
 cmake --list-presets=build        # build presets
