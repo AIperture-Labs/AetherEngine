@@ -83,9 +83,8 @@ configs/runtimes/uv/uv.toml
 runtimes/python/
 
 # Agent tooling
-#  AGENTS.md and .agents/ are the tracked source of truth. CLAUDE.md, GEMINI.md and
-#  .claude/ are tracked symlinks pointing at them. Only the volatile contents of
-#  .agents/ are ignored.
+#  AGENTS.md and .agents/ are the tracked source of truth. CLAUDE.md and .claude/ are
+#  tracked symlinks pointing at them. Only the volatile contents of .agents/ are ignored.
 .agents/**/*.local.json
 
 # Git worktrees

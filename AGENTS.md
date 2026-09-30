@@ -1,16 +1,20 @@
-# AGENTS.md
+# AetherEngine
 
-Single source of truth for every AI coding agent working on **AetherEngine**.
+AetherEngine is a lightweight, modular game engine written in C/C++23, targeting Vulkan for
+high-performance real-time rendering. It is built so that projects only pull in the systems they
+need, with a plugin-based architecture for custom modules, an asset pipeline for models, textures
+and audio, and first-class support for profilers and GPU debuggers such as Tracy and RenderDoc.
 
-This file is tool-agnostic on purpose. `CLAUDE.md` and `GEMINI.md` are symlinks to it, and
-`.claude/` is a symlink to `.agents/`. **Edit this file only** — never the aliases.
-See [Agent tooling layout](#11-agent-tooling-layout).
+The name refers to the classical *aether*, the pure upper air, and sets the three principles every
+change should respect:
+
+- **Purity** — clean, efficient, lightweight code.
+- **Freedom** — modular design; systems stay decoupled and optional.
+- **Performance** — real-time rendering is the target; costs are measured, not assumed.
 
 ---
 
 ## 1. Project at a glance
-
-AetherEngine is a lightweight, modular game engine written in C/C++23, targeting Vulkan.
 
 | Aspect | Value |
 | --- | --- |
@@ -42,7 +46,7 @@ not assume any type, module or test exists. Work so far is build-system plumbing
 ## 3. Repository layout
 
 ```
-.agents/            Shared agent configuration (see §11); .claude/ symlinks here
+.agents/            Agent configuration: skills, commands, settings (.claude/ points here)
 assets/             Shaders and textures (referenced by CMake, not created yet)
 cmake/
   Config.cmake         All user-facing options, language standards, AETHER_ENGINE_* paths
@@ -295,44 +299,3 @@ any of them — this list ages.
 - State plainly what you verified and what you assumed. If a command was not run, say so.
 - When the request and the code disagree, say so in one or two sentences and continue with the
   request, flagging the assumption.
-
----
-
-## 11. Agent tooling layout
-
-One source of truth, one alias per tool. Agnostic by construction: adding a tool means adding a
-link, never copying content.
-
-| Path | Kind | Read by |
-| --- | --- | --- |
-| `AGENTS.md` | real file | the cross-tool standard (Codex, Cursor, Aider, Jules, …) |
-| `CLAUDE.md` | symlink → `AGENTS.md` | Claude Code |
-| `GEMINI.md` | symlink → `AGENTS.md` | Gemini CLI |
-| `.agents/` | real directory | shared agent configuration (skills, commands, settings) |
-| `.claude/` | symlink → `.agents/` | Claude Code |
-
-`.agents/` holds tool files reached through the directory aliases — for example Claude Code reads
-`.claude/skills/`, which resolves to `.agents/skills/`. It only contains a `.gitkeep` until such
-files are added; that file keeps the directory, and therefore the `.claude/` link, alive after a
-clone. `.agents/worktrees/` and `.agents/**/*.local.json` are gitignored.
-
-To wire up another tool, add its expected path as a relative symlink, commit it, and record it in
-the table above:
-
-```bash
-ln -s AGENTS.md QWEN.md                              # file alias
-ln -s .agents .qwen                                  # directory alias
-ln -s ../AGENTS.md .github/copilot-instructions.md   # nested alias, target relative to its dir
-```
-
-The nested example is how GitHub Copilot would be wired back in: `.github/` was removed from this
-repository, so the alias is not created by default.
-
-The symlinks are committed, so git recreates them on clone and checkout — nothing to run. The one
-exception is **Windows, where git checks symlinks out as plain text files unless `core.symlinks` is
-enabled** (which also needs Developer Mode). Enable it, then restore the aliases from the index:
-
-```bash
-git config core.symlinks true
-git checkout -- CLAUDE.md GEMINI.md .claude
-```
