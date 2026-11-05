@@ -41,5 +41,9 @@ file(
 )
 # Creating a symlink can be denied (e.g. on Windows without Developer Mode); that must not stop the configure.
 if(NOT COMPILE_COMMANDS_LINK_RESULT EQUAL 0)
-    message(WARNING "Cannot link compile_commands.json at the root (${COMPILE_COMMANDS_LINK_RESULT}): clangd will not find it")
+    message(
+        WARNING
+        "Cannot link compile_commands.json at the root (${COMPILE_COMMANDS_LINK_RESULT}): "
+        "clangd will not find it"
+    )
 endif()
