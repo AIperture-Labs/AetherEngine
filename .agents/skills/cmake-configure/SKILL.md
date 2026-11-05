@@ -13,19 +13,20 @@ Always configure through a preset. Never run `cmake -S . -B <dir>` by hand.
 cmake --list-presets
 ```
 
-Presets are named `x64-<config>-<toolchain>`:
+Presets are named `x64-<config>-<toolchain>[-shared]`, all with the Ninja generator:
 
-- `<config>`: `debug`, `release`, `relwithdebinfo`, `minsizerel`
-- `<toolchain>`: `clang`, `clang-cl`, `msvc`
+- `<config>`: `debug`, `release`
+- `<toolchain>`: `clang` (Linux), `clang-cl` (Windows); only the presets of the host are listed
+- `-shared`: builds the modules as shared libraries; without it they are static
 
-When the user does not name one, default to a debug preset for the host:
+When the user does not name one, default to the debug preset of the host:
 
 | Host | Default preset |
 | --- | --- |
-| Windows | `x64-debug-msvc`, or `x64-debug-clang-cl` when the user prefers Clang |
-| Linux, macOS | `x64-debug-clang` |
+| Linux | `x64-debug-clang` |
+| Windows | `x64-debug-clang-cl` |
 
-Use `relwithdebinfo` for profiling and `release` for performance measurements.
+Use `release` for performance measurements.
 
 ## 2. Configure
 
@@ -33,10 +34,10 @@ Use `relwithdebinfo` for profiling and `release` for performance measurements.
 cmake --preset <preset>
 ```
 
-Pass options with `-D`, for example to enable the tests:
+Pass options with `-D`, for example to switch the library kind without changing preset:
 
 ```bash
-cmake --preset <preset> -DBUILD_TESTS=ON
+cmake --preset <preset> -DBUILD_SHARED_LIBS=ON
 ```
 
 Every option is declared in `cmake/Config.cmake`. Read it before passing one; do not invent option
@@ -48,19 +49,17 @@ To discard the existing cache and configure from scratch:
 cmake --preset <preset> --fresh
 ```
 
-The binary directory is `out/build/<preset>/`. The preset exports `compile_commands.json` and links
-it at the repository root for clangd.
+The binary directory is `out/build/<preset>/`, ignored by git. The preset exports
+`compile_commands.json` there, and the configure step links it at the repository root
+(`compile_commands.json`, ignored by git), where clangd finds it (`CompilationDatabase: .`). The link
+points to the last configured preset.
 
 ## 3. Before and after running it
 
-- Configuring is not free: it can initialise submodules and download the uv and Python runtimes into
-  `runtimes/` and `.cache/`. Do not run it only to "check" something that reading the CMake files
-  answers.
-- `msvc` and `clang-cl` presets use Ninja with the Microsoft toolchain, so they must run from a
-  Visual Studio developer shell where `cl` / `clang-cl` and the Windows SDK are on the path.
-- On failure, read the **first** error, not the last. If it comes from `cmake/Dependencies.cmake`,
-  check "Known rough edges" in `AGENTS.md` before patching anything.
-- Never edit `extern/` or rename entries in `CMakePresets.json` to get past an error.
+- `clang-cl` presets must run from a Visual Studio developer shell, where `clang-cl` and the Windows
+  SDK are on the path.
+- On failure, read the **first** error, not the last.
+- Never rename entries in `CMakePresets.json` to get past an error.
 
 ## Report
 
