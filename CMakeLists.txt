@@ -37,4 +37,9 @@ file(
     "${CMAKE_BINARY_DIR}/compile_commands.json"
     "${CMAKE_SOURCE_DIR}/compile_commands.json"
     SYMBOLIC
+    RESULT COMPILE_COMMANDS_LINK_RESULT
 )
+# Creating a symlink can be denied (e.g. on Windows without Developer Mode); that must not stop the configure.
+if(NOT COMPILE_COMMANDS_LINK_RESULT EQUAL 0)
+    message(WARNING "Cannot link compile_commands.json at the root (${COMPILE_COMMANDS_LINK_RESULT}): clangd will not find it")
+endif()
