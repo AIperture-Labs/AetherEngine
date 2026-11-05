@@ -1,0 +1,38 @@
+# Copyright (c) 2026 AIperture-Labs <xavier.beheydt@gmail.com>
+# SPDX-License-Identifier: MPL-2.0
+# Contributors:
+#   Copyright (c) 2026 Claude Code (Claude Haiku 5.5)
+# Doc: https://clangd.llvm.org/config
+
+If:
+  PathExclude:
+    - ".clang*"
+
+CompileFlags:
+  CompilationDatabase: .
+  BuiltinHeaders: QueryDriver
+  Add:
+    - -std=c++23
+    - -Wall
+    - -Wextra
+
+Diagnostics:
+  UnusedIncludes: Strict
+
+Index:
+  Background: Build
+
+InlayHints:
+  BlockEnd: false
+  Designators: true
+  Enabled: true
+  ParameterNames: true
+  DeducedTypes: true
+  DefaultArguments: false # clangd 20
+  TypeNameLimit: 24
+
+Completion:
+  AllScopes: true
+  ArgumentLists: FullPlaceholders
+  HeaderInsertion: IWYU
+  CodePatterns: All
