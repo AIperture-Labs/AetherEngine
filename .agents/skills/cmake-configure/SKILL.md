@@ -52,11 +52,12 @@ cmake --preset <preset> --fresh
 The binary directory is `out/build/<preset>/`, ignored by git. The preset exports
 `compile_commands.json` there, and the configure step links it at the repository root
 (`compile_commands.json`, ignored by git), where clangd finds it (`CompilationDatabase: .`). The link
-points to the last configured preset.
+points to the last configured preset. On Windows without the symlink privilege (Developer Mode or an
+elevated shell), configure warns and skips the link.
 
 ## 3. Before and after running it
 
-- `clang-cl` presets must run from a Visual Studio developer shell, where `clang-cl` and the Windows
+- `clang-cl` presets must run from an x64 Visual Studio developer shell, where `clang-cl` and the Windows
   SDK are on the path.
 - On failure, read the **first** error, not the last.
 - Never rename entries in `CMakePresets.json` to get past an error.
