@@ -1,0 +1,26 @@
+# Copyright (c) 2026 AIperture-Labs <xavier.beheydt@gmail.com>
+# SPDX-License-Identifier: MPL-2.0
+# Contributors:
+#   Copyright (c) 2026 Claude Code (Claude Sonnet 5.5)
+# Doc: https://editorconfig.org/
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+max_line_length = 120
+
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = 80
+
+[*.{yml,yaml}]
+indent_size = 2
+
+[.gitmodules]
+indent_style = tab
