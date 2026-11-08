@@ -13,8 +13,9 @@ Applies to every Python file in the repo.
 - Four spaces for indentation, lines up to 100 characters.
 - `_name` is module-private. `__name` is for class internals ("protected",
   name-mangled).
-- The body of an `if`, `for` or `while` always goes on its own line (PEP 8):
-  no `if not items: return`.
+- The body of an `if`, `for` or `while` goes on its own line (PEP 8). A
+  simple loop that builds a list, a set or a dict is a comprehension, with an
+  `if` to filter when needed: `[x.name for x in items if x.enabled]`.
 - Simple conditional assignment is a ternary, not an `if`/`else` block:
   `label = "items" if items else "none"`.
 - ruff config in `pyproject.toml`: `line-length = 100`,

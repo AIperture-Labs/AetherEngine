@@ -95,17 +95,11 @@ and PRs to plan or to-do files in the repository.
 
 Labels come in three families, one colour each:
 
-- `scope: <name>`: the part of the repository touched: `build` (CMake,
-  presets, vcpkg), `ci`, `config` (editor and tooling configs), `core`,
-  `tests`, `agents` (`AGENTS.md`, `.agents/`), `docs`. The Project's Area
-  field is the product (`Engine`…), not this.
-- `agent: <name>`: the agent suggested for an issue, or that authored a PR:
-  `claude-code`, `vibe`.
-- `model: <name>`: the model of that agent: `haiku`, `sonnet`, `opus` for
-  Claude Code; `mistral-medium-3.5` for Vibe.
-
-There is no `type:` label (the Conventional Commits type is in every title)
-and no status label (the organization Project has a Status field). GitHub's
-default labels stay. An issue carries one or more `scope:`, one `agent:` and
-one `model:` (the last two from its "Suggested model" section); a PR carries
-the `agent:` and `model:` that did the work.
+- `scope: <name>`, one or more: the part of the repository touched: `build`
+  (CMake, presets, vcpkg), `ci`, `config` (editor and tooling configs),
+  `core`, `tests`, `agents` (`AGENTS.md`, `.agents/`), `docs`. The Project's
+  Area field is the product (`Engine`…), not this.
+- `agent: <name>`, one: the agent suggested by an issue, or that did the work
+  of a PR: `claude-code`, `vibe`.
+- `model: <name>`, one: the model of that agent: `haiku`, `sonnet`, `opus`
+  for Claude Code; `mistral-medium-3.5` for Vibe.
