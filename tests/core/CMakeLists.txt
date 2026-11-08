@@ -7,5 +7,7 @@ message(STATUS "Configuring aether_core_tests")
 add_doctest(
     NAME aether_core_tests
     SOURCES
-        wiring.test.cpp
+        types.test.cpp
+        version.test.cpp
+    LIBS AetherEngine::core
 )
