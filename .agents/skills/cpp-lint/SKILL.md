@@ -30,8 +30,6 @@ Apply suggested fixes only when the user asks for it, then review the resulting 
 clang-tidy -p out/build/<preset> --fix <files>
 ```
 
-Files under `extern/` are never linted or fixed.
-
 ## 3. Handle findings
 
 - Fix the finding rather than suppressing it.

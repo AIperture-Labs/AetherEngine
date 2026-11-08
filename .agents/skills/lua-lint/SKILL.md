@@ -9,5 +9,4 @@ Run `luacheck <files>` from the project root. The rules come from
 `.luacheckrc`; don't pass rule flags or override them.
 
 Fix the finding rather than suppressing it. A `-- luacheck: ignore <code>` is
-acceptable only with the specific code and a short reason. Never lint
-`extern/`.
+acceptable only with the specific code and a short reason.

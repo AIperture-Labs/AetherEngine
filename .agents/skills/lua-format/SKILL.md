@@ -19,4 +19,4 @@ Apply in place:
 stylua <files>
 ```
 
-Format only the files you changed, never `extern/`.
+Format only the files you changed.
