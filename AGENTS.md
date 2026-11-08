@@ -123,6 +123,7 @@ instead of improvising the command:
 - [lua-test](.agents/skills/lua-test/SKILL.md): run tests with busted.
 - [python-deps](.agents/skills/python-deps/SKILL.md): install, add or update
   dependencies (uv).
+- [python-format](.agents/skills/python-format/SKILL.md): format with ruff.
 - [python-lint](.agents/skills/python-lint/SKILL.md): lint with ruff.
 - [python-test](.agents/skills/python-test/SKILL.md): run tests with pytest.
 - [todo-ai](.agents/skills/todo-ai/SKILL.md): resolve the `TODO-AI` comments,
@@ -139,5 +140,11 @@ Introducing a new language adds both a style guide
 Introducing a new tool or feature (build system, CI, runtime…) adds its
 skill (`.agents/skills/<tool>-<action>`) and, if it changes where files
 live, updates [repo-layout.md](.agents/instructions/repo-layout.md).
+
+Introducing a new language, file type or tool reviews the repo-wide configs in
+the same change, and adapts them only where the default does not fit:
+`.editorconfig` (indentation, line length), `.gitattributes` (line endings,
+binary files), `.gitignore` (generated outputs and caches), and the formatter
+and linter configs of the language.
 
 Each addition is listed in [Skills](#skills) in the same change.

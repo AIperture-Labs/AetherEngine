@@ -92,3 +92,14 @@ GitHub Project; the global plan lives in the `AIperture-Labs/.github`
 repository. An issue is the unit of work handed to an agent: it states its
 goal and how to verify it, and the branch and PR reference it. Prefer issues
 and PRs to plan or to-do files in the repository.
+
+Labels come in three families, one colour each:
+
+- `scope: <name>`, one or more: the part of the repository touched: `build`
+  (CMake, presets, vcpkg), `ci`, `config` (editor and tooling configs),
+  `core`, `tests`, `agents` (`AGENTS.md`, `.agents/`), `docs`. The Project's
+  Area field is the product (`Engine`…), not this.
+- `agent: <name>`, one: the agent suggested by an issue, or that did the work
+  of a PR: `claude-code`, `vibe`.
+- `model: <name>`, one: the model of that agent: `haiku`, `sonnet`, `opus`
+  for Claude Code; `mistral-medium-3.5` for Vibe.
