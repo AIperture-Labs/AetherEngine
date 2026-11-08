@@ -75,10 +75,15 @@ Settings that enforce the rules above; check them with
 
 ## Releases
 
-A `chore(release): vX.Y.Z` PR into `dev` bumps the project version in
-`CMakeLists.txt`; `dev` is then merged into `main`, and the release is tagged
-by hand as semver `vX.Y.Z` on that merge commit, once CI is green. Never tag
-unless the user asks.
+The project version is `VERSION` in `project()` (`CMakeLists.txt`). Before
+each tag, a `chore(release): vX.Y.Z` PR into `dev` sets it to the version
+about to be tagged; `dev` is then merged into `main`, and the release is
+tagged by hand as semver `vX.Y.Z` on that merge commit, once CI is green.
+Never tag unless the user asks.
+
+Pre-releases follow semver: `vX.Y.Z-alpha.N`, then `-beta.N`, then `-rc.N`,
+all before `vX.Y.Z`. `project(VERSION)` only takes numbers, so it holds the
+`X.Y.Z` the pre-release leads to; the label lives in the tag only.
 
 ## Tracking
 

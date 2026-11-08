@@ -15,6 +15,7 @@ nothing fits, ask instead of adding a top-level directory.
 | `tests/` | Unit tests, one directory per module under test (doctest) |
 | `.agents/` | AI agent instructions (`instructions/`) and skills (`skills/`) |
 | `.worktrees/` | Git worktrees, ignored by git (see `repo-workflow.md`) |
+| `out/` | Build directories (`out/build/<preset>/`), ignored by git |
 
 Root files: `CMakeLists.txt`, `CMakePresets.json`, `justfile`,
 `.clang-format`, `.clang-tidy`, `.clangd`, `.editorconfig`, `.gitattributes`, `.gitmodules`, `AGENTS.md`, `LICENSE`.
