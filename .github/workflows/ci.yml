@@ -57,6 +57,9 @@ jobs:
           arch: x64
 
       - name: Configure
+        env:
+          # vcpkg sanitizes PATH; its compiler detection needs clang-cl, found through the Visual Studio environment.
+          VCPKG_KEEP_ENV_VARS: ${{ runner.os == 'Windows' && 'PATH' || '' }}
         run: cmake --preset ${{ matrix.preset }} -DBUILD_TESTS=ON
 
       - name: Show vcpkg logs
