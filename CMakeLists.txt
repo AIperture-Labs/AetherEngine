@@ -6,15 +6,19 @@
 
 cmake_minimum_required(VERSION 3.31...4.1)
 
-project(
-    AetherEngine
-    VERSION 0.1.0
-    LANGUAGES CXX
-)
-
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/helpers")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+
+# The version is the latest vX.Y.Z git tag, read before project() since project() needs it.
+include(GitVersion)
+git_version(AETHER_VERSION FALLBACK 0.1.0)
+
+project(
+    AetherEngine
+    VERSION ${AETHER_VERSION}
+    LANGUAGES CXX
+)
 
 include(Config)
 include(CompilerWarnings)
@@ -29,4 +33,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
 
-link_compile_commands()
+if(AETHER_EXPORT_COMPILE_COMMANDS)
+    link_compile_commands()
+endif()
