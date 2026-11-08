@@ -7,10 +7,8 @@ Checks: >
   modernize-*,
   cppcoreguidelines-*,
   bugprone-*,
-  clang-analyzer-*
+  clang-analyzer-*,
+  -modernize-use-trailing-return-type
 WarningsAsErrors: false
 HeaderFilterRegex: "(^|/)sources/.+\\.hpp$"
 FormatStyle: Google
-CheckOptions:
-  - key: modernize-use-trailing-return-type
-    value: "0"
