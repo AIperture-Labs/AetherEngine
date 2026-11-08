@@ -17,7 +17,7 @@ nothing fits, ask instead of adding a top-level directory.
 | `.worktrees/` | Git worktrees, ignored by git (see `repo-workflow.md`) |
 
 Root files: `CMakeLists.txt`, `CMakePresets.json`, `justfile`,
-`.clang-format`, `.clang-tidy`, `.clangd`, `.editorconfig`, `.gitmodules`, `AGENTS.md`, `LICENSE`.
+`.clang-format`, `.clang-tidy`, `.clangd`, `.editorconfig`, `.gitattributes`, `.gitmodules`, `AGENTS.md`, `LICENSE`.
 
 `.claude/skills` is a symlink to `.agents/skills`, so Claude Code finds the
 same skills.
