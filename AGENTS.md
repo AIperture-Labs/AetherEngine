@@ -77,11 +77,12 @@ its check:
 Language-specific rules live in `.agents/instructions/style/<language>.md`;
 read the matching one before editing a file in that language.
 
-## Copyright
+## Header Comment
 
-Every source or config file starts with copyright lines, in the file's
-comment syntax and after the shebang if there is one. Docs and Markdown,
-generated files and files that can't hold comments have none.
+Every source or config file starts with a header comment (copyright, license
+and, if useful, documentation), in the file's comment syntax and after the
+shebang if there is one. Docs and Markdown, generated files and files that
+can't hold comments have none.
 
 - A file starts with the organization line and the license identifier
   (the project is under the [MPL-2.0](LICENSE)):
