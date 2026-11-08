@@ -18,7 +18,7 @@ nothing fits, ask instead of adding a top-level directory.
 | `out/` | Build directories (`out/build/<preset>/`), ignored by git |
 
 Root files: `CMakeLists.txt`, `CMakePresets.json`, `justfile`,
-`.clang-format`, `.clang-tidy`, `.clangd`, `.editorconfig`, `.gitmodules`, `AGENTS.md`, `LICENSE`.
+`.clang-format`, `.clang-tidy`, `.clangd`, `.editorconfig`, `.gitattributes`, `.gitmodules`, `AGENTS.md`, `LICENSE`.
 
 `.claude/skills` is a symlink to `.agents/skills`, so Claude Code finds the
 same skills.
