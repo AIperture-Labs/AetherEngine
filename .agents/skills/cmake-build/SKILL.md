@@ -8,7 +8,8 @@ description: Build AetherEngine, or a single target, from a configured CMake pre
 ## 1. Make sure the preset is configured
 
 The binary directory `out/build/<preset>/` must contain a `CMakeCache.txt`. If it does not, run the
-`cmake-configure` skill first with the same preset.
+`cmake-configure` skill first with the same preset. Dependencies are installed by vcpkg at configure time,
+not by the build.
 
 ## 2. Build
 

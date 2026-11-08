@@ -19,6 +19,9 @@ max_line_length = 120
 indent_style = space
 indent_size = 4
 
+[vcpkg.json]
+indent_size = 2
+
 [*.{yml,yaml}]
 indent_style = space
 indent_size = 2

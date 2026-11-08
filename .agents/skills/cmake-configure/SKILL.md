@@ -57,6 +57,12 @@ elevated shell), configure warns and skips the link.
 
 ## 3. Before and after running it
 
+- The presets load the toolchain of the `extern/vcpkg` submodule (see `docs/dependencies.md`): the
+  first configure bootstraps vcpkg, and every configure installs the dependencies of `vcpkg.json` into
+  the build directory. The first configure is slow; later ones reuse the vcpkg binary cache.
+- A `Could not find toolchain file` error means the submodule is not checked out: run
+  `git submodule update --init`.
+- A baseline error means `builtin-baseline` differs from the submodule commit: they move together.
 - `clang-cl` presets must run from an x64 Visual Studio developer shell, where `clang-cl` and the Windows
   SDK are on the path.
 - On failure, read the **first** error, not the last.
