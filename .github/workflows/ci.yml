@@ -59,6 +59,11 @@ jobs:
       - name: Configure
         run: cmake --preset ${{ matrix.preset }} -DBUILD_TESTS=ON
 
+      - name: Show vcpkg logs
+        if: failure()
+        shell: bash
+        run: find extern/vcpkg/buildtrees out/build -name '*.log' -path '*detect_compiler*' -print -exec cat {} \;
+
       - name: Build
         run: cmake --build --preset ${{ matrix.preset }}
 
