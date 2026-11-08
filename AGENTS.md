@@ -91,8 +91,6 @@ can't hold comments have none.
 - Then, if useful, a `Doc:` line linking the documentation of the format or
   the tool the file configures.
 - `<year>` is the current year.
-- No list of contributors in the files: authorship is in the git history,
-  commits and their `Co-Authored-By` trailers.
 
 Example, in a C++ file:
 
