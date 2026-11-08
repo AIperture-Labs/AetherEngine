@@ -4,13 +4,14 @@
 #   - https://cmake.org/cmake/help/v4.1/module/GenerateExportHeader.html
 #   - https://github.com/g-truc/glm/blob/master/manual.md
 
-# aether_core: fundamental types and version of the engine.
+# aether_core: fundamental types, version and logger of the engine.
 message(STATUS "Configuring aether_core")
 
 find_package(glm CONFIG REQUIRED)
 
 add_library(
     aether_core
+    src/logger.cpp
     src/version.cpp
 )
 add_library(AetherEngine::core ALIAS aether_core)
