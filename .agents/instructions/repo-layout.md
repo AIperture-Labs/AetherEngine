@@ -13,6 +13,7 @@ nothing fits, ask instead of adding a top-level directory.
 | `scripts/just/` | `just` recipes, imported by the root `justfile` |
 | `sources/` | Engine modules, one directory per module |
 | `tests/` | Unit tests, one directory per module under test (doctest) |
+| `.github/` | GitHub configuration: `workflows/` (CI, see `ci.yml`) |
 | `.agents/` | AI agent instructions (`instructions/`) and skills (`skills/`) |
 | `.worktrees/` | Git worktrees, ignored by git (see `repo-workflow.md`) |
 | `out/` | Build directories (`out/build/<preset>/`), ignored by git |

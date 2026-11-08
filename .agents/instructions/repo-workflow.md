@@ -47,7 +47,7 @@ Settings that enforce the rules above; check them with
 - Ruleset `main`, no bypass actor: deletion and force push blocked, changes
   through a pull request, merge commit only.
 - Both: 0 approving reviews while there is a single maintainer.
-- Not yet enforced: required status checks (no CI yet) and required reviews.
+- Not yet enforced: required status checks (CI exists, `.github/workflows/ci.yml`; making it required is the maintainer's call) and required reviews.
 
 ## Commits
 
