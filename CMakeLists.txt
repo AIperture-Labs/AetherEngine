@@ -33,6 +33,8 @@ if(AETHER_EXPORT_COMPILE_COMMANDS)
     link_compile_commands()
 endif()
 
+add_subdirectory(sources)
+
 if(BUILD_TESTS)
     enable_testing()
     add_subdirectory(tests)

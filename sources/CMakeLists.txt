@@ -1,0 +1,4 @@
+# Copyright (c) 2026 AIperture-Labs <xavier.beheydt@gmail.com>
+# SPDX-License-Identifier: MPL-2.0
+
+add_subdirectory(core)
