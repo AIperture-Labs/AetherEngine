@@ -18,9 +18,9 @@ function(add_doctest)
     # The sources include doctest.h without defining main(); this one file does it once per executable.
     set(main_source "${CMAKE_CURRENT_BINARY_DIR}/${ARG_NAME}_main.cpp")
     file(
-        WRITE
-        "${main_source}"
-        "#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN\n#include <doctest/doctest.h>\n"
+        CONFIGURE
+        OUTPUT "${main_source}"
+        CONTENT "#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN\n#include <doctest/doctest.h>\n"
     )
 
     add_executable(${ARG_NAME} "${main_source}" ${ARG_SOURCES})
