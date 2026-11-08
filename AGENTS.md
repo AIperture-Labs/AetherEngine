@@ -123,6 +123,7 @@ instead of improvising the command:
 - [lua-test](.agents/skills/lua-test/SKILL.md): run tests with busted.
 - [python-deps](.agents/skills/python-deps/SKILL.md): install, add or update
   dependencies (uv).
+- [python-format](.agents/skills/python-format/SKILL.md): format with ruff.
 - [python-lint](.agents/skills/python-lint/SKILL.md): lint with ruff.
 - [python-test](.agents/skills/python-test/SKILL.md): run tests with pytest.
 - [todo-ai](.agents/skills/todo-ai/SKILL.md): resolve the `TODO-AI` comments,

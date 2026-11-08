@@ -13,11 +13,15 @@ Applies to every Python file in the repo.
 - Four spaces for indentation, lines up to 100 characters.
 - `_name` is module-private. `__name` is for class internals ("protected",
   name-mangled).
-- One line when the statement and its action are short:
-  `if not items: return`, `for x in xs: seen.add(x)`.
+- The body of an `if`, `for` or `while` always goes on its own line (PEP 8):
+  no `if not items: return`.
 - Simple conditional assignment is a ternary, not an `if`/`else` block:
   `label = "items" if items else "none"`.
 - ruff config in `pyproject.toml`: `line-length = 100`,
-  `target-version = "py311"`, rules `E`, `F`, `I`, `UP`, `B`, ignoring `E701`
-  and `E702` (one-line statements). Don't run `ruff format`: it expands
-  one-line statements.
+  `target-version = "py311"`, rules `E`, `F`, `I`, `UP`, `B`.
+- The layout is the one `ruff format` produces, except a long list of plain
+  values (e.g. codes), which keeps several per line with a trailing
+  `# fmt: skip`.
+- A comment says only what the code can't. Docstrings are added on need, not
+  by default: for a substantial class or function whose use the name and the
+  signature don't tell, or for code whose API docs are generated from them.
