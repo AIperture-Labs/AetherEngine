@@ -19,7 +19,6 @@ max_line_length = 120
 indent_style = space
 indent_size = 4
 
-# `vcpkg format-manifest` writes two spaces.
 [vcpkg.json]
 indent_size = 2
 
