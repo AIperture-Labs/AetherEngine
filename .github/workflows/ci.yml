@@ -62,11 +62,6 @@ jobs:
           VCPKG_KEEP_ENV_VARS: ${{ runner.os == 'Windows' && 'PATH' || '' }}
         run: cmake --preset ${{ matrix.preset }} -DBUILD_TESTS=ON
 
-      - name: Show vcpkg logs
-        if: failure()
-        shell: bash
-        run: find extern/vcpkg/buildtrees out/build -name '*.log' -path '*detect_compiler*' -print -exec cat {} \;
-
       - name: Build
         run: cmake --build --preset ${{ matrix.preset }}
 
