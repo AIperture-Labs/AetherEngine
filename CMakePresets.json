@@ -53,6 +53,15 @@
             }
         },
         {
+            "name": "base-sanitize",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-fsanitize=address,undefined -fno-omit-frame-pointer",
+                "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=address,undefined",
+                "CMAKE_SHARED_LINKER_FLAGS": "-fsanitize=address,undefined"
+            }
+        },
+        {
             "name": "base-shared",
             "hidden": true,
             "cacheVariables": {
@@ -85,6 +94,13 @@
             "inherits": [
                 "x64-release-clang",
                 "base-shared"
+            ]
+        },
+        {
+            "name": "x64-debug-clang-sanitize",
+            "inherits": [
+                "x64-debug-clang",
+                "base-sanitize"
             ]
         },
         {
@@ -153,6 +169,11 @@
         {
             "name": "x64-release-clang-shared",
             "configurePreset": "x64-release-clang-shared",
+            "inherits": "base-clang"
+        },
+        {
+            "name": "x64-debug-clang-sanitize",
+            "configurePreset": "x64-debug-clang-sanitize",
             "inherits": "base-clang"
         },
         {
