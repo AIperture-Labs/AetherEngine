@@ -1,7 +1,5 @@
 # Copyright (c) 2026 AIperture-Labs <xavier.beheydt@gmail.com>
 # SPDX-License-Identifier: MPL-2.0
-# Contributors:
-#   Copyright (c) 2026 Claude Code (Claude Sonnet 5.5)
 # Docs:
 #   - https://cmake.org/cmake/help/v4.1/index.html
 #   - https://cliutils.gitlab.io/modern-cmake/README.html

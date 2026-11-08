@@ -1,7 +1,5 @@
 # Copyright (c) 2026 AIperture-Labs <xavier.beheydt@gmail.com>
 # SPDX-License-Identifier: MPL-2.0
-# Contributors:
-#   Copyright (c) 2026 Claude Code (Claude Sonnet 5.5)
 # Docs:
 #   - https://clang.llvm.org/docs/UsersManual.html#options-to-control-error-and-warning-messages
 #   - https://clang.llvm.org/docs/UsersManual.html#clang-cl
