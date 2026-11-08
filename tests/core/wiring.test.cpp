@@ -5,5 +5,5 @@
 
 TEST_CASE("the test wiring runs a test case")
 {
-    CHECK(1 + 1 == 2);
+    CHECK(1 + 1 == 3);
 }
