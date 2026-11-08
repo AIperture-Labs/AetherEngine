@@ -140,4 +140,10 @@ Introducing a new tool or feature (build system, CI, runtime…) adds its
 skill (`.agents/skills/<tool>-<action>`) and, if it changes where files
 live, updates [repo-layout.md](.agents/instructions/repo-layout.md).
 
+Introducing a new language, file type or tool reviews the repo-wide configs in
+the same change, and adapts them only where the default does not fit:
+`.editorconfig` (indentation, line length), `.gitattributes` (line endings,
+binary files), `.gitignore` (generated outputs and caches), and the formatter
+and linter configs of the language.
+
 Each addition is listed in [Skills](#skills) in the same change.
