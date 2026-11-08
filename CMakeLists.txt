@@ -32,3 +32,8 @@ set(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
 if(AETHER_EXPORT_COMPILE_COMMANDS)
     link_compile_commands()
 endif()
+
+if(BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()

@@ -12,3 +12,5 @@ option(BUILD_SHARED_LIBS "Build the engine modules as shared libraries" OFF)
 # file runs, so an option() of that name would never apply its default.
 option(AETHER_EXPORT_COMPILE_COMMANDS "Export compile_commands.json for language servers and clang-tidy" ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ${AETHER_EXPORT_COMPILE_COMMANDS})
+
+option(BUILD_TESTS "Build the unit tests and register them with CTest" OFF)
