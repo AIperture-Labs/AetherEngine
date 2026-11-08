@@ -77,34 +77,28 @@ its check:
 Language-specific rules live in `.agents/instructions/style/<language>.md`;
 read the matching one before editing a file in that language.
 
-## Copyright
+## Header Comment
 
-Every source or config file starts with copyright lines, in the file's
-comment syntax and after the shebang if there is one. Docs and Markdown,
-generated files and files that can't hold comments have none.
+Every source or config file starts with a header comment (copyright, license
+and, if useful, documentation), in the file's comment syntax and after the
+shebang if there is one. Docs and Markdown, generated files and files that
+can't hold comments have none.
 
 - A file starts with the organization line and the license identifier
   (the project is under the [MPL-2.0](LICENSE)):
   `Copyright (c) <year> AIperture-Labs <xavier.beheydt@gmail.com>` then
   `SPDX-License-Identifier: MPL-2.0`.
-- Below it, a `Contributors:` line followed by one copyright line per
-  contributor. Whoever makes a substantial change to a file, human or agent,
-  adds their own line once, if it is not already there. Not for a typo or a
-  pure reformat.
-  - Human: `Copyright (c) <year> <name> <<email>>`, from `git config
-    user.name` and `git config user.email`. If either is unset, ask.
-  - Agent: `Copyright (c) <year> <agent> (<model>)`, e.g.
-    `Copyright (c) 2026 Claude Code (Claude Sonnet 5.5)`.
+- Then, if useful, a `Doc:` line linking the documentation of the format or
+  the tool the file configures.
 - `<year>` is the current year.
+- No list of contributors in the files: authorship is in the git history,
+  commits and their `Co-Authored-By` trailers.
 
 Example, in a C++ file:
 
 ```cpp
 // Copyright (c) 2026 AIperture-Labs <xavier.beheydt@gmail.com>
 // SPDX-License-Identifier: MPL-2.0
-// Contributors:
-//   Copyright (c) 2026 Jane Doe <jane@example.com>
-//   Copyright (c) 2026 Claude Code (Claude Sonnet 5.5)
 ```
 
 ## Skills
