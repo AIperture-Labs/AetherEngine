@@ -7,6 +7,7 @@ nothing fits, ask instead of adding a top-level directory.
 | --- | --- |
 | `cmake/` | CMake entry points (`Config.cmake`), `helpers/`, find/config `modules/` and vcpkg `triplets/` |
 | `configs/` | Tooling and runtime configuration (`dev/`, `runtimes/`) |
+| `extern/vcpkg/` | vcpkg, as a git submodule pinned to the `builtin-baseline` commit |
 | `docs/` | Engine documentation (Markdown); no plans or roadmaps, those live in issues and the org Project |
 | `VERSIONS.md` | Versions of the languages, tools and dependencies in use |
 | `scripts/just/` | `just` recipes, imported by the root `justfile` |

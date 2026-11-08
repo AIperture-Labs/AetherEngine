@@ -8,20 +8,20 @@ them into the build directory.
 
 ## Get vcpkg
 
-Clone it anywhere and bootstrap it, then point `VCPKG_ROOT` at the clone. The
-presets read `$env{VCPKG_ROOT}`; no path is committed.
+vcpkg is a git submodule, `extern/vcpkg`, pinned to the `builtin-baseline`
+commit. Clone with the submodules, then configure: the first configure
+bootstraps vcpkg and installs the dependencies. No `VCPKG_ROOT` and no system
+install are needed.
 
 ```sh
-git clone https://github.com/microsoft/vcpkg.git
-./vcpkg/bootstrap-vcpkg.sh -disableMetrics
-export VCPKG_ROOT="$PWD/vcpkg"
+git clone --recurse-submodules \
+    https://github.com/AIperture-Labs/AetherEngine.git
+cmake --preset <preset>
 ```
 
-On Windows, run `.\vcpkg\bootstrap-vcpkg.bat` and, in PowerShell,
-`$env:VCPKG_ROOT = "$PWD\vcpkg"`.
-
-Keep `VCPKG_ROOT` set in your shell profile. The clone must be a full one
-(not shallow) so vcpkg can check out the baseline commit.
+In an existing clone, run `git submodule update --init`. To use a vcpkg
+installed elsewhere, override `toolchainFile` in a `CMakeUserPresets.json`
+(ignored by git).
 
 ## Triplets
 
@@ -36,6 +36,6 @@ with the same compiler as the engine:
 ## Add or update a dependency
 
 Add it to `dependencies` in `vcpkg.json`, then run
-`vcpkg format-manifest vcpkg.json`. To update the registry, set
-`builtin-baseline` to a newer vcpkg commit. Use `overrides` only to pin a port
-version.
+`extern/vcpkg/vcpkg format-manifest vcpkg.json`. To update the registry, move
+the submodule to a newer vcpkg commit and set `builtin-baseline` to that same
+commit, in one change. Use `overrides` only to pin a port version.
