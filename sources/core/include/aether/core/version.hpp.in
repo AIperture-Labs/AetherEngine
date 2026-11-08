@@ -1,0 +1,20 @@
+// Copyright (c) 2026 AIperture-Labs <xavier.beheydt@gmail.com>
+// SPDX-License-Identifier: MPL-2.0
+
+#pragma once
+
+#include <aether/core/export.hpp>
+
+namespace aether::core
+{
+
+inline constexpr int kVersionMajor = @AetherEngine_VERSION_MAJOR@;
+inline constexpr int kVersionMinor = @AetherEngine_VERSION_MINOR@;
+inline constexpr int kVersionPatch = @AetherEngine_VERSION_PATCH@;
+
+inline constexpr const char *kVersionString = "@AetherEngine_VERSION@";
+
+/// The engine version as "major.minor.patch".
+AETHER_CORE_API const char *versionString() noexcept;
+
+}  // namespace aether::core
