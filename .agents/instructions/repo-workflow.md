@@ -95,9 +95,9 @@ and PRs to plan or to-do files in the repository.
 
 Labels come in three families, one colour each:
 
-- `area: <name>`: the area touched, one or more per issue: `build` (CMake,
-  presets, vcpkg), `ci`, `config` (editor and tooling configs), `core`,
-  `tests`, `agents` (`AGENTS.md`, `.agents/`), `docs`.
+- `area: <name>`: the area touched: `build` (CMake, presets, vcpkg), `ci`,
+  `config` (editor and tooling configs), `core`, `tests`, `agents`
+  (`AGENTS.md`, `.agents/`), `docs`.
 - `agent: <name>`: the agent suggested for an issue, or that authored a PR:
   `claude-code`, `vibe`.
 - `model: <name>`: the model of that agent: `haiku`, `sonnet`, `opus` for
@@ -105,6 +105,6 @@ Labels come in three families, one colour each:
 
 There is no `type:` label (the Conventional Commits type is in every title)
 and no status label (the organization Project has a Status field). GitHub's
-default labels stay. An issue carries one `agent:` and one `model:`, from its
-"Suggested model" section; a PR carries the `agent:` and `model:` that did the
-work.
+default labels stay. An issue carries one or more `area:`, one `agent:` and
+one `model:` (the last two from its "Suggested model" section); a PR carries
+the `agent:` and `model:` that did the work.
