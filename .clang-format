@@ -1,7 +1,5 @@
 # Copyright (c) 2026 AIperture-Labs <xavier.beheydt@gmail.com>
 # SPDX-License-Identifier: MPL-2.0
-# Contributors:
-#   Copyright (c) 2026 Claude Code (Claude Haiku 5.5)
 # Doc: https://releases.llvm.org/20.1.0/tools/clang/docs/ClangFormat.html
 
 ---
