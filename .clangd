@@ -9,10 +9,6 @@ If:
 CompileFlags:
   CompilationDatabase: .
   BuiltinHeaders: QueryDriver
-  Add:
-    - -std=c++23
-    - -Wall
-    - -Wextra
 
 Diagnostics:
   UnusedIncludes: Strict
