@@ -18,6 +18,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 include(Config)
 include(CompilerWarnings)
+include(CompileCommands)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -28,20 +29,4 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
 
-# clangd looks for the database at the repository root, while it is generated in the build directory.
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-file(
-    CREATE_LINK
-    "${CMAKE_BINARY_DIR}/compile_commands.json"
-    "${CMAKE_SOURCE_DIR}/compile_commands.json"
-    SYMBOLIC
-    RESULT COMPILE_COMMANDS_LINK_RESULT
-)
-# Creating a symlink can be denied (e.g. on Windows without Developer Mode); that must not stop the configure.
-if(NOT COMPILE_COMMANDS_LINK_RESULT EQUAL 0)
-    message(
-        WARNING
-        "Cannot link compile_commands.json at the root (${COMPILE_COMMANDS_LINK_RESULT}): "
-        "clangd will not find it"
-    )
-endif()
+link_compile_commands()

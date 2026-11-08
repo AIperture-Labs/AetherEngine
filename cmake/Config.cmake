@@ -5,3 +5,6 @@
 
 # Standard CMake switch, read by every add_library() without an explicit kind.
 option(BUILD_SHARED_LIBS "Build the engine modules as shared libraries" OFF)
+
+# Written to the build directory; see link_compile_commands() for how language servers find it.
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
