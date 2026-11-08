@@ -5,7 +5,9 @@
 ---
 Checks: >
   modernize-*,
-  cppcoreguidelines-*
+  cppcoreguidelines-*,
+  bugprone-*,
+  clang-analyzer-*
 WarningsAsErrors: false
 HeaderFilterRegex: "(^|/)sources/.+\\.hpp$"
 FormatStyle: Google
