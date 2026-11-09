@@ -24,7 +24,7 @@ or pass it up.
 auto texture = loadTexture("hero.png");
 if (!texture)
 {
-    log<Severity::Error>(kRender, "{}", texture.error().message);
+    log<ESeverity::Error>(kRender, "{}", texture.error().message);
     return fallbackTexture();
 }
 ```
