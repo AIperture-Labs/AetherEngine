@@ -11,6 +11,11 @@ What every contributor needs before writing engine code.
   x64 Visual Studio developer shell on Windows.
 - clang-format and clang-tidy from LLVM 23 or newer.
 
+## Code style
+
+Formatting comes from `.clang-format`, the checks from `.clang-tidy`; names
+follow [naming.md](naming.md).
+
 ## Error handling: avoid exceptions
 
 Engine code avoids exceptions: it does not throw. A function that can fail says
@@ -19,7 +24,8 @@ or an `Error`), and the caller decides what to do: report it and carry on,
 retry, or pass it up.
 
 ```cpp
-[[nodiscard]] Result<Texture> loadTexture(const std::filesystem::path &path);
+[[nodiscard]]
+Result<Texture> loadTexture(const std::filesystem::path &path);
 
 auto texture = loadTexture("hero.png");
 if (!texture)
