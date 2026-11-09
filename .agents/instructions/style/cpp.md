@@ -16,6 +16,10 @@ truth: never edit them to make code pass.
   header comes first, then the others, sorted by clang-format.
 - Public symbols of a shared library carry the module's generated export
   macro (`AETHER_<MODULE>_API`); everything else stays hidden.
+- No exceptions in engine code: a function that can fail returns
+  `Result<T>` or `Status` (`aether::core`), is `[[nodiscard]]`, and never
+  `throw`s. Only catch, at the call site, what a standard or third-party call
+  throws, and turn it into a `Result`. Why: `docs/development.md`.
 - Mark functions `noexcept` when they cannot throw.
 - Prefer the `modernize-*` and `cppcoreguidelines-*` idioms: `nullptr`,
   `auto` where the type is obvious, smart pointers over owning raw pointers,
