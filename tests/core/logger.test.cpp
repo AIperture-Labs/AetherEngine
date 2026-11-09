@@ -23,7 +23,7 @@ namespace aether::core {
 
 namespace {
 
-struct CapturingSink final : Sink
+struct CapturingSink final : ISink
 {
     std::vector<LogRecord> records;
     int                    flushes = 0;
@@ -43,9 +43,9 @@ struct CapturingSink final : Sink
 class SinkGuard
 {
 public:
-    explicit SinkGuard(std::shared_ptr<Sink> sink) : sink_(std::move(sink))
+    explicit SinkGuard(std::shared_ptr<ISink> sink) : m_sink(std::move(sink))
     {
-        addSink(sink_);
+        addSink(m_sink);
     }
 
     SinkGuard(const SinkGuard &)            = delete;
@@ -55,11 +55,11 @@ public:
 
     ~SinkGuard()
     {
-        removeSink(sink_);
+        removeSink(m_sink);
     }
 
 private:
-    std::shared_ptr<Sink> sink_;
+    std::shared_ptr<ISink> m_sink;
 };
 
 std::filesystem::path tempLog(std::string_view name)
@@ -88,12 +88,12 @@ TEST_CASE("a log call submits a record with its severity, category, message, tim
 
     const auto before = std::chrono::system_clock::now();
     const auto line   = std::source_location::current().line() + 1;
-    log<Severity::Info>(category, "{} + {} = {}", 1, 2, 3);
+    log<ESeverity::Info>(category, "{} + {} = {}", 1, 2, 3);
     const auto after = std::chrono::system_clock::now();
 
     REQUIRE(sink->records.size() == 1);
     const LogRecord &record = sink->records.front();
-    CHECK(record.severity == Severity::Info);
+    CHECK(record.severity == ESeverity::Info);
     CHECK(record.category == "test");
     CHECK(record.message == "1 + 2 = 3");
     CHECK(record.time >= before);
@@ -106,15 +106,15 @@ TEST_CASE("records below the minimum severity of their category are dropped")
     const auto      sink = std::make_shared<CapturingSink>();
     const SinkGuard guard(sink);
     Category        category{.name = "test"};
-    category.minSeverity = Severity::Warning;
+    category.minSeverity = ESeverity::Warning;
 
-    log<Severity::Info>(category, "dropped");
-    log<Severity::Warning>(category, "kept");
-    log<Severity::Error>(category, "kept");
+    log<ESeverity::Info>(category, "dropped");
+    log<ESeverity::Warning>(category, "kept");
+    log<ESeverity::Error>(category, "kept");
 
     REQUIRE(sink->records.size() == 2);
-    CHECK(sink->records.at(0).severity == Severity::Warning);
-    CHECK(sink->records.at(1).severity == Severity::Error);
+    CHECK(sink->records.at(0).severity == ESeverity::Warning);
+    CHECK(sink->records.at(1).severity == ESeverity::Error);
 }
 
 TEST_CASE("the minimum severity of a category does not filter the other categories")
@@ -123,10 +123,10 @@ TEST_CASE("the minimum severity of a category does not filter the other categori
     const SinkGuard guard(sink);
     Category        audio{.name = "audio"};
     const Category  render{.name = "render"};
-    audio.minSeverity = Severity::Fatal;
+    audio.minSeverity = ESeverity::Fatal;
 
-    log<Severity::Error>(audio, "muted");
-    log<Severity::Info>(render, "shown");
+    log<ESeverity::Error>(audio, "muted");
+    log<ESeverity::Info>(render, "shown");
 
     REQUIRE(sink->records.size() == 1);
     CHECK(sink->records.at(0).category == "render");
@@ -137,7 +137,7 @@ TEST_CASE("a record is formatted as UTC time, severity, category, message and fi
     using namespace std::chrono_literals;
     const auto      location = std::source_location::current();
     const LogRecord record{
-        .severity = Severity::Warning,
+        .severity = ESeverity::Warning,
         .category = "core",
         .message  = "low memory",
         .time     = std::chrono::sys_days{std::chrono::year{2026} / 11 / 8} + 18h + 5min + 24s + 123456us,
@@ -156,9 +156,9 @@ TEST_CASE("flush flushes every sink, and a fatal record flushes them too")
 
     flush();
     CHECK(sink->flushes == 1);
-    log<Severity::Error>(category, "not flushed");
+    log<ESeverity::Error>(category, "not flushed");
     CHECK(sink->flushes == 1);
-    log<Severity::Fatal>(category, "flushed");
+    log<ESeverity::Fatal>(category, "flushed");
     CHECK(sink->flushes == 2);
     CHECK(sink->records.size() == 2);
 }
@@ -170,7 +170,7 @@ TEST_CASE("the console sink writes formatted lines to std::clog")
     auto              *previous = std::clog.rdbuf(output.rdbuf());
     {
         const SinkGuard guard(makeConsoleSink());
-        log<Severity::Info>(category, "hello");
+        log<ESeverity::Info>(category, "hello");
         flush();
     }
     std::clog.rdbuf(previous);
@@ -185,8 +185,8 @@ TEST_CASE("the file sink writes one formatted line per record")
     const Category category{.name = "file"};
     {
         const SinkGuard guard(makeFileSink(path));
-        log<Severity::Info>(category, "first");
-        log<Severity::Error>(category, "second {}", 2);
+        log<ESeverity::Info>(category, "first");
+        log<ESeverity::Error>(category, "second {}", 2);
         flush();
 
         const auto lines = readLines(path);
@@ -212,7 +212,7 @@ TEST_CASE("concurrent log calls write whole lines that never interleave")
                 threads.emplace_back([&category, thread] {
                     for (int line = 0; line < kLines; ++line)
                     {
-                        log<Severity::Info>(category, "thread {} line {}", thread, line);
+                        log<ESeverity::Info>(category, "thread {} line {}", thread, line);
                     }
                 });
             }

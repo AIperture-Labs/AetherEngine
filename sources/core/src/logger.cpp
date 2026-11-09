@@ -17,8 +17,8 @@ namespace {
 // Synchronous: an asynchronous logger replaces this with a queue drained by a thread.
 struct Dispatcher
 {
-    std::mutex                         mutex;
-    std::vector<std::shared_ptr<Sink>> sinks;
+    std::mutex                          mutex;
+    std::vector<std::shared_ptr<ISink>> sinks;
 };
 
 Dispatcher &dispatcher()
@@ -27,27 +27,27 @@ Dispatcher &dispatcher()
     return instance;
 }
 
-std::string_view toString(Severity severity)
+std::string_view toString(ESeverity severity)
 {
     switch (severity)
     {
-        case Severity::Trace:
+        case ESeverity::Trace:
             return "trace";
-        case Severity::Debug:
+        case ESeverity::Debug:
             return "debug";
-        case Severity::Info:
+        case ESeverity::Info:
             return "info";
-        case Severity::Warning:
+        case ESeverity::Warning:
             return "warning";
-        case Severity::Error:
+        case ESeverity::Error:
             return "error";
-        case Severity::Fatal:
+        case ESeverity::Fatal:
             return "fatal";
     }
     std::unreachable();
 }
 
-class ConsoleSink final : public Sink
+class ConsoleSink final : public ISink
 {
 public:
     void write(const LogRecord &record) override
@@ -61,12 +61,12 @@ public:
     }
 };
 
-class FileSink final : public Sink
+class FileSink final : public ISink
 {
 public:
-    explicit FileSink(const std::filesystem::path &path) : file_(path)
+    explicit FileSink(const std::filesystem::path &path) : m_file(path)
     {
-        if (!file_)
+        if (!m_file)
         {
             throw std::runtime_error(std::format("cannot open the log file {}", path.string()));
         }
@@ -74,28 +74,28 @@ public:
 
     void write(const LogRecord &record) override
     {
-        file_ << formatRecord(record) << '\n';
+        m_file << formatRecord(record) << '\n';
     }
 
     void flush() override
     {
-        file_.flush();
+        m_file.flush();
     }
 
 private:
-    std::ofstream file_;
+    std::ofstream m_file;
 };
 
 }  // namespace
 
-void addSink(std::shared_ptr<Sink> sink)
+void addSink(std::shared_ptr<ISink> sink)
 {
     auto &[mutex, sinks] = dispatcher();
     const std::scoped_lock lock(mutex);
     sinks.push_back(std::move(sink));
 }
 
-void removeSink(const std::shared_ptr<Sink> &sink)
+void removeSink(const std::shared_ptr<ISink> &sink)
 {
     auto &[mutex, sinks] = dispatcher();
     const std::scoped_lock lock(mutex);
@@ -110,7 +110,7 @@ void submit(LogRecord record)
     {
         sink->write(record);
     }
-    if (record.severity == Severity::Fatal)
+    if (record.severity == ESeverity::Fatal)
     {
         for (const auto &sink : sinks)
         {
@@ -143,12 +143,12 @@ std::string formatRecord(const LogRecord &record)
                        record.location.line());
 }
 
-std::shared_ptr<Sink> makeConsoleSink()
+std::shared_ptr<ISink> makeConsoleSink()
 {
     return std::make_shared<ConsoleSink>();
 }
 
-std::shared_ptr<Sink> makeFileSink(const std::filesystem::path &path)
+std::shared_ptr<ISink> makeFileSink(const std::filesystem::path &path)
 {
     return std::make_shared<FileSink>(path);
 }

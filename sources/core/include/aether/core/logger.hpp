@@ -19,25 +19,26 @@
 
 namespace aether::core {
 
-enum class Severity : u8 { Trace, Debug, Info, Warning, Error, Fatal };
+enum class ESeverity : u8 { Trace, Debug, Info, Warning, Error, Fatal };
 
-// Build-wide: define AETHER_LOG_MIN_SEVERITY as a Severity enumerator (e.g. Warning) to compile out the calls below it.
+// Build-wide: define AETHER_LOG_MIN_SEVERITY as a ESeverity enumerator (e.g. Warning) to compile out the calls below
+// it.
 #ifdef AETHER_LOG_MIN_SEVERITY
-inline constexpr Severity kMinSeverity = Severity::AETHER_LOG_MIN_SEVERITY;
+inline constexpr ESeverity kMinSeverity = ESeverity::AETHER_LOG_MIN_SEVERITY;
 #else
-inline constexpr Severity kMinSeverity = Severity::Trace;
+inline constexpr ESeverity kMinSeverity = ESeverity::Trace;
 #endif
 
 // One per module, alive for the whole program: records keep a view of its name.
 struct Category
 {
-    std::string_view      name;
-    std::atomic<Severity> minSeverity{Severity::Trace};
+    std::string_view       name;
+    std::atomic<ESeverity> minSeverity{ESeverity::Trace};
 };
 
 struct LogRecord
 {
-    Severity                              severity;
+    ESeverity                             severity;
     std::string_view                      category;
     std::string                           message;
     std::chrono::system_clock::time_point time;
@@ -45,22 +46,22 @@ struct LogRecord
 };
 
 // Called one record at a time, under the dispatcher's lock.
-class Sink
+class ISink
 {
 public:
-    Sink()                        = default;
-    Sink(const Sink &)            = delete;
-    Sink(Sink &&)                 = delete;
-    Sink &operator=(const Sink &) = delete;
-    Sink &operator=(Sink &&)      = delete;
-    virtual ~Sink()               = default;
+    ISink()                         = default;
+    ISink(const ISink &)            = delete;
+    ISink(ISink &&)                 = delete;
+    ISink &operator=(const ISink &) = delete;
+    ISink &operator=(ISink &&)      = delete;
+    virtual ~ISink()                = default;
 
     virtual void write(const LogRecord &record) = 0;
     virtual void flush()                        = 0;
 };
 
 // A checked format string that also captures the location of the log call.
-template <typename... Args>
+template <typename... TArgs>
 struct LogFormat
 {
     template <typename T>
@@ -71,12 +72,12 @@ struct LogFormat
     {
     }
 
-    std::format_string<Args...> format;
-    std::source_location        location;
+    std::format_string<TArgs...> format;
+    std::source_location         location;
 };
 
-AETHER_CORE_API void addSink(std::shared_ptr<Sink> sink);
-AETHER_CORE_API void removeSink(const std::shared_ptr<Sink> &sink);
+AETHER_CORE_API void addSink(std::shared_ptr<ISink> sink);
+AETHER_CORE_API void removeSink(const std::shared_ptr<ISink> &sink);
 
 // Dispatches the record to every sink, then flushes them if it is fatal.
 AETHER_CORE_API void submit(LogRecord record);
@@ -86,12 +87,12 @@ AETHER_CORE_API void flush();
 AETHER_CORE_API std::string formatRecord(const LogRecord &record);
 
 // Writes to std::clog.
-AETHER_CORE_API std::shared_ptr<Sink> makeConsoleSink();
+AETHER_CORE_API std::shared_ptr<ISink> makeConsoleSink();
 // Truncates the file; throws std::runtime_error if it cannot be opened.
-AETHER_CORE_API std::shared_ptr<Sink> makeFileSink(const std::filesystem::path &path);
+AETHER_CORE_API std::shared_ptr<ISink> makeFileSink(const std::filesystem::path &path);
 
-template <Severity S, typename... Args>
-void log(const Category &category, LogFormat<std::type_identity_t<Args>...> format, Args &&...args)
+template <ESeverity S, typename... TArgs>
+void log(const Category &category, LogFormat<std::type_identity_t<TArgs>...> format, TArgs &&...args)
 {
     if constexpr (S >= kMinSeverity)
     {
@@ -99,7 +100,7 @@ void log(const Category &category, LogFormat<std::type_identity_t<Args>...> form
         {
             submit({S,
                     category.name,
-                    std::format(format.format, std::forward<Args>(args)...),
+                    std::format(format.format, std::forward<TArgs>(args)...),
                     std::chrono::system_clock::now(),
                     format.location});
         }
