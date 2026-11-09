@@ -33,9 +33,10 @@ using Result = std::expected<T, Error>;
 using Status = Result<void>;
 
 // Returns an `std::unexpected` so it converts to any Result<T> or Status; the location is the caller's.
-[[nodiscard]] inline std::unexpected<Error> makeError(EErrorCode           code,
-                                                      std::string          message,
-                                                      std::source_location location = std::source_location::current())
+[[nodiscard]]
+inline std::unexpected<Error> makeError(EErrorCode           code,
+                                        std::string          message,
+                                        std::source_location location = std::source_location::current())
 {
     return std::unexpected<Error>(Error{.code = code, .message = std::move(message), .location = location});
 }
