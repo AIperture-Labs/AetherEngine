@@ -35,6 +35,9 @@ BraceWrapping:
   BeforeElse: true
 AccessModifierOffset: -4
 
+# Attributes on their own line, above the declaration
+BreakAfterAttributes: Always
+
 # Short statements → NEVER (engine readability)
 AllowShortBlocksOnASingleLine: Never
 AllowShortFunctionsOnASingleLine: None
