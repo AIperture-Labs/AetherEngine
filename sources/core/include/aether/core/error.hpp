@@ -11,7 +11,7 @@
 
 namespace aether::core {
 
-enum class ErrorCode {
+enum class EErrorCode {
     Unknown,
     InvalidArgument,
     NotFound,
@@ -22,7 +22,7 @@ enum class ErrorCode {
 
 struct Error
 {
-    ErrorCode            code = ErrorCode::Unknown;
+    EErrorCode           code = EErrorCode::Unknown;
     std::string          message;
     std::source_location location;
 };
@@ -33,7 +33,7 @@ using Result = std::expected<T, Error>;
 using Status = Result<void>;
 
 // Returns an `std::unexpected` so it converts to any Result<T> or Status; the location is the caller's.
-[[nodiscard]] inline std::unexpected<Error> makeError(ErrorCode            code,
+[[nodiscard]] inline std::unexpected<Error> makeError(EErrorCode           code,
                                                       std::string          message,
                                                       std::source_location location = std::source_location::current())
 {

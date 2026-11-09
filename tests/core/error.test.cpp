@@ -15,7 +15,7 @@ Result<i32> parsePositive(i32 value)
 {
     if (value <= 0)
     {
-        return makeError(ErrorCode::InvalidArgument, "value must be positive");
+        return makeError(EErrorCode::InvalidArgument, "value must be positive");
     }
     return value;
 }
@@ -53,7 +53,7 @@ TEST_CASE("a failed Result holds the code and the message")
 {
     const Result<i32> result = parsePositive(-1);
     REQUIRE_FALSE(result.has_value());
-    CHECK(result.error().code == ErrorCode::InvalidArgument);
+    CHECK(result.error().code == EErrorCode::InvalidArgument);
     CHECK(result.error().message == "value must be positive");
 }
 
@@ -72,7 +72,7 @@ TEST_CASE("an error propagates to the caller unchanged")
 
     const Result<i32> result = doubled(-4);
     REQUIRE_FALSE(result.has_value());
-    CHECK(result.error().code == ErrorCode::InvalidArgument);
+    CHECK(result.error().code == EErrorCode::InvalidArgument);
     CHECK(std::string_view(result.error().location.function_name()).find("parsePositive") != std::string_view::npos);
 }
 
@@ -85,7 +85,7 @@ TEST_CASE("a Status fails with an error")
 {
     const Status status = requirePositive(0);
     REQUIRE_FALSE(status.has_value());
-    CHECK(status.error().code == ErrorCode::InvalidArgument);
+    CHECK(status.error().code == EErrorCode::InvalidArgument);
 }
 
 TEST_CASE("a Result chains with the monadic operations")
