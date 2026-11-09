@@ -13,10 +13,10 @@ What every contributor needs before writing engine code.
 
 ## Error handling: avoid exceptions
 
-Engine code avoids exceptions: it does not throw. A function that can fail says so in its return
-type, `Result<T>` (a value or an `Error`) or `Status` (success or an
-`Error`), and the caller decides what to do: report it and carry on, retry,
-or pass it up.
+Engine code avoids exceptions: it does not throw. A function that can fail says
+so in its return type, `Result<T>` (a value or an `Error`) or `Status` (success
+or an `Error`), and the caller decides what to do: report it and carry on,
+retry, or pass it up.
 
 ```cpp
 [[nodiscard]] Result<Texture> loadTexture(const std::filesystem::path &path);
