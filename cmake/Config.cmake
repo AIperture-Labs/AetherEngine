@@ -14,3 +14,6 @@ option(AETHER_EXPORT_COMPILE_COMMANDS "Export compile_commands.json for language
 set(CMAKE_EXPORT_COMPILE_COMMANDS ${AETHER_EXPORT_COMPILE_COMMANDS})
 
 option(BUILD_TESTS "Build the unit tests and register them with CTest" OFF)
+
+# Executables and shared libraries side by side: on Windows, a test finds the engine's DLLs only there.
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")

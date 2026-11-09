@@ -31,8 +31,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { os: ubuntu-24.04, os-name: Linux, preset: x64-debug-clang, triplet: x64-linux-clang }
-          - { os: ubuntu-24.04, os-name: Linux, preset: x64-debug-clang-shared, triplet: x64-linux-clang }
+          - { os: ubuntu-26.04, os-name: Linux, preset: x64-debug-clang, triplet: x64-linux-clang }
+          - { os: ubuntu-26.04, os-name: Linux, preset: x64-debug-clang-shared, triplet: x64-linux-clang }
           - { os: windows-2025, os-name: Windows, preset: x64-debug-clang-cl, triplet: x64-windows-clang-cl }
           - { os: windows-2025, os-name: Windows, preset: x64-debug-clang-cl-shared, triplet: x64-windows-clang-cl }
     steps:
@@ -70,7 +70,7 @@ jobs:
 
   format:
     name: clang-format
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
