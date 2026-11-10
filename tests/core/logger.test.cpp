@@ -101,6 +101,27 @@ TEST_CASE("a log call submits a record with its severity, category, message, tim
     CHECK(record.location.line() == line);
 }
 
+TEST_CASE("the log macros submit at their severity, with the location of the macro call")
+{
+    const auto      sink = std::make_shared<CapturingSink>();
+    const SinkGuard guard(sink);
+    const Category  category{.name = "test"};
+
+    const auto line = std::source_location::current().line() + 1;
+    AETHER_LOG_TRACE(category, "{}", "trace");
+    AETHER_LOG_DEBUG(category, "debug");
+    AETHER_LOG_INFO(category, "info");
+    AETHER_LOG_WARNING(category, "warning");
+    AETHER_LOG_ERROR(category, "error");
+    AETHER_LOG_FATAL(category, "fatal");
+
+    REQUIRE(sink->records.size() == 6);
+    CHECK(sink->records.at(0).severity == ESeverity::Trace);
+    CHECK(sink->records.at(0).message == "trace");
+    CHECK(sink->records.at(0).location.line() == line);
+    CHECK(sink->records.at(5).severity == ESeverity::Fatal);
+}
+
 TEST_CASE("records below the minimum severity of their category are dropped")
 {
     const auto      sink = std::make_shared<CapturingSink>();

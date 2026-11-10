@@ -21,7 +21,7 @@ namespace aether::core {
 
 enum class ESeverity : u8 { Trace, Debug, Info, Warning, Error, Fatal };
 
-// Build-wide: define AETHER_LOG_MIN_SEVERITY as a ESeverity enumerator (e.g. Warning) to compile out the calls below
+// Build-wide: define AETHER_LOG_MIN_SEVERITY as an ESeverity enumerator (e.g. Warning) to compile out the calls below
 // it.
 #ifdef AETHER_LOG_MIN_SEVERITY
 inline constexpr ESeverity kMinSeverity = ESeverity::AETHER_LOG_MIN_SEVERITY;
@@ -108,3 +108,19 @@ void log(const Category &category, LogFormat<std::type_identity_t<TArgs>...> for
 }
 
 }  // namespace aether::core
+
+// Log through these macros: below kMinSeverity they compile out the call and its arguments, which a function cannot.
+// NOLINTBEGIN(cppcoreguidelines-macro-usage)
+#define AETHER_LOG(severity, category, ...)                                              \
+    if constexpr (::aether::core::ESeverity::severity >= ::aether::core::kMinSeverity)   \
+        ::aether::core::log<::aether::core::ESeverity::severity>(category, __VA_ARGS__); \
+    else                                                                                 \
+        static_cast<void>(0)
+
+#define AETHER_LOG_TRACE(category, ...) AETHER_LOG(Trace, category, __VA_ARGS__)
+#define AETHER_LOG_DEBUG(category, ...) AETHER_LOG(Debug, category, __VA_ARGS__)
+#define AETHER_LOG_INFO(category, ...) AETHER_LOG(Info, category, __VA_ARGS__)
+#define AETHER_LOG_WARNING(category, ...) AETHER_LOG(Warning, category, __VA_ARGS__)
+#define AETHER_LOG_ERROR(category, ...) AETHER_LOG(Error, category, __VA_ARGS__)
+#define AETHER_LOG_FATAL(category, ...) AETHER_LOG(Fatal, category, __VA_ARGS__)
+// NOLINTEND(cppcoreguidelines-macro-usage)
