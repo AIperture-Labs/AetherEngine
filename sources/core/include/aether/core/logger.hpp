@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <aether/core/error.hpp>
 #include <aether/core/export.hpp>
 #include <aether/core/types.hpp>
 #include <atomic>
@@ -88,8 +89,9 @@ AETHER_CORE_API std::string formatRecord(const LogRecord &record);
 
 // Writes to std::clog.
 AETHER_CORE_API std::shared_ptr<ISink> makeConsoleSink();
-// Truncates the file; throws std::runtime_error if it cannot be opened.
-AETHER_CORE_API std::shared_ptr<ISink> makeFileSink(const std::filesystem::path &path);
+// Truncates the file; fails with EErrorCode::IoError if it cannot be opened.
+[[nodiscard]]
+AETHER_CORE_API Result<std::shared_ptr<ISink>> makeFileSink(const std::filesystem::path &path);
 
 template <ESeverity S, typename... TArgs>
 void log(const Category &category, LogFormat<std::type_identity_t<TArgs>...> format, TArgs &&...args)

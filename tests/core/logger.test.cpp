@@ -205,7 +205,9 @@ TEST_CASE("the file sink writes one formatted line per record")
     const auto     path = tempLog("file_sink");
     const Category category{.name = "file"};
     {
-        const SinkGuard guard(makeFileSink(path));
+        const auto fileSink = makeFileSink(path);
+        REQUIRE(fileSink.has_value());
+        const SinkGuard guard(*fileSink);
         log<ESeverity::Info>(category, "first");
         log<ESeverity::Error>(category, "second {}", 2);
         flush();
@@ -218,6 +220,15 @@ TEST_CASE("the file sink writes one formatted line per record")
     std::filesystem::remove(path);
 }
 
+TEST_CASE("the file sink fails with an IO error when the file cannot be opened")
+{
+    const auto path   = std::filesystem::temp_directory_path() / "aether_missing_directory" / "file.log";
+    const auto result = makeFileSink(path);
+    REQUIRE_FALSE(result.has_value());
+    CHECK(result.error().code == EErrorCode::IoError);
+    CHECK(result.error().message.contains("aether_missing_directory"));
+}
+
 TEST_CASE("concurrent log calls write whole lines that never interleave")
 {
     constexpr int  kThreads = 8;
@@ -225,7 +236,9 @@ TEST_CASE("concurrent log calls write whole lines that never interleave")
     const auto     path     = tempLog("threads");
     const Category category{.name = "threads"};
     {
-        const SinkGuard guard(makeFileSink(path));
+        const auto fileSink = makeFileSink(path);
+        REQUIRE(fileSink.has_value());
+        const SinkGuard guard(*fileSink);
         {
             std::vector<std::jthread> threads;
             for (int thread = 0; thread < kThreads; ++thread)

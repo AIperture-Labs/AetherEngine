@@ -6,7 +6,6 @@
 #include <fstream>
 #include <iostream>
 #include <mutex>
-#include <stdexcept>
 #include <utility>
 #include <vector>
 
@@ -64,12 +63,8 @@ public:
 class FileSink final : public ISink
 {
 public:
-    explicit FileSink(const std::filesystem::path &path) : m_file(path)
+    explicit FileSink(std::ofstream file) : m_file(std::move(file))
     {
-        if (!m_file)
-        {
-            throw std::runtime_error(std::format("cannot open the log file {}", path.string()));
-        }
     }
 
     void write(const LogRecord &record) override
@@ -148,9 +143,14 @@ std::shared_ptr<ISink> makeConsoleSink()
     return std::make_shared<ConsoleSink>();
 }
 
-std::shared_ptr<ISink> makeFileSink(const std::filesystem::path &path)
+Result<std::shared_ptr<ISink>> makeFileSink(const std::filesystem::path &path)
 {
-    return std::make_shared<FileSink>(path);
+    std::ofstream file(path);
+    if (!file)
+    {
+        return makeError(EErrorCode::IoError, std::format("cannot open the log file {}", path.string()));
+    }
+    return std::make_shared<FileSink>(std::move(file));
 }
 
 }  // namespace aether::core
