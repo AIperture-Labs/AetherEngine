@@ -16,7 +16,7 @@ Format only the files you changed, never the whole tree:
 git diff --name-only --diff-filter=ACMR HEAD -- '*.c' '*.h' '*.cpp' '*.hpp' '*.cc' '*.cxx' '*.ixx' '*.cppm'
 ```
 
-Add `--cached` to limit the list to staged files. Files under `extern/` are never formatted.
+Add `--cached` to limit the list to staged files.
 
 ## 2. Check or apply
 

@@ -9,8 +9,11 @@ truth: never edit them to make code pass.
 - Allman braces for classes, structs, functions and control statements;
   `else` on its own line. Never a one-line `if`, loop, block or function.
 - Pointer and reference sign bind to the name: `const char *name`.
+- Attributes (`[[nodiscard]]`, `[[maybe_unused]]`...) go on their own line,
+  above the declaration.
 - Namespaces `aether::<module>`, closed with `}  // namespace aether::<module>`.
-- Functions and methods are `camelCase`; constants are `kPascalCase`.
+- Names follow `docs/naming.md` (kind and scope prefixes), checked by
+  clang-tidy; the boolean `b` prefix is checked in review.
 - Public headers live under `include/aether/<module>/` and are included with
   angle brackets: `#include <aether/core/version.hpp>`. The module's own
   header comes first, then the others, sorted by clang-format.

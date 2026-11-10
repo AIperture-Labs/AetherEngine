@@ -1,0 +1,32 @@
+# Copyright (c) 2026 AIperture-Labs <xavier.beheydt@gmail.com>
+# SPDX-License-Identifier: MPL-2.0
+# Doc: https://clangd.llvm.org/config
+
+If:
+  PathExclude:
+    - ".clang*"
+
+CompileFlags:
+  CompilationDatabase: .
+  BuiltinHeaders: QueryDriver
+
+Diagnostics:
+  UnusedIncludes: Strict
+
+Index:
+  Background: Build
+
+InlayHints:
+  BlockEnd: false
+  Designators: true
+  Enabled: true
+  ParameterNames: true
+  DeducedTypes: true
+  DefaultArguments: false
+  TypeNameLimit: 24
+
+Completion:
+  AllScopes: true
+  ArgumentLists: FullPlaceholders
+  HeaderInsertion: IWYU
+  CodePatterns: All

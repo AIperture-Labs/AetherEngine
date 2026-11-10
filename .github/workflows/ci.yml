@@ -1,0 +1,81 @@
+# Copyright (c) 2026 AIperture-Labs <xavier.beheydt@gmail.com>
+# SPDX-License-Identifier: MPL-2.0
+# Docs:
+#   - https://docs.github.com/en/actions/writing-workflows
+#   - https://learn.microsoft.com/en-us/vcpkg/users/binarycaching#files
+
+name: CI
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  VCPKG_DISABLE_METRICS: 1
+  VCPKG_BINARY_SOURCES: clear;files,${{ github.workspace }}/.vcpkg-cache,readwrite
+
+jobs:
+  build:
+    name: ${{ matrix.os-name }} · ${{ matrix.preset }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-26.04, os-name: Linux, preset: x64-debug-clang, triplet: x64-linux-clang }
+          - { os: ubuntu-26.04, os-name: Linux, preset: x64-debug-clang-shared, triplet: x64-linux-clang }
+          - { os: windows-2025, os-name: Windows, preset: x64-debug-clang-cl, triplet: x64-windows-clang-cl }
+          - { os: windows-2025, os-name: Windows, preset: x64-debug-clang-cl-shared, triplet: x64-windows-clang-cl }
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: true
+
+      - name: Resolve the vcpkg submodule commit
+        id: vcpkg
+        shell: bash
+        run: echo "commit=$(git rev-parse HEAD:extern/vcpkg)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .vcpkg-cache
+          key: vcpkg-${{ runner.os }}-${{ matrix.triplet }}-${{ hashFiles('vcpkg.json', 'cmake/triplets/**') }}-${{ steps.vcpkg.outputs.commit }}
+
+      # clang-cl needs the MS STL and the Windows SDK of an x64 Visual Studio environment.
+      - uses: ilammy/msvc-dev-cmd@c1ed231f339aec74961130db0459823a08f1b215 # v1.9.0
+        if: runner.os == 'Windows'
+        with:
+          arch: x64
+
+      - name: Configure
+        env:
+          # vcpkg sanitizes PATH; its compiler detection needs clang-cl, found through the Visual Studio environment.
+          VCPKG_KEEP_ENV_VARS: ${{ runner.os == 'Windows' && 'PATH' || '' }}
+        run: cmake --preset ${{ matrix.preset }} -DBUILD_TESTS=ON
+
+      - name: Build
+        run: cmake --build --preset ${{ matrix.preset }}
+
+      - name: Test
+        run: ctest --test-dir out/build/${{ matrix.preset }} --output-on-failure
+
+  format:
+    name: clang-format
+    runs-on: ubuntu-26.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install clang-format
+        run: pip install clang-format==23.1.4
+
+      - name: Check formatting
+        run: git ls-files -z -- '*.c' '*.h' '*.cpp' '*.hpp' | xargs -0 --no-run-if-empty clang-format --dry-run --Werror

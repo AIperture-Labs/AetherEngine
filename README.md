@@ -19,9 +19,4 @@ scripting)
 
 ## Contributing
 
-Humans and AI agents follow [AGENTS.md](AGENTS.md).
-
-## License
-
-[Mozilla Public License 2.0](LICENSE): games made with the engine can stay
-closed, but changes to the engine's own files must be published with them.
+Issues and pull requests are welcome. Pull requests target the `dev` branch.

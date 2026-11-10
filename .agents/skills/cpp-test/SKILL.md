@@ -5,7 +5,7 @@ description: Build and run the AetherEngine unit tests (doctest + CTest), or add
 
 # Test
 
-Unit tests use [doctest](https://github.com/doctest/doctest) and are run through CTest.
+Unit tests use [doctest](https://github.com/doctest/doctest), installed by vcpkg at configure time, and are run through CTest.
 
 ## 1. Configure and build with tests enabled
 
@@ -13,7 +13,7 @@ Unit tests use [doctest](https://github.com/doctest/doctest) and are run through
 
 ```bash
 cmake --preset <preset> -DBUILD_TESTS=ON
-cmake --build --preset <preset>-verbose
+cmake --build --preset <preset>
 ```
 
 See the `cmake-configure` and `cmake-build` skills for choosing the preset and handling failures.
@@ -40,23 +40,21 @@ present it as a passing run.
 
 ## 3. Add tests
 
-1. Put sources under `tests/`, one executable per engine module.
-2. Register each executable with `add_doctest()` from `cmake/helpers/Doctest.cmake`:
+1. Put sources in `tests/<module>/`, named `*.test.cpp`, one executable per engine module.
+2. Register the executable with `add_doctest()` (`cmake/helpers/Doctest.cmake`) in
+   `tests/<module>/CMakeLists.txt`, and add that directory from `tests/CMakeLists.txt`:
 
    ```cmake
-   include(Doctest)
-
    add_doctest(
-       NAME   <module>_tests
-       SOURCES <module>/foo_tests.cpp
-       LIBS   <engine target>
+       NAME aether_<module>_tests
+       SOURCES
+           foo.test.cpp
+       LIBS AetherEngine::<module>
    )
    ```
 
-   It creates the executable, links doctest, and registers every test case with CTest.
-3. CTest only sees tests when testing is enabled. Check that, behind `if(BUILD_TESTS)`, the build
-   calls `enable_testing()` and `add_subdirectory(${AETHER_ENGINE_TESTS_DIR})`. If either is missing,
-   add it in the top-level `CMakeLists.txt` and say so in your report.
+   `LIBS` is optional. The helper creates the executable with its `main()`, links doctest, enables the
+   warnings, and registers every test case with CTest as `<NAME>/<test case>`.
 
 Write test names and assertion messages in English, like the rest of the repository.
 

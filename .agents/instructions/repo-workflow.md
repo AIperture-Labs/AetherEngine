@@ -47,7 +47,7 @@ Settings that enforce the rules above; check them with
 - Ruleset `main`, no bypass actor: deletion and force push blocked, changes
   through a pull request, merge commit only.
 - Both: 0 approving reviews while there is a single maintainer.
-- Not yet enforced: required status checks (no CI yet) and required reviews.
+- Not yet enforced: required status checks (CI exists, `.github/workflows/ci.yml`; making it required is the maintainer's call) and required reviews.
 
 ## Commits
 
@@ -75,10 +75,15 @@ Settings that enforce the rules above; check them with
 
 ## Releases
 
-A `chore(release): vX.Y.Z` PR into `dev` bumps the project version in
-`CMakeLists.txt`; `dev` is then merged into `main`, and the release is tagged
-by hand as semver `vX.Y.Z` on that merge commit, once CI is green. Never tag
-unless the user asks.
+The project version is `VERSION` in `project()` (`CMakeLists.txt`). Before
+each tag, a `chore(release): vX.Y.Z` PR into `dev` sets it to the version
+about to be tagged; `dev` is then merged into `main`, and the release is
+tagged by hand as semver `vX.Y.Z` on that merge commit, once CI is green.
+Never tag unless the user asks.
+
+Pre-releases follow semver: `vX.Y.Z-alpha.N`, then `-beta.N`, then `-rc.N`,
+all before `vX.Y.Z`. `project(VERSION)` only takes numbers, so it holds the
+`X.Y.Z` the pre-release leads to; the label lives in the tag only.
 
 ## Tracking
 
@@ -87,3 +92,14 @@ GitHub Project; the global plan lives in the `AIperture-Labs/.github`
 repository. An issue is the unit of work handed to an agent: it states its
 goal and how to verify it, and the branch and PR reference it. Prefer issues
 and PRs to plan or to-do files in the repository.
+
+Labels come in three families, one colour each:
+
+- `scope: <name>`, one or more: the part of the repository touched: `build`
+  (CMake, presets, vcpkg), `ci`, `config` (editor and tooling configs),
+  `core`, `tests`, `agents` (`AGENTS.md`, `.agents/`), `docs`. The Project's
+  Area field is the product (`Engine`…), not this.
+- `agent: <name>`, one: the agent suggested by an issue, or that did the work
+  of a PR: `claude-code`, `vibe`.
+- `model: <name>`, one: the model of that agent: `haiku`, `sonnet`, `opus`
+  for Claude Code; `mistral-medium-3.5` for Vibe.

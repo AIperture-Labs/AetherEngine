@@ -1,0 +1,206 @@
+{
+    "version": 10,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 31,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "base",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/out/build/${presetName}",
+            "toolchainFile": "${sourceDir}/extern/vcpkg/scripts/buildsystems/vcpkg.cmake",
+            "cacheVariables": {
+                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/cmake/triplets"
+            }
+        },
+        {
+            "name": "base-debug",
+            "hidden": true,
+            "inherits": "base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "base-release",
+            "hidden": true,
+            "inherits": "base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "base-clang",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "clang++",
+                "VCPKG_TARGET_TRIPLET": "x64-linux-clang"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            }
+        },
+        {
+            "name": "base-clang-cl",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "clang-cl",
+                "VCPKG_TARGET_TRIPLET": "x64-windows-clang-cl"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "base-sanitize",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-fsanitize=address,undefined -fno-omit-frame-pointer",
+                "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=address,undefined",
+                "CMAKE_SHARED_LINKER_FLAGS": "-fsanitize=address,undefined"
+            }
+        },
+        {
+            "name": "base-shared",
+            "hidden": true,
+            "cacheVariables": {
+                "BUILD_SHARED_LIBS": "ON"
+            }
+        },
+        {
+            "name": "x64-debug-clang",
+            "inherits": [
+                "base-debug",
+                "base-clang"
+            ]
+        },
+        {
+            "name": "x64-debug-clang-shared",
+            "inherits": [
+                "x64-debug-clang",
+                "base-shared"
+            ]
+        },
+        {
+            "name": "x64-release-clang",
+            "inherits": [
+                "base-release",
+                "base-clang"
+            ]
+        },
+        {
+            "name": "x64-release-clang-shared",
+            "inherits": [
+                "x64-release-clang",
+                "base-shared"
+            ]
+        },
+        {
+            "name": "x64-debug-clang-sanitize",
+            "inherits": [
+                "x64-debug-clang",
+                "base-sanitize"
+            ]
+        },
+        {
+            "name": "x64-debug-clang-cl",
+            "inherits": [
+                "base-debug",
+                "base-clang-cl"
+            ]
+        },
+        {
+            "name": "x64-debug-clang-cl-shared",
+            "inherits": [
+                "x64-debug-clang-cl",
+                "base-shared"
+            ]
+        },
+        {
+            "name": "x64-release-clang-cl",
+            "inherits": [
+                "base-release",
+                "base-clang-cl"
+            ]
+        },
+        {
+            "name": "x64-release-clang-cl-shared",
+            "inherits": [
+                "x64-release-clang-cl",
+                "base-shared"
+            ]
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "base-clang",
+            "hidden": true,
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            }
+        },
+        {
+            "name": "base-clang-cl",
+            "hidden": true,
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "x64-debug-clang",
+            "configurePreset": "x64-debug-clang",
+            "inherits": "base-clang"
+        },
+        {
+            "name": "x64-debug-clang-shared",
+            "configurePreset": "x64-debug-clang-shared",
+            "inherits": "base-clang"
+        },
+        {
+            "name": "x64-release-clang",
+            "configurePreset": "x64-release-clang",
+            "inherits": "base-clang"
+        },
+        {
+            "name": "x64-release-clang-shared",
+            "configurePreset": "x64-release-clang-shared",
+            "inherits": "base-clang"
+        },
+        {
+            "name": "x64-debug-clang-sanitize",
+            "configurePreset": "x64-debug-clang-sanitize",
+            "inherits": "base-clang"
+        },
+        {
+            "name": "x64-debug-clang-cl",
+            "configurePreset": "x64-debug-clang-cl",
+            "inherits": "base-clang-cl"
+        },
+        {
+            "name": "x64-debug-clang-cl-shared",
+            "configurePreset": "x64-debug-clang-cl-shared",
+            "inherits": "base-clang-cl"
+        },
+        {
+            "name": "x64-release-clang-cl",
+            "configurePreset": "x64-release-clang-cl",
+            "inherits": "base-clang-cl"
+        },
+        {
+            "name": "x64-release-clang-cl-shared",
+            "configurePreset": "x64-release-clang-cl-shared",
+            "inherits": "base-clang-cl"
+        }
+    ]
+}
