@@ -22,6 +22,10 @@ int main(int argc, char **argv)
     {
         AETHER_ASSERT(argc == 42, "value {}", 7);
     }
+    else if (mode == "assert-no-message")
+    {
+        AETHER_ASSERT(argc == 42);
+    }
     else if (mode == "verify")
     {
         AETHER_VERIFY(argc == 42);

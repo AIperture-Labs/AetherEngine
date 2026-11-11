@@ -80,10 +80,18 @@ TEST_CASE("a verification always evaluates its condition")
     CHECK(evaluations == 1);
 }
 
-TEST_CASE("the message of an assertion is optional")
+TEST_CASE("an assertion without a message compiles, and its failure logs the expression alone")
 {
-    AETHER_ASSERT(true);
-    AETHER_VERIFY(true);
+    const auto run = runHelper("assert-no-message");
+    if constexpr (kAssertionsEnabled)
+    {
+        CHECK(run.status != 0);
+        CHECK(run.output.contains("[fatal] [assert] assertion failed: argc == 42 (assert_helper.cpp:"));
+    }
+    else
+    {
+        CHECK(run.status == 0);
+    }
 }
 
 TEST_CASE("a failing assertion logs a fatal record with the expression, message and location, then fails")
