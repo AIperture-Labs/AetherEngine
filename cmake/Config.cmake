@@ -17,3 +17,8 @@ option(BUILD_TESTS "Build the unit tests and register them with CTest" OFF)
 
 # Executables and shared libraries side by side: on Windows, a test finds the engine's DLLs only there.
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+
+# What is compiled in or out (logs, assertions, validation), independent of CMAKE_BUILD_TYPE (optimisation).
+# See apply_build_profile() in cmake/helpers/BuildProfile.cmake.
+set(AETHER_BUILD_PROFILE "Debug" CACHE STRING "Build profile: Debug, Development or Shipping")
+set_property(CACHE AETHER_BUILD_PROFILE PROPERTY STRINGS Debug Development Shipping)

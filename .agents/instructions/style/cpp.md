@@ -33,4 +33,6 @@ truth: never edit them to make code pass.
 - First-party code compiles with warnings as errors: fix the cause, never
   silence it with a pragma without a documented reason next to it.
 - Tests use doctest: one `TEST_CASE` per behaviour, its name a sentence
-  describing that behaviour.
+  describing that behaviour. Every test checks something, at run time or
+  with `static_assert`; when part of what it proves is that some code
+  compiles, its name says so ("... compiles, and ...").

@@ -68,3 +68,54 @@ Building without exceptions (`-fno-exceptions`, `/EHs-c-`) would make the
 binaries smaller and rule out any `throw`, but on x64 an exception that is
 never thrown costs almost nothing at run time. The decision waits for
 measurements: #32.
+
+## Build profiles
+
+The profile says what is compiled in or out; it is independent of
+`CMAKE_BUILD_TYPE`, which only sets the optimisation. One cache variable,
+`AETHER_BUILD_PROFILE`, picks it, and `apply_build_profile()`
+(`cmake/helpers/BuildProfile.cmake`) turns it into definitions on `aether_core`,
+which reach every target linking it.
+
+| | Debug | Development | Shipping |
+| --- | --- | --- | --- |
+| Definition | `AETHER_PROFILE_DEBUG` | `AETHER_PROFILE_DEVELOPMENT` | `AETHER_PROFILE_SHIPPING` |
+| Logs (`AETHER_LOG_MIN_SEVERITY`) | all | from `Info` | from `Warning` |
+| `AETHER_ASSERT` | on | on | compiled out |
+| `AETHER_VERIFY` | checks | checks | evaluates only |
+| `AETHER_VALIDATION` (internal validation checks) | `1` | `1` | `0` |
+
+The presets set it: the `debug` ones use `Debug`, the `release` ones
+`Development`, an optimized build that keeps the logs, assertions and
+validation, for performance tests and profiling. `Shipping` has no preset yet;
+pass it, or any other profile, with `-DAETHER_BUILD_PROFILE=<profile>`, for
+instance to measure the final performance.
+
+In code, read the profile from `<aether/core/profile.hpp>`: `kBuildProfile`,
+`kAssertionsEnabled` and `kValidationEnabled`. Validation layers and other
+costly checks key off `kValidationEnabled` or `#if AETHER_VALIDATION`.
+
+## Assertions
+
+`<aether/core/assert.hpp>`; the message is optional, with the syntax of
+`std::format`:
+
+```cpp
+AETHER_ASSERT(index < size, "index {} out of range", index);
+AETHER_VERIFY(file.close());  // the call stays in Shipping
+AETHER_UNREACHABLE();
+```
+
+- `AETHER_ASSERT` checks the condition where assertions are enabled; in
+  Shipping it compiles out, condition included, so it must have no side effect.
+- `AETHER_VERIFY` always evaluates the condition, and checks it where
+  assertions are enabled.
+- `AETHER_UNREACHABLE` fails where assertions are enabled, and is an
+  optimiser hint (`std::unreachable`) in Shipping.
+
+A failure logs a fatal record (the `assert` category, with the expression, the
+message, the file and the line), which flushes the sinks, then breaks into the
+debugger, or kills the process when there is none.
+
+An assertion reports a bug in the code, never an expected failure: those are
+`Result` and `Status` (see above).
