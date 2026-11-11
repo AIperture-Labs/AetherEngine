@@ -40,3 +40,4 @@ target_include_directories(
 target_link_libraries(aether_core PUBLIC glm::glm)
 apply_build_profile(aether_core)
 enable_warnings(aether_core)
+enable_coverage(aether_core)

@@ -20,6 +20,7 @@ include(Config)
 include(BuildProfile)
 include(CompilerWarnings)
 include(CompileCommands)
+include(Coverage)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -40,3 +41,5 @@ if(BUILD_TESTS)
     enable_testing()
     add_subdirectory(tests)
 endif()
+
+add_coverage_target()

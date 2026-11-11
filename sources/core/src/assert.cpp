@@ -7,6 +7,12 @@
 #include <cstdlib>
 #include <utility>
 
+#ifdef AETHER_COVERAGE
+// The profile runtime of Clang; the trap below kills the process before it writes its profile.
+// NOLINTNEXTLINE(bugprone-reserved-identifier,readability-identifier-naming,cert-dcl37-c,cert-dcl51-cpp)
+extern "C" int __llvm_profile_write_file();
+#endif
+
 namespace aether::core {
 
 namespace {
@@ -27,6 +33,9 @@ void assertionFailed(std::string_view expression, std::source_location location,
             .message  = std::move(text),
             .time     = std::chrono::system_clock::now(),
             .location = location});
+#ifdef AETHER_COVERAGE
+    __llvm_profile_write_file();
+#endif
     // Without a debugger, the trap kills the process like abort() does; with one, it stops at the failure.
     __builtin_debugtrap();
     std::abort();
