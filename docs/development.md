@@ -119,3 +119,24 @@ debugger, or kills the process when there is none.
 
 An assertion reports a bug in the code, never an expected failure: those are
 `Result` and `Status` (see above).
+
+## Code coverage
+
+Coverage is measured with Clang source-based coverage on the first-party
+targets (`AETHER_COVERAGE`, off by default), the same way locally and in CI:
+
+```sh
+cmake --preset x64-coverage-clang
+cmake --build --preset x64-coverage-clang --target coverage
+```
+
+The target runs the tests (child processes included, one profile per
+process), prints the `llvm-cov` summary of `sources/`, writes the HTML report
+to `out/build/x64-coverage-clang/coverage/html/` and fails below the minimums:
+lines 85 %, functions 90 %, branches 75 %. They are the cache variables
+`AETHER_COVERAGE_MIN_*` in `cmake/helpers/Coverage.cmake`. The CI `coverage`
+job does the same and uploads the report as an artifact.
+
+An assertion failure ends the process with a debug trap, which would lose its
+profile: coverage builds write it first (`__llvm_profile_write_file()` in
+`assertionFailed()`). A new first-party target calls `enable_coverage()`.
