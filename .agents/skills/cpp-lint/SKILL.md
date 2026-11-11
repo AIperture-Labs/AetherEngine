@@ -5,8 +5,9 @@ description: Run clang-tidy static analysis on C and C++ sources using the proje
 
 # Lint
 
-Checks are configured in `.clang-tidy` at the repository root: `modernize-*` and
-`cppcoreguidelines-*`. Warnings are not errors. Never edit `.clang-tidy` to make code pass.
+Checks are configured in `.clang-tidy` at the repository root: `modernize-*`,
+`cppcoreguidelines-*`, `bugprone-*`, `clang-analyzer-*` and the naming convention. Locally warnings are
+not errors; CI makes them errors. Never edit `.clang-tidy` to make code pass.
 
 ## 1. Have a compile database
 
@@ -23,6 +24,14 @@ clang-tidy -p out/build/<preset> <files>
 
 Prefer `-p out/build/<preset>` over `-p .`: the root `compile_commands.json` is a symlink on some
 platforms and a copy on others, so it can be stale.
+
+CI (`tidy` job in `.github/workflows/ci.yml`) lints every first-party `.cpp` with clang-tidy 23
+(`pip install clang-tidy==23.1.4`) and fails on any warning, after configuring and building
+`x64-debug-clang` with `-DBUILD_TESTS=ON` so the generated headers exist:
+
+```bash
+git ls-files -z -- 'sources/*.cpp' 'tests/*.cpp' | xargs -0 clang-tidy -p out/build/x64-debug-clang --warnings-as-errors='*'
+```
 
 Apply suggested fixes only when the user asks for it, then review the resulting diff:
 
