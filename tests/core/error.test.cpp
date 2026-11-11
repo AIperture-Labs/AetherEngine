@@ -11,7 +11,8 @@ namespace aether::core {
 
 namespace {
 
-Result<i32> parsePositive(i32 value)
+[[nodiscard]]
+Result<i32> checkPositive(i32 value)
 {
     if (value <= 0)
     {
@@ -20,9 +21,10 @@ Result<i32> parsePositive(i32 value)
     return value;
 }
 
+[[nodiscard]]
 Result<i32> doubled(i32 value)
 {
-    const Result<i32> parsed = parsePositive(value);
+    const Result<i32> parsed = checkPositive(value);
     if (!parsed)
     {
         return std::unexpected(parsed.error());
@@ -30,9 +32,10 @@ Result<i32> doubled(i32 value)
     return *parsed * 2;
 }
 
+[[nodiscard]]
 Status requirePositive(i32 value)
 {
-    const Result<i32> parsed = parsePositive(value);
+    const Result<i32> parsed = checkPositive(value);
     if (!parsed)
     {
         return std::unexpected(parsed.error());
@@ -44,14 +47,14 @@ Status requirePositive(i32 value)
 
 TEST_CASE("a successful Result holds its value")
 {
-    const Result<i32> result = parsePositive(3);
+    const Result<i32> result = checkPositive(3);
     REQUIRE(result.has_value());
     CHECK(*result == 3);
 }
 
 TEST_CASE("a failed Result holds the code and the message")
 {
-    const Result<i32> result = parsePositive(-1);
+    const Result<i32> result = checkPositive(-1);
     REQUIRE_FALSE(result.has_value());
     CHECK(result.error().code == EErrorCode::InvalidArgument);
     CHECK(result.error().message == "value must be positive");
@@ -59,10 +62,10 @@ TEST_CASE("a failed Result holds the code and the message")
 
 TEST_CASE("makeError records the location of its caller")
 {
-    const Result<i32> result = parsePositive(0);
+    const Result<i32> result = checkPositive(0);
     REQUIRE_FALSE(result.has_value());
     CHECK(std::string_view(result.error().location.file_name()).find("error.test.cpp") != std::string_view::npos);
-    CHECK(std::string_view(result.error().location.function_name()).find("parsePositive") != std::string_view::npos);
+    CHECK(std::string_view(result.error().location.function_name()).find("checkPositive") != std::string_view::npos);
     CHECK(result.error().location.line() > 0);
 }
 
@@ -73,7 +76,7 @@ TEST_CASE("an error propagates to the caller unchanged")
     const Result<i32> result = doubled(-4);
     REQUIRE_FALSE(result.has_value());
     CHECK(result.error().code == EErrorCode::InvalidArgument);
-    CHECK(std::string_view(result.error().location.function_name()).find("parsePositive") != std::string_view::npos);
+    CHECK(std::string_view(result.error().location.function_name()).find("checkPositive") != std::string_view::npos);
 }
 
 TEST_CASE("a Status succeeds with no value")
@@ -90,10 +93,10 @@ TEST_CASE("a Status fails with an error")
 
 TEST_CASE("a Result chains with the monadic operations")
 {
-    const Result<i32> result = parsePositive(5).and_then(doubled);
+    const Result<i32> result = checkPositive(5).and_then(doubled);
     REQUIRE(result.has_value());
     CHECK(*result == 10);
-    CHECK_FALSE(parsePositive(-5).and_then(doubled).has_value());
+    CHECK_FALSE(checkPositive(-5).and_then(doubled).has_value());
 }
 
 }  // namespace aether::core
