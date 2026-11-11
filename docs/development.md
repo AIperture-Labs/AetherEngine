@@ -86,8 +86,10 @@ which reach every target linking it.
 | `AETHER_VALIDATION` (internal validation checks) | `1` | `1` | `0` |
 
 The presets set it: the `debug` ones use `Debug`, the `release` ones
-`Shipping`. `Development` has no preset; pass it, or any other profile, with
-`-DAETHER_BUILD_PROFILE=<profile>`.
+`Development`, an optimized build that keeps the logs, assertions and
+validation, for performance tests and profiling. `Shipping` has no preset yet;
+pass it, or any other profile, with `-DAETHER_BUILD_PROFILE=<profile>`, for
+instance to measure the final performance.
 
 In code, read the profile from `<aether/core/profile.hpp>`: `kBuildProfile`,
 `kAssertionsEnabled` and `kValidationEnabled`. Validation layers and other

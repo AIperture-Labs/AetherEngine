@@ -31,7 +31,7 @@
             "inherits": "base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "AETHER_BUILD_PROFILE": "Shipping"
+                "AETHER_BUILD_PROFILE": "Development"
             }
         },
         {
