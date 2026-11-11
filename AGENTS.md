@@ -77,24 +77,25 @@ its check:
 Language-specific rules live in `.agents/instructions/style/<language>.md`;
 read the matching one before editing a file in that language.
 
-## Copyright
+Formatting is owned by the language's formatter (clang-format for C and C++,
+the Python and Lua formatters for theirs). `.editorconfig` sets indentation
+and line length only for the file types that have no formatter (CMake, just,
+JSON, TOML, YAML, Markdown): add a section there only for such a type, never
+for a language that has a formatter.
 
-Every source or config file starts with copyright lines, in the file's
-comment syntax and after the shebang if there is one. Docs and Markdown,
-generated files and files that can't hold comments have none.
+## Header Comment
+
+Every source or config file starts with a header comment (copyright, license
+and, if useful, documentation), in the file's comment syntax and after the
+shebang if there is one. Docs and Markdown, generated files and files that
+can't hold comments have none.
 
 - A file starts with the organization line and the license identifier
   (the project is under the [MPL-2.0](LICENSE)):
   `Copyright (c) <year> AIperture-Labs <xavier.beheydt@gmail.com>` then
   `SPDX-License-Identifier: MPL-2.0`.
-- Below it, a `Contributors:` line followed by one copyright line per
-  contributor. Whoever makes a substantial change to a file, human or agent,
-  adds their own line once, if it is not already there. Not for a typo or a
-  pure reformat.
-  - Human: `Copyright (c) <year> <name> <<email>>`, from `git config
-    user.name` and `git config user.email`. If either is unset, ask.
-  - Agent: `Copyright (c) <year> <agent> (<model>)`, e.g.
-    `Copyright (c) 2026 Claude Code (Claude Sonnet 5.5)`.
+- Then, if useful, a `Doc:` line linking the documentation of the format or
+  the tool the file configures.
 - `<year>` is the current year.
 
 Example, in a C++ file:
@@ -102,9 +103,6 @@ Example, in a C++ file:
 ```cpp
 // Copyright (c) 2026 AIperture-Labs <xavier.beheydt@gmail.com>
 // SPDX-License-Identifier: MPL-2.0
-// Contributors:
-//   Copyright (c) 2026 Jane Doe <jane@example.com>
-//   Copyright (c) 2026 Claude Code (Claude Sonnet 5.5)
 ```
 
 ## Skills
@@ -117,6 +115,8 @@ instead of improvising the command:
 - [cmake-build](.agents/skills/cmake-build/SKILL.md): build a preset or a
   target.
 - [cpp-format](.agents/skills/cpp-format/SKILL.md): format with clang-format.
+- [cpp-coverage](.agents/skills/cpp-coverage/SKILL.md): measure the code coverage
+  and check its minimums (Clang, `llvm-cov`).
 - [cpp-lint](.agents/skills/cpp-lint/SKILL.md): lint with clang-tidy.
 - [cpp-test](.agents/skills/cpp-test/SKILL.md): build and run the tests
   (doctest, CTest), or add some.
@@ -125,6 +125,7 @@ instead of improvising the command:
 - [lua-test](.agents/skills/lua-test/SKILL.md): run tests with busted.
 - [python-deps](.agents/skills/python-deps/SKILL.md): install, add or update
   dependencies (uv).
+- [python-format](.agents/skills/python-format/SKILL.md): format with ruff.
 - [python-lint](.agents/skills/python-lint/SKILL.md): lint with ruff.
 - [python-test](.agents/skills/python-test/SKILL.md): run tests with pytest.
 - [todo-ai](.agents/skills/todo-ai/SKILL.md): resolve the `TODO-AI` comments,
@@ -141,5 +142,11 @@ Introducing a new language adds both a style guide
 Introducing a new tool or feature (build system, CI, runtime…) adds its
 skill (`.agents/skills/<tool>-<action>`) and, if it changes where files
 live, updates [repo-layout.md](.agents/instructions/repo-layout.md).
+
+Introducing a new language, file type or tool reviews the repo-wide configs in
+the same change, and adapts them only where the default does not fit:
+`.editorconfig` (indentation, line length), `.gitattributes` (line endings,
+binary files), `.gitignore` (generated outputs and caches), and the formatter
+and linter configs of the language.
 
 Each addition is listed in [Skills](#skills) in the same change.
