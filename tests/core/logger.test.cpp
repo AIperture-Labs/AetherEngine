@@ -43,9 +43,9 @@ struct CapturingSink final : ISink
 class SinkGuard
 {
 public:
-    explicit SinkGuard(std::shared_ptr<ISink> sink) : m_sink(std::move(sink))
+    explicit SinkGuard(std::shared_ptr<ISink> sink) : sink(std::move(sink))
     {
-        addSink(m_sink);
+        addSink(sink);
     }
 
     SinkGuard(const SinkGuard &)            = delete;
@@ -55,11 +55,11 @@ public:
 
     ~SinkGuard()
     {
-        removeSink(m_sink);
+        removeSink(sink);
     }
 
 private:
-    std::shared_ptr<ISink> m_sink;
+    std::shared_ptr<ISink> sink;
 };
 
 std::filesystem::path tempLog(std::string_view name)
