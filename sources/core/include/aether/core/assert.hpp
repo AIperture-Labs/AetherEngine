@@ -34,7 +34,8 @@ std::string formatMessage(std::format_string<TArgs...> format, TArgs &&...args)
 // AETHER_UNREACHABLE(): a failure where checked, an optimiser hint otherwise.
 // The message is optional.
 // NOLINTBEGIN(cppcoreguidelines-macro-usage)
-#define AETHER_CHECK(cond, ...)                                                                        \
+// Internal to the macros below: it has no else branch, so it is not safe to use alone.
+#define AETHER_DETAIL_ASSERT_CHECK(cond, ...)                                                          \
     if (!(cond))                                                                                       \
     {                                                                                                  \
         ::aether::core::assertionFailed(#cond,                                                         \
@@ -45,7 +46,7 @@ std::string formatMessage(std::format_string<TArgs...> format, TArgs &&...args)
 #define AETHER_ASSERT(cond, ...)                      \
     if constexpr (::aether::core::kAssertionsEnabled) \
     {                                                 \
-        AETHER_CHECK(cond, __VA_ARGS__)               \
+        AETHER_DETAIL_ASSERT_CHECK(cond, __VA_ARGS__) \
     }                                                 \
     else                                              \
         static_cast<void>(0)
@@ -53,7 +54,7 @@ std::string formatMessage(std::format_string<TArgs...> format, TArgs &&...args)
 #define AETHER_VERIFY(cond, ...)                      \
     if constexpr (::aether::core::kAssertionsEnabled) \
     {                                                 \
-        AETHER_CHECK(cond, __VA_ARGS__)               \
+        AETHER_DETAIL_ASSERT_CHECK(cond, __VA_ARGS__) \
     }                                                 \
     else                                              \
         static_cast<void>(cond)
