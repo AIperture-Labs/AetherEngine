@@ -21,7 +21,8 @@
             "hidden": true,
             "inherits": "base",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
+                "CMAKE_BUILD_TYPE": "Debug",
+                "AETHER_BUILD_PROFILE": "Debug"
             }
         },
         {
@@ -29,7 +30,8 @@
             "hidden": true,
             "inherits": "base",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
+                "CMAKE_BUILD_TYPE": "Release",
+                "AETHER_BUILD_PROFILE": "Shipping"
             }
         },
         {

@@ -17,6 +17,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/helpers")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 include(Config)
+include(BuildProfile)
 include(CompilerWarnings)
 include(CompileCommands)
 

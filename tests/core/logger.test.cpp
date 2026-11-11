@@ -88,12 +88,12 @@ TEST_CASE("a log call submits a record with its severity, category, message, tim
 
     const auto before = std::chrono::system_clock::now();
     const auto line   = std::source_location::current().line() + 1;
-    log<ESeverity::Info>(category, "{} + {} = {}", 1, 2, 3);
+    log<ESeverity::Warning>(category, "{} + {} = {}", 1, 2, 3);
     const auto after = std::chrono::system_clock::now();
 
     REQUIRE(sink->records.size() == 1);
     const LogRecord &record = sink->records.front();
-    CHECK(record.severity == ESeverity::Info);
+    CHECK(record.severity == ESeverity::Warning);
     CHECK(record.category == "test");
     CHECK(record.message == "1 + 2 = 3");
     CHECK(record.time >= before);
@@ -115,11 +115,12 @@ TEST_CASE("the log macros submit at their severity, with the location of the mac
     AETHER_LOG_ERROR(category, "error");
     AETHER_LOG_FATAL(category, "fatal");
 
-    REQUIRE(sink->records.size() == 6);
-    CHECK(sink->records.at(0).severity == ESeverity::Trace);
-    CHECK(sink->records.at(0).message == "trace");
-    CHECK(sink->records.at(0).location.line() == line);
-    CHECK(sink->records.at(5).severity == ESeverity::Fatal);
+    // The macros compile out what is below kMinSeverity.
+    const auto first = static_cast<std::size_t>(kMinSeverity);
+    REQUIRE(sink->records.size() == 6 - first);
+    CHECK(sink->records.front().severity == kMinSeverity);
+    CHECK(sink->records.front().location.line() == line + first);
+    CHECK(sink->records.back().severity == ESeverity::Fatal);
 }
 
 TEST_CASE("records below the minimum severity of their category are dropped")
@@ -147,7 +148,7 @@ TEST_CASE("the minimum severity of a category does not filter the other categori
     audio.minSeverity = ESeverity::Fatal;
 
     log<ESeverity::Error>(audio, "muted");
-    log<ESeverity::Info>(render, "shown");
+    log<ESeverity::Warning>(render, "shown");
 
     REQUIRE(sink->records.size() == 1);
     CHECK(sink->records.at(0).category == "render");
@@ -191,12 +192,12 @@ TEST_CASE("the console sink writes formatted lines to std::clog")
     auto              *previous = std::clog.rdbuf(output.rdbuf());
     {
         const SinkGuard guard(makeConsoleSink());
-        log<ESeverity::Info>(category, "hello");
+        log<ESeverity::Warning>(category, "hello");
         flush();
     }
     std::clog.rdbuf(previous);
 
-    CHECK(output.str().contains("[info] [console] hello (logger.test.cpp:"));
+    CHECK(output.str().contains("[warning] [console] hello (logger.test.cpp:"));
     CHECK(output.str().ends_with(")\n"));
 }
 
@@ -208,13 +209,13 @@ TEST_CASE("the file sink writes one formatted line per record")
         const auto fileSink = makeFileSink(path);
         REQUIRE(fileSink.has_value());
         const SinkGuard guard(*fileSink);
-        log<ESeverity::Info>(category, "first");
+        log<ESeverity::Warning>(category, "first");
         log<ESeverity::Error>(category, "second {}", 2);
         flush();
 
         const auto lines = readLines(path);
         REQUIRE(lines.size() == 2);
-        CHECK(lines.at(0).contains("[info] [file] first (logger.test.cpp:"));
+        CHECK(lines.at(0).contains("[warning] [file] first (logger.test.cpp:"));
         CHECK(lines.at(1).contains("[error] [file] second 2 (logger.test.cpp:"));
     }
     std::filesystem::remove(path);
@@ -246,7 +247,7 @@ TEST_CASE("concurrent log calls write whole lines that never interleave")
                 threads.emplace_back([&category, thread] {
                     for (int line = 0; line < kLines; ++line)
                     {
-                        log<ESeverity::Info>(category, "thread {} line {}", thread, line);
+                        log<ESeverity::Warning>(category, "thread {} line {}", thread, line);
                     }
                 });
             }
@@ -254,7 +255,7 @@ TEST_CASE("concurrent log calls write whole lines that never interleave")
         flush();
 
         const auto       lines = readLines(path);
-        const std::regex pattern(R"(\S+ \S+ \[info\] \[threads\] thread \d+ line \d+ \(logger\.test\.cpp:\d+\))");
+        const std::regex pattern(R"(\S+ \S+ \[warning\] \[threads\] thread \d+ line \d+ \(logger\.test\.cpp:\d+\))");
         CHECK(lines.size() == kThreads * kLines);
         CHECK(std::ranges::all_of(lines,
                                   [&pattern](const std::string &line) { return std::regex_match(line, pattern); }));
