@@ -79,3 +79,34 @@ jobs:
 
       - name: Check formatting
         run: git ls-files -z -- '*.c' '*.h' '*.cpp' '*.hpp' | xargs -0 --no-run-if-empty clang-format --dry-run --Werror
+
+  tidy:
+    name: clang-tidy
+    runs-on: ubuntu-26.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: true
+
+      - name: Resolve the vcpkg submodule commit
+        id: vcpkg
+        run: echo "commit=$(git rev-parse HEAD:extern/vcpkg)" >> "$GITHUB_OUTPUT"
+
+      # Same key as the Linux build jobs: restores their vcpkg binary cache.
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .vcpkg-cache
+          key: vcpkg-${{ runner.os }}-x64-linux-clang-${{ hashFiles('vcpkg.json', 'cmake/triplets/**') }}-${{ steps.vcpkg.outputs.commit }}
+
+      - name: Install clang-tidy
+        run: pip install clang-tidy==23.1.4
+
+      # Configure and build: clang-tidy needs compile_commands.json and the generated headers.
+      - name: Configure
+        run: cmake --preset x64-debug-clang -DBUILD_TESTS=ON
+
+      - name: Build
+        run: cmake --build --preset x64-debug-clang
+
+      - name: Lint
+        run: git ls-files -z -- 'sources/*.cpp' 'tests/*.cpp' | xargs -0 --no-run-if-empty clang-tidy -p out/build/x64-debug-clang --warnings-as-errors='*'
