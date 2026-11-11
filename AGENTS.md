@@ -115,6 +115,8 @@ instead of improvising the command:
 - [cmake-build](.agents/skills/cmake-build/SKILL.md): build a preset or a
   target.
 - [cpp-format](.agents/skills/cpp-format/SKILL.md): format with clang-format.
+- [cpp-coverage](.agents/skills/cpp-coverage/SKILL.md): measure the code coverage
+  and check its minimums (Clang, `llvm-cov`).
 - [cpp-lint](.agents/skills/cpp-lint/SKILL.md): lint with clang-tidy.
 - [cpp-test](.agents/skills/cpp-test/SKILL.md): build and run the tests
   (doctest, CTest), or add some.

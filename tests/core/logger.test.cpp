@@ -5,6 +5,7 @@
 
 #include <aether/core/logger.hpp>
 #include <algorithm>
+#include <array>
 #include <chrono>
 #include <filesystem>
 #include <fstream>
@@ -168,6 +169,25 @@ TEST_CASE("a record is formatted as UTC time, severity, category, message and fi
 
     CHECK(formatRecord(record) ==
           std::format("2026-11-08 18:05:24.123 [warning] [core] low memory (logger.test.cpp:{})", location.line()));
+}
+
+TEST_CASE("a record is formatted with the lowercase name of its severity")
+{
+    const std::array<std::pair<ESeverity, std::string_view>, 6> names{{{ESeverity::Trace, "trace"},
+                                                                       {ESeverity::Debug, "debug"},
+                                                                       {ESeverity::Info, "info"},
+                                                                       {ESeverity::Warning, "warning"},
+                                                                       {ESeverity::Error, "error"},
+                                                                       {ESeverity::Fatal, "fatal"}}};
+    for (const auto &[severity, name] : names)
+    {
+        const LogRecord record{.severity = severity,
+                               .category = "core",
+                               .message  = "text",
+                               .time     = std::chrono::system_clock::now(),
+                               .location = std::source_location::current()};
+        CHECK(formatRecord(record).contains(std::format("[{}] [core] text", name)));
+    }
 }
 
 TEST_CASE("flush flushes every sink, and a fatal record flushes them too")

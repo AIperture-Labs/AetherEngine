@@ -112,6 +112,14 @@
             ]
         },
         {
+            "name": "x64-coverage-clang",
+            "inherits": "x64-debug-clang",
+            "cacheVariables": {
+                "AETHER_COVERAGE": "ON",
+                "BUILD_TESTS": "ON"
+            }
+        },
+        {
             "name": "x64-debug-clang-cl",
             "inherits": [
                 "base-debug",
@@ -182,6 +190,11 @@
         {
             "name": "x64-debug-clang-sanitize",
             "configurePreset": "x64-debug-clang-sanitize",
+            "inherits": "base-clang"
+        },
+        {
+            "name": "x64-coverage-clang",
+            "configurePreset": "x64-coverage-clang",
             "inherits": "base-clang"
         },
         {
