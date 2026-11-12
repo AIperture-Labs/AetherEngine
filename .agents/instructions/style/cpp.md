@@ -5,12 +5,9 @@ to `extern/`. `.clang-format` and `.clang-tidy` at the root are the source of
 truth: never edit them to make code pass.
 
 - C++23. Headers `.hpp`, sources `.cpp`, tests `*.test.cpp`.
-- Four spaces for indentation, no tabs, lines up to 120 characters.
-- Allman braces for classes, structs, functions and control statements;
-  `else` on its own line. Never a one-line `if`, loop, block or function.
-- Pointer and reference sign bind to the name: `const char *name`.
-- Attributes (`[[nodiscard]]`, `[[maybe_unused]]`...) go on their own line,
-  above the declaration.
+- The layout (indentation, line length, braces, pointers, attributes) is the
+  one clang-format produces: see the
+  [cpp-format](../../skills/cpp-format/SKILL.md) skill.
 - Namespaces `aether::<module>`, closed with `}  // namespace aether::<module>`.
 - Names follow [docs/naming.md](../../../docs/naming.md) (kind and scope
   prefixes), checked by clang-tidy; the boolean `b` prefix is checked in
