@@ -8,9 +8,7 @@ nothing fits, ask instead of adding a top-level directory.
 | `cmake/` | CMake entry points (`Config.cmake`), `helpers/`, find/config `modules/` and vcpkg `triplets/` |
 | `configs/` | Tooling and runtime configuration (`dev/`, `runtimes/`) |
 | `extern/vcpkg/` | vcpkg, as a git submodule pinned to the `builtin-baseline` commit |
-| `docs/` | Engine documentation (Markdown); no plans or roadmaps, those live in issues and the org Project |
-| `VERSIONS.md` | Versions of the languages, tools and dependencies in use |
-| `scripts/just/` | `just` recipes, imported by the root `justfile` |
+| `docs/` | Engine documentation (Markdown) |
 | `sources/` | Engine modules, one directory per module |
 | `tests/` | Unit tests, one directory per module under test (doctest) |
 | `.github/` | GitHub configuration: `workflows/` (CI, see `ci.yml`) |
@@ -18,8 +16,9 @@ nothing fits, ask instead of adding a top-level directory.
 | `.worktrees/` | Git worktrees, ignored by git (see `repo-workflow.md`) |
 | `out/` | Build directories (`out/build/<preset>/`), ignored by git |
 
-Root files: `CMakeLists.txt`, `CMakePresets.json`, `vcpkg.json`, `justfile`,
-`.clang-format`, `.clang-tidy`, `.clangd`, `.editorconfig`, `.gitattributes`, `AGENTS.md`, `LICENSE`.
+Root files: `CMakeLists.txt`, `CMakePresets.json`, `vcpkg.json`,
+`.clang-format`, `.clang-tidy`, `.clangd`, `.editorconfig`, `.gitattributes`,
+`AGENTS.md`, `LICENSE`.
 
 `.claude/skills` is a symlink to `.agents/skills`, so Claude Code finds the
 same skills.
@@ -36,6 +35,7 @@ added from the parent one.
 - Build outputs and generated files never go in the tree: they live in the
   build directory, ignored by git.
 - A dependency is declared in `vcpkg.json` (manifest mode, pinned by its
-  `builtin-baseline`); see `docs/dependencies.md`.
+  `builtin-baseline`); see
+  [docs/dependencies.md](../../docs/dependencies.md).
 - A new directory or a new kind of file updates this page in the same
   change.
