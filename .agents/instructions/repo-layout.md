@@ -17,7 +17,7 @@ nothing fits, ask instead of adding a top-level directory.
 
 Root files: `CMakeLists.txt`, `CMakePresets.json`, `vcpkg.json`,
 `.clang-format`, `.clang-tidy`, `.clangd`, `.editorconfig`, `.gitattributes`,
-`AGENTS.md`, `LICENSE`.
+`.gitignore`, `.gitmodules`, `AGENTS.md`, `LICENSE`, `README.md`.
 
 `.claude/skills` is a symlink to `.agents/skills`, so Claude Code finds the
 same skills.
