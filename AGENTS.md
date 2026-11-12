@@ -100,8 +100,9 @@ with the current year, then the license identifier (the project is under the
 ```
 
 Then, if useful, a `Doc:` line linking the documentation of the format or
-the tool the file configures. Docs and Markdown, generated files and files
-that can't hold comments have no header.
+the tool the file configures, or a `Docs:` block, one link per line, when
+there are several. Docs and Markdown, generated files and files that can't
+hold comments have no header.
 
 ## Skills
 
