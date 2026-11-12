@@ -6,7 +6,6 @@ nothing fits, ask instead of adding a top-level directory.
 | Path | Content |
 | --- | --- |
 | `cmake/` | CMake entry points (`Config.cmake`), `helpers/`, find/config `modules/` and vcpkg `triplets/` |
-| `configs/` | Tooling and runtime configuration (`dev/`, `runtimes/`) |
 | `extern/vcpkg/` | vcpkg, as a git submodule pinned to the `builtin-baseline` commit |
 | `docs/` | Engine documentation (Markdown) |
 | `sources/` | Engine modules, one directory per module |
