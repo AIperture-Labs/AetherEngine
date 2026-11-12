@@ -19,7 +19,7 @@ autonomously. Branches, worktrees, commits and PRs follow
 3. **Plan.** For each group, write a short plan and a task list, each task
    with its check (see [Coding Workflow](../../../AGENTS.md#coding-workflow)).
 4. **Dispatch.** One subagent per group, run in parallel, each in its own
-   worktree and branch (`<type>/<short-description>`, from `main`). Give each
+   worktree and branch (`<type>/<short-description>`, from `dev`). Give each
    one: its TODOs, its plan and task list, and the instruction to follow
    [AGENTS.md](../../../AGENTS.md) (style guide, lint, test, loop until
    green). A subagent touches only its group's files and never spawns others.
