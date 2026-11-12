@@ -89,25 +89,19 @@ lint only the files of the change, never the whole tree.
 
 ## Header Comment
 
-Every source or config file starts with a header comment (copyright, license
-and, if useful, documentation), in the file's comment syntax and after the
-shebang if there is one. Docs and Markdown, generated files and files that
-can't hold comments have none.
-
-- A file starts with the organization line and the license identifier
-  (the project is under the [MPL-2.0](LICENSE)):
-  `Copyright (c) <year> AIperture-Labs <xavier.beheydt@gmail.com>` then
-  `SPDX-License-Identifier: MPL-2.0`.
-- Then, if useful, a `Doc:` line linking the documentation of the format or
-  the tool the file configures.
-- `<year>` is the current year.
-
-Example, in a C++ file:
+Every source or config file starts with a header comment, in the file's
+comment syntax and after the shebang if there is one: the organization line
+with the current year, then the license identifier (the project is under the
+[MPL-2.0](LICENSE)). In a C++ file:
 
 ```cpp
 // Copyright (c) 2026 AIperture-Labs <xavier.beheydt@gmail.com>
 // SPDX-License-Identifier: MPL-2.0
 ```
+
+Then, if useful, a `Doc:` line linking the documentation of the format or
+the tool the file configures. Docs and Markdown, generated files and files
+that can't hold comments have no header.
 
 ## Skills
 
