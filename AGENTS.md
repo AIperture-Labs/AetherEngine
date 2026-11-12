@@ -16,7 +16,8 @@ For every agent, on every task:
 6. Thou shalt not handle errors that cannot happen.
 7. Thou shalt be concise and compact, in writing and in code, without
    repetition, and rewrite in 50 lines what thou wrote in 200.
-8. Thou shalt let the code explain itself, without an avalanche of comments.
+8. Thou shalt let the code explain itself, without an avalanche of comments:
+   a comment says why, never what.
 9. Thou shalt follow the coding rules strictly. Where none exists, thou shalt
    neither invent one nor mix styles, but ask, and the rule gets added to
    `.agents/`.
@@ -82,6 +83,9 @@ the Python and Lua formatters for theirs). `.editorconfig` sets indentation
 and line length only for the file types that have no formatter (CMake, JSON,
 TOML, YAML, Markdown): add a section there only for such a type, never
 for a language that has a formatter.
+
+A formatter or linter config is never edited to make code pass. Format and
+lint only the files of the change, never the whole tree.
 
 ## Header Comment
 

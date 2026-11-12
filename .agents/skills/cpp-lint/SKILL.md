@@ -7,7 +7,7 @@ description: Run clang-tidy static analysis on C and C++ sources using the proje
 
 Checks are configured in `.clang-tidy` at the repository root: `modernize-*`,
 `cppcoreguidelines-*`, `bugprone-*`, `clang-analyzer-*` and the naming convention. Locally warnings are
-not errors; CI makes them errors. Never edit `.clang-tidy` to make code pass.
+not errors; CI makes them errors.
 
 ## 1. Have a compile database
 
@@ -17,7 +17,7 @@ clang-tidy needs `compile_commands.json`, which every preset exports into its bi
 
 ## 2. Run
 
-Lint the files you changed, not the whole tree:
+Lint the files of the change:
 
 ```bash
 clang-tidy -p out/build/<preset> <files>

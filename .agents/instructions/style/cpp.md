@@ -2,7 +2,7 @@
 
 Applies to every C++ source and header under `sources/` and `tests/`, never
 to `extern/`. `.clang-format` and `.clang-tidy` at the root are the source of
-truth: never edit them to make code pass.
+truth.
 
 - C++23. Headers `.hpp`, sources `.cpp`, tests `*.test.cpp`.
 - The layout (indentation, line length, braces, pointers, attributes) is the

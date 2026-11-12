@@ -29,4 +29,3 @@ Applies to every `CMakeLists.txt` and `.cmake` file in the repo, never to
   `cmake/Config.cmake`, never in a helper.
 - Hide symbols by default on libraries and export through
   `generate_export_header`.
-- Comments explain why, not what.
