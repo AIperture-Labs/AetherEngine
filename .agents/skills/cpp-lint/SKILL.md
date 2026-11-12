@@ -23,8 +23,8 @@ Lint the files of the change:
 clang-tidy -p out/build/<preset> <files>
 ```
 
-Prefer `-p out/build/<preset>` over `-p .`: the root `compile_commands.json` is a symlink on some
-platforms and a copy on others, so it can be stale.
+Prefer `-p out/build/<preset>` over `-p .`: the root `compile_commands.json` is a link to the last
+configured preset, which may be another one, and is missing where the link could not be created.
 
 CI lints every first-party `.cpp` and fails on any warning: the `tidy` job of
 `.github/workflows/ci.yml` is the reference for a run on the whole tree.
