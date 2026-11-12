@@ -1,7 +1,7 @@
 # Architecture
 
-How the engine is split, how a demo or a game plugs into it, and how it is
-linked. Decisions and their rationale are recorded in the
+How the engine is split, how a project plugs into it, and how it is linked.
+Decisions and their rationale are recorded in the
 [global plan](https://github.com/AIperture-Labs/.github/blob/main/PLAN.md).
 
 ```mermaid
@@ -10,7 +10,7 @@ flowchart TD
     player["player<br/>standalone"]
     editor["editor<br/>Dear ImGui viewport"]
   end
-  content["content module<br/>demo or game"]
+  content["content module<br/>game, music, video, VFX…"]
   subgraph engine["AetherEngine"]
     runtime --> render --> platform --> core
   end
@@ -39,8 +39,9 @@ Each module depends only on the modules below it, never the other way.
 
 ## Hosts and content
 
-A demo or a game is a content module: it implements `IContent` and declares
-it with `AETHER_CONTENT`. Hosts stay thin: they read their arguments and
+A project (a game, a demo, a piece of music, a video, a VFX sequence…) builds
+one content module: it implements `IContent` and declares it with
+`AETHER_CONTENT`. Hosts stay thin: they read their arguments and
 hand the content to `runtime`.
 
 - `player` runs it standalone, full screen.
@@ -75,7 +76,7 @@ struct ContentDescriptor {
 
 // In one source file of the content; defines
 // extern "C" const ContentDescriptor *aetherContent();
-AETHER_CONTENT(MyGame)
+AETHER_CONTENT(MyProject)
 ```
 
 `runtime` reads the descriptor, creates the content, calls `init`, then
@@ -83,6 +84,15 @@ AETHER_CONTENT(MyGame)
 shut down; in dynamic mode, before its library is unloaded. A failed `init`
 stops the host with its error. `Runtime` gives the content the window and the
 renderer, and grows with what content needs.
+
+Content reads time only from the `deltaSeconds` that `runtime` passes, never
+from the clock: a real-time host passes the elapsed time, a later offline
+host (exporting a video or an audio file) a fixed step, and the content runs
+the same in both.
+
+Project types (game, music, video, VFX…) are templates chosen at project
+creation, with the editor: they pick the plugins and the exports (an
+executable, a video or audio file…), not a different kind of content.
 
 ## Build modes
 
