@@ -9,16 +9,22 @@ Applies to every `CMakeLists.txt` and `.cmake` file in the repo, never to
 - Header: copyright line, then a `# Docs:` block listing the references used.
 - A module's `CMakeLists.txt` opens with a banner naming its target, a short
   comment on its role, and `message(STATUS "Configuring ...")`.
-- Targets are `aether_<module>`, with an alias `AetherEngine::<module>`; link
-  and consume the alias.
+- An engine module is declared with `aether_add_engine_module(<module> ...)`
+  (`cmake/helpers/EngineModule.cmake`), never with `add_library`: it gives
+  the target `aether_<module>`, the alias `AetherEngine::<module>` (link and
+  consume the alias), hidden symbols with the export macro
+  `AETHER_<MODULE>_API`, warnings as errors and coverage.
+- `aether_add_module()` (`cmake/helpers/AetherModule.cmake`) is the public
+  function, for content and plugins outside the engine tree: it uses no other
+  helper of the engine, and nothing specific to the engine's own code goes in
+  it.
 - Target-based CMake only: `target_*` commands with explicit
   `PUBLIC`/`PRIVATE`/`INTERFACE`, never directory-wide `include_directories`,
   `add_definitions` or `link_libraries`.
 - List sources explicitly, one per line; no `file(GLOB)`.
-- Every first-party target calls `enable_warnings(<target>)`
-  (`cmake/helpers/CompilerWarnings.cmake`).
+- A first-party target that no helper declares calls `enable_warnings(<target>)`
+  (`cmake/helpers/CompilerWarnings.cmake`) and `enable_coverage(<target>)`
+  (`cmake/helpers/Coverage.cmake`).
 - Shared code goes in `cmake/helpers/` (functions) or `cmake/modules/` (find
   and config modules), included by name, not by path.
-- Hide symbols by default on libraries and export through
-  `generate_export_header`.
 - Comments explain why, not what.

@@ -15,8 +15,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ${AETHER_EXPORT_COMPILE_COMMANDS})
 
 option(BUILD_TESTS "Build the unit tests and register them with CTest" OFF)
 
-# Executables and shared libraries side by side: on Windows, a test finds the engine's DLLs only there.
+# Executables, shared libraries and loadable content side by side: on Windows, a test finds the engine's DLLs
+# only there, and on every platform each library is found, and loaded, once (docs/architecture.md).
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 # What is compiled in or out (logs, assertions, validation), independent of CMAKE_BUILD_TYPE (optimisation).
 # See apply_build_profile() in cmake/helpers/BuildProfile.cmake.

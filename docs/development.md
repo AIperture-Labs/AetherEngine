@@ -69,6 +69,43 @@ binaries smaller and rule out any `throw`, but on x64 an exception that is
 never thrown costs almost nothing at run time. The decision waits for
 measurements: #32.
 
+## Modules
+
+A module is declared with one CMake function, which builds it in the engine's
+[build mode](architecture.md#build-modes).
+
+`aether_add_module()` (`cmake/helpers/AetherModule.cmake`) is the public one,
+for the content of a project and for plugins:
+
+```cmake
+aether_add_module(my_project CONTENT SOURCES src/my_project.cpp)
+target_link_libraries(my_project PRIVATE AetherEngine::core)
+```
+
+- The library is built in C++23 with hidden symbols: `MY_PROJECT_API`, from
+  the generated `<my_project/export.hpp>`, marks what it exports.
+  `INCLUDE_PREFIX <directory>` moves that header to
+  `<directory>/export.hpp`.
+- Public headers are in `include/`, next to the `CMakeLists.txt`.
+- `CONTENT` declares the content of a project: in dynamic mode, a library
+  that the host loads at run time, built into `bin/` next to the engine's
+  libraries; in monolithic mode, a static library (its executable comes with
+  the player, #49).
+- Dependencies are added with `target_link_libraries()`; linking an engine
+  module brings the [build profile](#build-profiles).
+
+`aether_add_engine_module()` (`cmake/helpers/EngineModule.cmake`) declares a
+module of the engine, in `sources/<module>/`:
+
+```cmake
+aether_add_engine_module(core SOURCES src/logger.cpp)
+```
+
+It calls `aether_add_module()` for the target `aether_core`, with the alias
+`AetherEngine::core` and the macro `AETHER_CORE_API` in
+`<aether/core/export.hpp>`, then adds what only the engine's own code gets:
+warnings as errors and coverage.
+
 ## Build profiles
 
 The profile says what is compiled in or out; it is independent of
@@ -139,4 +176,5 @@ job does the same and uploads the report as an artifact.
 
 An assertion failure ends the process with a debug trap, which would lose its
 profile: coverage builds write it first (`__llvm_profile_write_file()` in
-`assertionFailed()`). A new first-party target calls `enable_coverage()`.
+`assertionFailed()`). Engine modules and tests are instrumented by their
+CMake function; any other first-party target calls `enable_coverage()`.
