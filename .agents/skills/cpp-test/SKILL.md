@@ -41,11 +41,11 @@ present it as a passing run.
 ## 3. Add tests
 
 1. Put sources in `tests/<module>/`, named `*.test.cpp`, one executable per engine module.
-2. Register the executable with `add_doctest()` (`cmake/helpers/Doctest.cmake`) in
+2. Register the executable with `aether_add_doctest()` (`cmake/helpers/Doctest.cmake`) in
    `tests/<module>/CMakeLists.txt`, and add that directory from `tests/CMakeLists.txt`:
 
    ```cmake
-   add_doctest(
+   aether_add_doctest(
        NAME aether_<module>_tests
        SOURCES
            foo.test.cpp

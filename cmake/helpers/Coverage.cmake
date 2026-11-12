@@ -4,12 +4,12 @@
 #   - https://clang.llvm.org/docs/SourceBasedCodeCoverage.html
 #   - https://llvm.org/docs/CommandGuide/llvm-cov.html
 
-# enable_coverage(<target>)
+# aether_enable_coverage(<target>)
 #
 # Instrument <target> when AETHER_COVERAGE is on. Called by every first-party target and never by the
 # dependencies, which vcpkg builds on its own. AETHER_COVERAGE is also defined on <target>, for the code that
 # must write its profile before the process dies (see assertionFailed()).
-function(enable_coverage target)
+function(aether_enable_coverage target)
     if(NOT AETHER_COVERAGE)
         return()
     endif()
@@ -19,11 +19,11 @@ function(enable_coverage target)
     set_property(GLOBAL APPEND PROPERTY AETHER_COVERAGE_TARGETS ${target})
 endfunction()
 
-# add_coverage_target()
+# aether_add_coverage_target()
 #
 # Define the `coverage` target, once every first-party target is declared: it runs the tests, then prints the
 # report of sources/, writes the HTML one and checks the thresholds (cmake/helpers/CoverageReport.cmake).
-function(add_coverage_target)
+function(aether_add_coverage_target)
     if(NOT AETHER_COVERAGE)
         return()
     endif()

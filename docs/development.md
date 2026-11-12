@@ -73,7 +73,7 @@ measurements: #32.
 
 The profile says what is compiled in or out; it is independent of
 `CMAKE_BUILD_TYPE`, which only sets the optimisation. One cache variable,
-`AETHER_BUILD_PROFILE`, picks it, and `apply_build_profile()`
+`AETHER_BUILD_PROFILE`, picks it, and `aether_apply_build_profile()`
 (`cmake/helpers/BuildProfile.cmake`) turns it into definitions on `aether_core`,
 which reach every target linking it.
 
@@ -139,4 +139,4 @@ the same and uploads the report as an artifact.
 
 An assertion failure ends the process with a debug trap, which would lose its
 profile: coverage builds write it first (`__llvm_profile_write_file()` in
-`assertionFailed()`). A new first-party target calls `enable_coverage()`.
+`assertionFailed()`). A new first-party target calls `aether_enable_coverage()`.

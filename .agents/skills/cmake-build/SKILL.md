@@ -30,7 +30,7 @@ Useful flags:
 
 ## 3. Handle failures
 
-- First-party targets compile with warnings as errors (`enable_warnings()` in
+- First-party targets compile with warnings as errors (`aether_enable_warnings()` in
   `cmake/helpers/CompilerWarnings.cmake`). Fix the cause of a warning. Do not relax the flags, and do
   not silence it with a pragma unless there is a documented reason next to it.
 - Read the first error in the log; later errors are often consequences of it.

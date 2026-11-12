@@ -38,6 +38,6 @@ target_include_directories(
         "${CMAKE_CURRENT_BINARY_DIR}/include"
 )
 target_link_libraries(aether_core PUBLIC glm::glm)
-apply_build_profile(aether_core)
-enable_warnings(aether_core)
-enable_coverage(aether_core)
+aether_apply_build_profile(aether_core)
+aether_enable_warnings(aether_core)
+aether_enable_coverage(aether_core)

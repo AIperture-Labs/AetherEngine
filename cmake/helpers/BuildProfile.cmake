@@ -3,11 +3,11 @@
 # Docs:
 #   - https://cmake.org/cmake/help/v4.1/command/target_compile_definitions.html
 
-# apply_build_profile(<target>)
+# aether_apply_build_profile(<target>)
 #
 # Define on <target>, and on everything linking it, what AETHER_BUILD_PROFILE compiles in or out. The
 # table is in docs/development.md.
-function(apply_build_profile target)
+function(aether_apply_build_profile target)
     if(AETHER_BUILD_PROFILE STREQUAL "Debug")
         set(
             definitions

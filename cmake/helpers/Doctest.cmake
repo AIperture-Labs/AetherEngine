@@ -8,11 +8,11 @@
 find_package(doctest CONFIG REQUIRED)
 include("${doctest_DIR}/doctest.cmake")
 
-# add_doctest(NAME <name> SOURCES <source>... [LIBS <library>...])
+# aether_add_doctest(NAME <name> SOURCES <source>... [LIBS <library>...])
 #
 # Build the test executable <name> from SOURCES, link it with doctest and LIBS, and register each of its
 # test cases with CTest as "<name>/<test case>".
-function(add_doctest)
+function(aether_add_doctest)
     cmake_parse_arguments(ARG "" "NAME" "SOURCES;LIBS" ${ARGN})
 
     # The sources include doctest.h without defining main(); this one file does it once per executable.
@@ -25,7 +25,7 @@ function(add_doctest)
 
     add_executable(${ARG_NAME} "${main_source}" ${ARG_SOURCES})
     target_link_libraries(${ARG_NAME} PRIVATE doctest::doctest ${ARG_LIBS})
-    enable_warnings(${ARG_NAME})
-    enable_coverage(${ARG_NAME})
+    aether_enable_warnings(${ARG_NAME})
+    aether_enable_coverage(${ARG_NAME})
     doctest_discover_tests(${ARG_NAME} TEST_PREFIX "${ARG_NAME}/")
 endfunction()
