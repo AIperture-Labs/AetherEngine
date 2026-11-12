@@ -134,8 +134,8 @@ The target runs the tests (child processes included, one profile per
 process), prints the `llvm-cov` summary of `sources/`, writes the HTML report
 to `out/build/x64-coverage-clang/coverage/html/` and fails below the minimums:
 lines 85 %, functions 90 %, branches 75 %. They are the cache variables
-`AETHER_COVERAGE_MIN_*` in `cmake/helpers/Coverage.cmake`. The CI `coverage`
-job does the same and uploads the report as an artifact.
+`AETHER_COVERAGE_MIN_*` in `cmake/Config.cmake`. The CI `coverage` job does
+the same and uploads the report as an artifact.
 
 An assertion failure ends the process with a debug trap, which would lose its
 profile: coverage builds write it first (`__llvm_profile_write_file()` in

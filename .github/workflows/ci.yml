@@ -132,7 +132,7 @@ jobs:
       - name: Configure
         run: cmake --preset x64-coverage-clang
 
-      # Prints the report, and fails below the thresholds (AETHER_COVERAGE_MIN_* in cmake/helpers/Coverage.cmake).
+      # Prints the report, and fails below the thresholds (AETHER_COVERAGE_MIN_* in cmake/Config.cmake).
       - name: Coverage
         run: cmake --build --preset x64-coverage-clang --target coverage
 

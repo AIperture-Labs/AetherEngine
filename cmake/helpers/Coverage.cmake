@@ -4,17 +4,6 @@
 #   - https://clang.llvm.org/docs/SourceBasedCodeCoverage.html
 #   - https://llvm.org/docs/CommandGuide/llvm-cov.html
 
-option(AETHER_COVERAGE "Measure the code coverage of the first-party targets (Clang, source-based)" OFF)
-
-# The minimum coverage, in percent, below which the coverage target fails. The one place to change them.
-set(AETHER_COVERAGE_MIN_LINES 85 CACHE STRING "Minimum line coverage, in percent")
-set(AETHER_COVERAGE_MIN_FUNCTIONS 90 CACHE STRING "Minimum function coverage, in percent")
-set(AETHER_COVERAGE_MIN_BRANCHES 75 CACHE STRING "Minimum branch coverage, in percent")
-
-if(AETHER_COVERAGE AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    message(FATAL_ERROR "AETHER_COVERAGE needs Clang, not '${CMAKE_CXX_COMPILER_ID}'")
-endif()
-
 # enable_coverage(<target>)
 #
 # Instrument <target> when AETHER_COVERAGE is on. Called by every first-party target and never by the
@@ -37,6 +26,9 @@ endfunction()
 function(add_coverage_target)
     if(NOT AETHER_COVERAGE)
         return()
+    endif()
+    if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        message(FATAL_ERROR "AETHER_COVERAGE needs Clang, not '${CMAKE_CXX_COMPILER_ID}'")
     endif()
     if(NOT BUILD_TESTS)
         message(FATAL_ERROR "AETHER_COVERAGE needs BUILD_TESTS=ON: the coverage comes from the tests")

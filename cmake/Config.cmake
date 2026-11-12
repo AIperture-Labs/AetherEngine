@@ -22,3 +22,11 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 # See apply_build_profile() in cmake/helpers/BuildProfile.cmake.
 set(AETHER_BUILD_PROFILE "Debug" CACHE STRING "Build profile: Debug, Development or Shipping")
 set_property(CACHE AETHER_BUILD_PROFILE PROPERTY STRINGS Debug Development Shipping)
+
+# See enable_coverage() and add_coverage_target() in cmake/helpers/Coverage.cmake.
+option(AETHER_COVERAGE "Measure the code coverage of the first-party targets (Clang, source-based)" OFF)
+
+# The minimum coverage, in percent, below which the coverage target fails. The one place to change them.
+set(AETHER_COVERAGE_MIN_LINES 85 CACHE STRING "Minimum line coverage, in percent")
+set(AETHER_COVERAGE_MIN_FUNCTIONS 90 CACHE STRING "Minimum function coverage, in percent")
+set(AETHER_COVERAGE_MIN_BRANCHES 75 CACHE STRING "Minimum branch coverage, in percent")

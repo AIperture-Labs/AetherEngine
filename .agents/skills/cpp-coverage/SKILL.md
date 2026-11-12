@@ -30,7 +30,7 @@ compiler, else on `PATH`; the configure step prints which.
 ## 3. Thresholds
 
 They are the cache variables `AETHER_COVERAGE_MIN_LINES`, `AETHER_COVERAGE_MIN_FUNCTIONS` and
-`AETHER_COVERAGE_MIN_BRANCHES`, defined in `cmake/helpers/Coverage.cmake`, the one place to change them.
+`AETHER_COVERAGE_MIN_BRANCHES`, defined in `cmake/Config.cmake`, the one place to change them.
 To check that the target fails, pass a value above the current one:
 
 ```bash

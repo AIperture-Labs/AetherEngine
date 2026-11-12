@@ -22,6 +22,8 @@ Applies to every `CMakeLists.txt` and `.cmake` file in the repo, never to
   (`cmake/helpers/CompilerWarnings.cmake`).
 - Shared code goes in `cmake/helpers/` (functions) or `cmake/modules/` (find
   and config modules), included by name, not by path.
+- Build options (`option()`, `set(... CACHE ...)`) are declared in
+  `cmake/Config.cmake`, never in a helper.
 - Hide symbols by default on libraries and export through
   `generate_export_header`.
 - Comments explain why, not what.
