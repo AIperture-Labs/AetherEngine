@@ -79,8 +79,8 @@ read the matching one before editing a file in that language.
 
 Formatting is owned by the language's formatter (clang-format for C and C++,
 the Python and Lua formatters for theirs). `.editorconfig` sets indentation
-and line length only for the file types that have no formatter (CMake, just,
-JSON, TOML, YAML, Markdown): add a section there only for such a type, never
+and line length only for the file types that have no formatter (CMake, JSON,
+TOML, YAML, Markdown): add a section there only for such a type, never
 for a language that has a formatter.
 
 ## Header Comment
