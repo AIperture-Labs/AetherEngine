@@ -26,13 +26,8 @@ clang-tidy -p out/build/<preset> <files>
 Prefer `-p out/build/<preset>` over `-p .`: the root `compile_commands.json` is a symlink on some
 platforms and a copy on others, so it can be stale.
 
-CI (`tidy` job in `.github/workflows/ci.yml`) lints every first-party `.cpp` with clang-tidy 23
-(`pip install clang-tidy==23.1.4`) and fails on any warning, after configuring and building
-`x64-debug-clang` with `-DBUILD_TESTS=ON` so the generated headers exist:
-
-```bash
-git ls-files -z -- 'sources/*.cpp' 'tests/*.cpp' | xargs -0 clang-tidy -p out/build/x64-debug-clang --warnings-as-errors='*'
-```
+CI lints every first-party `.cpp` and fails on any warning: the `tidy` job of
+`.github/workflows/ci.yml` is the reference for a run on the whole tree.
 
 Apply suggested fixes only when the user asks for it, then review the resulting diff:
 
