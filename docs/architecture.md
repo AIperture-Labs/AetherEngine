@@ -62,12 +62,14 @@ public:
 
     [[nodiscard]]
     virtual Status init(Runtime &runtime) = 0;
-    virtual void update(f32 deltaSeconds) = 0;
+    [[nodiscard]]
+    virtual Status update(f32 deltaSeconds) = 0;
 };
 
 struct ContentDescriptor {
     const char *engineVersion;  // core::kVersionString of the content's build
     const void *coreIdentity;   // core::identity(), as the content sees it
+    core::EBuildProfile buildProfile;  // core::kBuildProfile of that build
     const char *name;
     IContent *(*create)();
 };
@@ -81,9 +83,27 @@ AETHER_CONTENT(MyProject)
 
 `runtime` reads the descriptor, creates the content, calls `init`, then
 `update` every frame, and destroys it before the renderer and the platform
-shut down; in dynamic mode, before its library is unloaded. A failed `init`
-stops the host with its error. `Runtime` gives the content the window and the
-renderer, and grows with what content needs.
+shut down; in dynamic mode, before its library is unloaded. An error returned
+by `init` or `update` is logged and stops the host cleanly, with a non-zero
+exit code; `Runtime::requestQuit()` ends the loop normally.
+
+Before its destructor returns, the content has removed everything it
+registered in the engine (log sinks, callbacks) and stopped its threads:
+nothing in the engine may point into the content once it is destroyed, since
+its library is then unloaded.
+
+### The context
+
+`Runtime` is the engine context. `runtime` creates one, which owns the
+subsystems (the window, the renderer, and later audio, assets…), and hands it
+to the content in `init`; the content reaches every subsystem through it, and
+it grows with what content needs. Engine modules above `core` keep their
+state in such objects, never in globals: the creation and shutdown order is
+explicit, and a test creates its own instance.
+
+Only the services that any code must reach without being handed anything are
+global, in `core`: the logger and the assertion handler (later the allocator
+and the profiler).
 
 Content reads time only from the `deltaSeconds` that `runtime` passes, never
 from the clock: a real-time host passes the elapsed time, a later offline
@@ -111,8 +131,8 @@ calling `aetherContent()` directly.
 
 ### One copy of each engine state
 
-Each global state (the logger and its sinks, SDL, volk's function pointers,
-VMA) exists once in the process. A second copy would work silently on its
+Each global state (the logger and its sinks, and the internal state of SDL
+and volk) exists once in the process. A second copy would work silently on its
 own: content logging through its own copy of `core` never reaches the host's
 sinks. Hence:
 
@@ -121,6 +141,10 @@ sinks. Hence:
 - A third-party library with global state is linked into exactly one engine
   module (SDL3 into `platform`, volk and VMA into `render`); content and the
   other modules reach it through that module, never by linking it.
+- Global state is defined in a source file of its module and reached through
+  an exported function, never in a header: symbols are hidden by default, so
+  an `inline` variable, or a `static` local of an `inline` function, would
+  exist once per shared library.
 - The C and C++ runtimes are dynamic in both triplets
   (`VCPKG_CRT_LINKAGE dynamic`): one heap, so memory allocated on one side of
   a library boundary can be freed on the other.
@@ -136,9 +160,11 @@ non-zero exit code, when:
   was built against another engine, and the C++ interface is not stable
   across versions;
 - `coreIdentity` differs from its own `core::identity()`: the content carries
-  its own copy of `core`.
+  its own copy of `core`;
+- `buildProfile` differs from its own `core::kBuildProfile`: assertions and
+  log macros would be compiled differently on each side.
 
-In monolithic mode both checks pass by construction.
+In monolithic mode the three checks pass by construction.
 
 ## Module descriptor
 
