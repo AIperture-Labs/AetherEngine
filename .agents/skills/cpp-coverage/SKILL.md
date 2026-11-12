@@ -7,7 +7,7 @@ description: Measure the code coverage of AetherEngine with Clang source-based c
 
 Clang source-based coverage (`-fprofile-instr-generate -fcoverage-mapping`) on the first-party targets,
 Linux and Clang only. The `coverage` target runs the tests, prints the `llvm-cov` summary for `sources/`,
-writes an HTML report and fails below the minimums: lines 85 %, functions 90 %, branches 75 %.
+writes an HTML report and fails below the minimums.
 
 ## 1. Configure and run
 
