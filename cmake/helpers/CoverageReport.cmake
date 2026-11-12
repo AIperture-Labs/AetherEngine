@@ -14,7 +14,9 @@ file(MAKE_DIRECTORY "${out}")
 
 # One profile per process (%p), so the child processes of the tests write theirs.
 execute_process(
-    COMMAND "${CMAKE_COMMAND}" -E env "LLVM_PROFILE_FILE=${out}/raw/%p.profraw" "${CTEST}" --test-dir "${BUILD_DIR}" --output-on-failure
+    COMMAND
+        "${CMAKE_COMMAND}" -E env "LLVM_PROFILE_FILE=${out}/raw/%p.profraw"
+        "${CTEST}" --test-dir "${BUILD_DIR}" --output-on-failure
     RESULT_VARIABLE status
 )
 if(NOT status EQUAL 0)
@@ -60,7 +62,10 @@ foreach(kind lines functions branches)
     math(EXPR scaled "${covered} * 100")
     math(EXPR required "${MIN_${upper}} * ${count}")
     if(scaled LESS required)
-        message(SEND_ERROR "${kind} coverage is ${covered}/${count} (${actual} %), below the minimum of ${MIN_${upper}} %")
+        message(
+            SEND_ERROR
+            "${kind} coverage is ${covered}/${count} (${actual} %), below the minimum of ${MIN_${upper}} %"
+        )
         set(failed TRUE)
     else()
         message(STATUS "${kind} coverage is ${covered}/${count} (${actual} %), minimum ${MIN_${upper}} %")

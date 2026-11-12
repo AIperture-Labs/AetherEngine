@@ -21,4 +21,8 @@ target_link_libraries(aether_core_assert_helper PRIVATE AetherEngine::core)
 enable_warnings(aether_core_assert_helper)
 enable_coverage(aether_core_assert_helper)
 add_dependencies(aether_core_tests aether_core_assert_helper)
-target_compile_definitions(aether_core_tests PRIVATE "AETHER_ASSERT_HELPER=\"$<TARGET_FILE:aether_core_assert_helper>\"")
+target_compile_definitions(
+    aether_core_tests
+    PRIVATE
+        "AETHER_ASSERT_HELPER=\"$<TARGET_FILE:aether_core_assert_helper>\""
+)

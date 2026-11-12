@@ -33,7 +33,10 @@ function(apply_build_profile target)
             AETHER_VALIDATION=0
         )
     else()
-        message(FATAL_ERROR "AETHER_BUILD_PROFILE must be Debug, Development or Shipping, not '${AETHER_BUILD_PROFILE}'")
+        message(
+            FATAL_ERROR
+            "AETHER_BUILD_PROFILE must be Debug, Development or Shipping, not '${AETHER_BUILD_PROFILE}'"
+        )
     endif()
     target_compile_definitions(${target} PUBLIC ${definitions})
 endfunction()

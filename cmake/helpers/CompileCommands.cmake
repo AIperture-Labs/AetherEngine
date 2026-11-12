@@ -16,7 +16,8 @@ function(link_compile_commands)
         SYMBOLIC
         RESULT link_result
     )
-    # Creating a symlink can be denied (e.g. on Windows without Developer Mode); that must not stop the configure.
+    # Creating a symlink can be denied (e.g. on Windows without Developer Mode); that must not stop the
+    # configure.
     if(NOT link_result EQUAL 0)
         message(
             WARNING
