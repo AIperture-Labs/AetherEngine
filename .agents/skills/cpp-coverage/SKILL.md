@@ -16,8 +16,9 @@ cmake --preset x64-coverage-clang
 cmake --build --preset x64-coverage-clang --target coverage
 ```
 
-The preset is Debug with `AETHER_COVERAGE=ON` and `BUILD_TESTS=ON`. See the `cmake-configure` and
-`cmake-build` skills for failures. The tools (`llvm-cov`, `llvm-profdata`) are those found next to the
+The preset is Debug with `AETHER_COVERAGE=ON` and `BUILD_TESTS=ON`. See the
+[cmake-configure](../cmake-configure/SKILL.md) and [cmake-build](../cmake-build/SKILL.md) skills for
+failures. The tools (`llvm-cov`, `llvm-profdata`) are those found next to the
 compiler, else on `PATH`; the configure step prints which.
 
 ## 2. Read the result
@@ -25,7 +26,7 @@ compiler, else on `PATH`; the configure step prints which.
 - The summary is printed per file, then one line per kind with the minimum.
 - The HTML report is `out/build/x64-coverage-clang/coverage/html/index.html`: uncovered lines are red.
 - A failure below a minimum ends with `The code coverage is below the minimum`. Add tests (see the
-  `cpp-test` skill); never lower a threshold to make it pass.
+  [cpp-test](../cpp-test/SKILL.md) skill); never lower a threshold to make it pass.
 
 ## 3. Thresholds
 

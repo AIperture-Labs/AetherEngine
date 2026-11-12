@@ -12,8 +12,9 @@ truth: never edit them to make code pass.
 - Attributes (`[[nodiscard]]`, `[[maybe_unused]]`...) go on their own line,
   above the declaration.
 - Namespaces `aether::<module>`, closed with `}  // namespace aether::<module>`.
-- Names follow `docs/naming.md` (kind and scope prefixes), checked by
-  clang-tidy; the boolean `b` prefix is checked in review.
+- Names follow [docs/naming.md](../../../docs/naming.md) (kind and scope
+  prefixes), checked by clang-tidy; the boolean `b` prefix is checked in
+  review.
 - Public headers live under `include/aether/<module>/` and are included with
   angle brackets: `#include <aether/core/version.hpp>`. The module's own
   header comes first, then the others, sorted by clang-format.
@@ -25,7 +26,7 @@ truth: never edit them to make code pass.
   standard APIs that do not throw (`std::from_chars`, the `std::error_code`
   overloads of `std::filesystem`, `find` over `at`); catch what a standard or
   third-party call still throws at the call site and turn it into a `Result`.
-  Why: `docs/development.md`.
+  Why: [docs/development.md](../../../docs/development.md).
 - Mark functions `noexcept` when they cannot throw.
 - Prefer the `modernize-*` and `cppcoreguidelines-*` idioms: `nullptr`,
   `auto` where the type is obvious, smart pointers over owning raw pointers,

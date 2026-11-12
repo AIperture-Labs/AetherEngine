@@ -7,7 +7,7 @@ description: Resolve the `TODO-AI` comments left in the repo, grouped logically,
 
 Resolve the `TODO-AI: <description>` comments the user left in files, nearly
 autonomously. Branches, worktrees, commits and PRs follow
-`.agents/instructions/repo-workflow.md`.
+[repo-workflow.md](../../instructions/repo-workflow.md).
 
 1. **Collect.** `grep -rn "TODO-AI" --exclude-dir=.git --exclude-dir=.worktrees`.
    List each hit: file, line, description. None found: stop.
@@ -17,12 +17,12 @@ autonomously. Branches, worktrees, commits and PRs follow
    groups, and each gets its own branch and PR. Show the groups to the user,
    and ask when a grouping is ambiguous.
 3. **Plan.** For each group, write a short plan and a task list, each task
-   with its check (see Coding Workflow in `AGENTS.md`).
+   with its check (see [Coding Workflow](../../../AGENTS.md#coding-workflow)).
 4. **Dispatch.** One subagent per group, run in parallel, each in its own
    worktree and branch (`<type>/<short-description>`, from `main`). Give each
    one: its TODOs, its plan and task list, and the instruction to follow
-   `AGENTS.md` (style guide, lint, test, loop until green). A subagent
-   touches only its group's files and never spawns others.
+   [AGENTS.md](../../../AGENTS.md) (style guide, lint, test, loop until
+   green). A subagent touches only its group's files and never spawns others.
 5. **Finish.** A subagent removes the `TODO-AI` comment in the change that
    resolves it, and reports: what changed, lint and test results, what is
    left. It does not commit or open a PR before the user has reviewed it.

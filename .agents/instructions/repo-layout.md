@@ -12,7 +12,7 @@ nothing fits, ask instead of adding a top-level directory.
 | `tests/` | Unit tests, one directory per module under test (doctest) |
 | `.github/` | GitHub configuration: `workflows/` (CI, see `ci.yml`) |
 | `.agents/` | AI agent instructions (`instructions/`) and skills (`skills/`) |
-| `.worktrees/` | Git worktrees, ignored by git (see `repo-workflow.md`) |
+| `.worktrees/` | Git worktrees, ignored by git (see [repo-workflow.md](repo-workflow.md)) |
 | `out/` | Build directories (`out/build/<preset>/`), ignored by git |
 
 Root files: `CMakeLists.txt`, `CMakePresets.json`, `vcpkg.json`,

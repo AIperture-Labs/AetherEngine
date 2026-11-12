@@ -16,7 +16,8 @@ cmake --preset <preset> -DBUILD_TESTS=ON
 cmake --build --preset <preset>
 ```
 
-See the `cmake-configure` and `cmake-build` skills for choosing the preset and handling failures.
+See the [cmake-configure](../cmake-configure/SKILL.md) and [cmake-build](../cmake-build/SKILL.md) skills
+for choosing the preset and handling failures.
 
 ## 2. Run
 
