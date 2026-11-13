@@ -8,6 +8,7 @@ Checks: >
   cppcoreguidelines-*,
   bugprone-*,
   clang-analyzer-*,
+  misc-include-cleaner,
   readability-identifier-naming,
   -modernize-use-trailing-return-type
 WarningsAsErrors: false
