@@ -6,32 +6,28 @@ description: Run clang-tidy static analysis on C and C++ sources using the proje
 # Lint
 
 Checks are configured in `.clang-tidy` at the repository root: `modernize-*`,
-`cppcoreguidelines-*`, `bugprone-*`, `clang-analyzer-*` and the naming convention. Locally warnings are
-not errors; CI makes them errors. Never edit `.clang-tidy` to make code pass.
+`cppcoreguidelines-*`, `bugprone-*`, `clang-analyzer-*`, the naming convention and the includes
+(`misc-include-cleaner`). Locally warnings are not errors; CI makes them errors.
 
 ## 1. Have a compile database
 
 clang-tidy needs `compile_commands.json`, which every preset exports into its binary directory. If
-`out/build/<preset>/compile_commands.json` is missing, run the `cmake-configure` skill first.
+`out/build/<preset>/compile_commands.json` is missing, run the
+[cmake-configure](../cmake-configure/SKILL.md) skill first.
 
 ## 2. Run
 
-Lint the files you changed, not the whole tree:
+Lint the files of the change, headers too: the include check only looks at the file it is given.
 
 ```bash
 clang-tidy -p out/build/<preset> <files>
 ```
 
-Prefer `-p out/build/<preset>` over `-p .`: the root `compile_commands.json` is a symlink on some
-platforms and a copy on others, so it can be stale.
+Prefer `-p out/build/<preset>` over `-p .`: the root `compile_commands.json` is a link to the last
+configured preset, which may be another one, and is missing where the link could not be created.
 
-CI (`tidy` job in `.github/workflows/ci.yml`) lints every first-party `.cpp` with clang-tidy 23
-(`pip install clang-tidy==23.1.4`) and fails on any warning, after configuring and building
-`x64-debug-clang` with `-DBUILD_TESTS=ON` so the generated headers exist:
-
-```bash
-git ls-files -z -- 'sources/*.cpp' 'tests/*.cpp' | xargs -0 clang-tidy -p out/build/x64-debug-clang --warnings-as-errors='*'
-```
+CI lints every first-party source and header and fails on any warning: the `tidy` job of
+`.github/workflows/ci.yml` is the reference for a run on the whole tree.
 
 Apply suggested fixes only when the user asks for it, then review the resulting diff:
 

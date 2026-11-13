@@ -5,6 +5,7 @@
 
 #include <aether/core/assert.hpp>
 #include <aether/core/logger.hpp>
+#include <aether/core/profile.hpp>
 #include <cstdlib>
 #include <filesystem>
 #include <format>

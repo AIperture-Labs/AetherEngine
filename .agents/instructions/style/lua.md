@@ -13,9 +13,7 @@ tests. Never to `extern/`.
   classes; `UPPER_SNAKE_CASE` for constants.
 - Double quotes for strings, except to avoid escaping.
 - One line for a short statement is fine: `if not items then return end`.
-- Comments in English, explaining why. Annotate public functions with
-  LuaLS-style `---@param` / `---@return`.
+- Annotate public functions with LuaLS-style `---@param` / `---@return`.
 - Config at the repo root: `stylua.toml` (formatter), `.luacheckrc` (linter),
-  `.busted` (tests). They are added with the first Lua file and never edited
-  to make code pass.
+  `.busted` (tests). They are added with the first Lua file.
 - Tests are `*_spec.lua` files under `tests/`, with busted.

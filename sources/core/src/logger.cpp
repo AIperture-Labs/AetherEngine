@@ -1,11 +1,17 @@
 // Copyright (c) 2026 AIperture-Labs <xavier.beheydt@gmail.com>
 // SPDX-License-Identifier: MPL-2.0
 
+#include <aether/core/error.hpp>
 #include <aether/core/logger.hpp>
-#include <algorithm>
+#include <chrono>
+#include <filesystem>
+#include <format>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <mutex>
+#include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 

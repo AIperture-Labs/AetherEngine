@@ -5,7 +5,7 @@
 #pragma once
 
 #include <aether/core/export.hpp>
-#include <aether/core/profile.hpp>
+#include <aether/core/profile.hpp>  // IWYU pragma: keep, the macros below use it
 #include <format>
 #include <source_location>
 #include <string>

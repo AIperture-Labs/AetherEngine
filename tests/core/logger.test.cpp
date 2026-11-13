@@ -3,17 +3,21 @@
 
 #include <doctest/doctest.h>
 
+#include <aether/core/error.hpp>
 #include <aether/core/logger.hpp>
 #include <algorithm>
 #include <array>
 #include <chrono>
+#include <cstddef>
 #include <filesystem>
+#include <format>
 #include <fstream>
 #include <iostream>
 #include <memory>
 #include <regex>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <thread>
 #include <utility>
 #include <vector>
@@ -163,6 +167,7 @@ TEST_CASE("a record is formatted as UTC time, severity, category, message and fi
         .severity = ESeverity::Warning,
         .category = "core",
         .message  = "low memory",
+        // NOLINTNEXTLINE(misc-include-cleaner): the check does not know that <chrono> provides the literals.
         .time     = std::chrono::sys_days{std::chrono::year{2026} / 11 / 8} + 18h + 5min + 24s + 123456us,
         .location = location,
     };
