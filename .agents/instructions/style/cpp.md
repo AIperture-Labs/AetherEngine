@@ -15,6 +15,9 @@ truth.
 - Public headers live under `include/aether/<module>/` and are included with
   angle brackets: `#include <aether/core/version.hpp>`. The module's own
   header comes first, then the others, sorted by clang-format.
+- A file includes every header it uses directly, and only those: it never
+  relies on what another header includes, its own header included. Checked
+  by clang-tidy (`misc-include-cleaner`).
 - Public symbols of a shared library carry the module's generated export
   macro (`AETHER_<MODULE>_API`); everything else stays hidden.
 - Avoid exceptions, so a failure never stops the program and the success
