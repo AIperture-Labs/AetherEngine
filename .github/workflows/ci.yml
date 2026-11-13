@@ -109,7 +109,7 @@ jobs:
         run: cmake --build --preset x64-debug-clang
 
       - name: Lint
-        run: git ls-files -z -- 'sources/*.cpp' 'tests/*.cpp' | xargs -0 --no-run-if-empty clang-tidy -p out/build/x64-debug-clang --warnings-as-errors='*'
+        run: git ls-files -z -- 'sources/*.cpp' 'sources/*.hpp' 'tests/*.cpp' | xargs -0 --no-run-if-empty clang-tidy -p out/build/x64-debug-clang --warnings-as-errors='*'
 
   coverage:
     name: coverage
