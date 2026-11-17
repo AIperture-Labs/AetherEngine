@@ -14,6 +14,8 @@ aether_add_engine_module(
         src/assert.cpp
         src/logger.cpp
         src/version.cpp
+    PUBLIC
+        glm::glm
 )
 
 # The version comes from project() only.
@@ -23,6 +25,5 @@ configure_file(
     @ONLY
 )
 
-target_link_libraries(aether_core PUBLIC glm::glm)
 # Every module links core, which carries the build profile to all of them.
 apply_build_profile(aether_core)

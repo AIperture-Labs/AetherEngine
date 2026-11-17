@@ -78,8 +78,11 @@ A module is declared with one CMake function, which builds it in the engine's
 for the content of a project and for plugins:
 
 ```cmake
-aether_add_module(my_project CONTENT SOURCES src/my_project.cpp)
-target_link_libraries(my_project PRIVATE AetherEngine::core)
+aether_add_module(
+    my_project CONTENT
+    SOURCES src/my_project.cpp
+    PRIVATE AetherEngine::core
+)
 ```
 
 - The library is built in C++23 with hidden symbols: `MY_PROJECT_API`, from
@@ -91,14 +94,15 @@ target_link_libraries(my_project PRIVATE AetherEngine::core)
   that the host loads at run time, built into `bin/` next to the engine's
   libraries; in monolithic mode, a static library (its executable comes with
   the player, #49).
-- Dependencies are added with `target_link_libraries()`; linking an engine
-  module brings the [build profile](#build-profiles).
+- `PUBLIC` and `PRIVATE` list the targets it links, as
+  `target_link_libraries()` does; linking an engine module brings the
+  [build profile](#build-profiles).
 
 `aether_add_engine_module()` (`cmake/helpers/EngineModule.cmake`) declares a
 module of the engine, in `sources/<module>/`:
 
 ```cmake
-aether_add_engine_module(core SOURCES src/logger.cpp)
+aether_add_engine_module(core SOURCES src/logger.cpp PUBLIC glm::glm)
 ```
 
 It calls `aether_add_module()` for the target `aether_core`, with the alias

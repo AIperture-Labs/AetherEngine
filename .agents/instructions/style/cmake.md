@@ -18,6 +18,9 @@ Applies to every `CMakeLists.txt` and `.cmake` file in the repo, never to
   function, for content and plugins outside the engine tree: it uses no other
   helper of the engine, and nothing specific to the engine's own code goes in
   it.
+- A module lists the targets it links in the `PUBLIC` and `PRIVATE`
+  arguments of the function that declares it, not in a separate
+  `target_link_libraries()`.
 - Target-based CMake only: `target_*` commands with explicit
   `PUBLIC`/`PRIVATE`/`INTERFACE`, never directory-wide `include_directories`,
   `add_definitions` or `link_libraries`.

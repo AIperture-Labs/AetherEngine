@@ -6,21 +6,23 @@
 
 include(GenerateExportHeader)
 
-# aether_add_module(<name> [CONTENT] [INCLUDE_PREFIX <directory>] SOURCES <source>...)
+# aether_add_module(<name> [CONTENT] [INCLUDE_PREFIX <directory>] SOURCES <source>...
+#                   [PUBLIC <target>...] [PRIVATE <target>...])
 #
 # Declare the module <name>: a library built in the mode of the engine, in C++23, with hidden symbols and an
 # export macro. The public API of the engine's build: an engine module, a plugin and the content of a project
-# outside the engine tree are all declared with it. Dependencies are added with target_link_libraries().
+# outside the engine tree are all declared with it.
 #
 # - Public headers are in include/, next to the calling CMakeLists.txt.
 # - <NAME>_API, from the generated <INCLUDE_PREFIX>/export.hpp, marks the exported symbols. INCLUDE_PREFIX
 #   defaults to <name>.
+# - PUBLIC and PRIVATE list the targets it links, as target_link_libraries() does.
 # - CONTENT: the content of a project (docs/architecture.md). In dynamic mode (BUILD_SHARED_LIBS), a library
 #   that a host loads at run time and nothing links; in monolithic mode, a static library like any module.
 #   The kind follows the mode of the engine only: a static engine never gets content loaded at run time,
 #   which would carry its own copy of the engine state.
 function(aether_add_module name)
-    cmake_parse_arguments(PARSE_ARGV 1 ARG "CONTENT" "INCLUDE_PREFIX" "SOURCES")
+    cmake_parse_arguments(PARSE_ARGV 1 ARG "CONTENT" "INCLUDE_PREFIX" "SOURCES;PUBLIC;PRIVATE")
     if(NOT ARG_INCLUDE_PREFIX)
         set(ARG_INCLUDE_PREFIX "${name}")
     endif()
@@ -31,6 +33,7 @@ function(aether_add_module name)
         set(kind MODULE)
     endif()
     add_library(${name} ${kind} ${ARG_SOURCES})
+    target_link_libraries(${name} PUBLIC ${ARG_PUBLIC} PRIVATE ${ARG_PRIVATE})
 
     target_compile_features(${name} PUBLIC cxx_std_23)
     # Hidden by default so that only the symbols marked <NAME>_API are public; the shared and static builds

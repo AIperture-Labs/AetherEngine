@@ -5,7 +5,7 @@ include(AetherModule)
 include(CompilerWarnings)
 include(Coverage)
 
-# aether_add_engine_module(<module> SOURCES <source>...)
+# aether_add_engine_module(<module> SOURCES <source>... [PUBLIC <target>...] [PRIVATE <target>...])
 #
 # Declare the engine module <module> of sources/<module>/: the target aether_<module>, its alias
 # AetherEngine::<module> and its export macro AETHER_<MODULE>_API in <aether/<module>/export.hpp>. On top of
