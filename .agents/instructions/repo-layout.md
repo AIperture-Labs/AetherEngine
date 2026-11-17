@@ -12,7 +12,7 @@ nothing fits, ask instead of adding a top-level directory.
 | `VERSIONS.md` | Versions of the languages, tools and dependencies in use |
 | `scripts/just/` | `just` recipes, imported by the root `justfile` |
 | `sources/` | Engine modules, one directory per module |
-| `tests/` | Unit tests, one directory per module under test (doctest) |
+| `tests/` | Unit tests, one directory per module under test (doctest); `content/`, a content module that CI only builds |
 | `.github/` | GitHub configuration: `workflows/` (CI, see `ci.yml`) |
 | `.agents/` | AI agent instructions (`instructions/`) and skills (`skills/`) |
 | `.worktrees/` | Git worktrees, ignored by git (see `repo-workflow.md`) |
