@@ -8,4 +8,5 @@ message(STATUS "Configuring tests")
 
 include(Doctest)
 
+add_subdirectory(content)
 add_subdirectory(core)
