@@ -12,7 +12,6 @@ Applies to every `CMakeLists.txt` and `.cmake` file in the repo, never to
 - Functions are named `aether_<verb>_<object>`: CMake functions are global,
   and the prefix keeps them from colliding with those of a project that
   consumes the engine.
-- Header: copyright line, then a `# Docs:` block listing the references used.
 - A module's `CMakeLists.txt` opens with a banner naming its target, a short
   comment on its role, and `message(STATUS "Configuring ...")`.
 - Targets are `aether_<module>`, with an alias `AetherEngine::<module>`; link
