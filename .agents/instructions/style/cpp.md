@@ -2,21 +2,22 @@
 
 Applies to every C++ source and header under `sources/` and `tests/`, never
 to `extern/`. `.clang-format` and `.clang-tidy` at the root are the source of
-truth: never edit them to make code pass.
+truth.
 
 - C++23. Headers `.hpp`, sources `.cpp`, tests `*.test.cpp`.
-- Four spaces for indentation, no tabs, lines up to 120 characters.
-- Allman braces for classes, structs, functions and control statements;
-  `else` on its own line. Never a one-line `if`, loop, block or function.
-- Pointer and reference sign bind to the name: `const char *name`.
-- Attributes (`[[nodiscard]]`, `[[maybe_unused]]`...) go on their own line,
-  above the declaration.
+- The layout (indentation, line length, braces, pointers, attributes) is the
+  one clang-format produces: see the
+  [cpp-format](../../skills/cpp-format/SKILL.md) skill.
 - Namespaces `aether::<module>`, closed with `}  // namespace aether::<module>`.
-- Names follow `docs/naming.md` (kind and scope prefixes), checked by
-  clang-tidy; the boolean `b` prefix is checked in review.
+- Names follow [docs/naming.md](../../../docs/naming.md) (kind and scope
+  prefixes), checked by clang-tidy; the boolean `b` prefix is checked in
+  review.
 - Public headers live under `include/aether/<module>/` and are included with
   angle brackets: `#include <aether/core/version.hpp>`. The module's own
   header comes first, then the others, sorted by clang-format.
+- A file includes every header it uses directly, and only those: it never
+  relies on what another header includes, its own header included. Checked
+  by clang-tidy (`misc-include-cleaner`).
 - Public symbols of a shared library carry the module's generated export
   macro (`AETHER_<MODULE>_API`); everything else stays hidden.
 - Avoid exceptions, so a failure never stops the program and the success
@@ -25,7 +26,7 @@ truth: never edit them to make code pass.
   standard APIs that do not throw (`std::from_chars`, the `std::error_code`
   overloads of `std::filesystem`, `find` over `at`); catch what a standard or
   third-party call still throws at the call site and turn it into a `Result`.
-  Why: `docs/development.md`.
+  Why: [docs/development.md](../../../docs/development.md).
 - Mark functions `noexcept` when they cannot throw.
 - Prefer the `modernize-*` and `cppcoreguidelines-*` idioms: `nullptr`,
   `auto` where the type is obvious, smart pointers over owning raw pointers,

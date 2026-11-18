@@ -73,7 +73,7 @@ measurements: #32.
 
 The profile says what is compiled in or out; it is independent of
 `CMAKE_BUILD_TYPE`, which only sets the optimisation. One cache variable,
-`AETHER_BUILD_PROFILE`, picks it, and `apply_build_profile()`
+`AETHER_BUILD_PROFILE`, picks it, and `aether_apply_build_profile()`
 (`cmake/helpers/BuildProfile.cmake`) turns it into definitions on `aether_core`,
 which reach every target linking it.
 
@@ -134,9 +134,9 @@ The target runs the tests (child processes included, one profile per
 process), prints the `llvm-cov` summary of `sources/`, writes the HTML report
 to `out/build/x64-coverage-clang/coverage/html/` and fails below the minimums:
 lines 85 %, functions 90 %, branches 75 %. They are the cache variables
-`AETHER_COVERAGE_MIN_*` in `cmake/helpers/Coverage.cmake`. The CI `coverage`
-job does the same and uploads the report as an artifact.
+`AETHER_COVERAGE_MIN_*` in `cmake/Config.cmake`. The CI `coverage` job does
+the same and uploads the report as an artifact.
 
 An assertion failure ends the process with a debug trap, which would lose its
 profile: coverage builds write it first (`__llvm_profile_write_file()` in
-`assertionFailed()`). A new first-party target calls `enable_coverage()`.
+`assertionFailed()`). A new first-party target calls `aether_enable_coverage()`.

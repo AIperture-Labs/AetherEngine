@@ -5,6 +5,7 @@
 
 #include <aether/core/error.hpp>
 #include <aether/core/types.hpp>
+#include <expected>
 #include <string_view>
 
 namespace aether::core {

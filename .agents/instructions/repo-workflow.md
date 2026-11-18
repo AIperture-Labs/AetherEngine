@@ -6,10 +6,9 @@ Read this before any git, branch, commit, PR or issue operation.
 ## Branches
 
 - `main` — the stable branch, protected: no deletion, no force push. It only
-  receives `dev`, through a pull request merged with a merge commit.
-  Releases are tagged on it.
+  receives `dev`. Releases are tagged on it.
 - `dev` — the default and integration branch, protected the same way. It
-  receives feature and fix branches through pull requests, squash-merged.
+  receives the feature and fix branches.
 - Never commit directly on `main` or `dev`.
 - Feature and fix branches — one per change, created from `dev`, named
   `<type>/<short-description>` where `<type>` is a Conventional Commits type:
@@ -37,17 +36,9 @@ move the directory, then run `git worktree repair`.
 
 ## GitHub protections
 
-Settings that enforce the rules above; check them with
-`gh api repos/{owner}/{repo}/rulesets`. Change them only when the user asks.
-
-- Repository: default branch `dev`; squash merge and merge commit allowed,
-  rebase disabled; no automatic deletion of merged branches.
-- Ruleset `dev`, no bypass actor: deletion and force push blocked, linear
-  history required, changes through a pull request, squash only.
-- Ruleset `main`, no bypass actor: deletion and force push blocked, changes
-  through a pull request, merge commit only.
-- Both: 0 approving reviews while there is a single maintainer.
-- Not yet enforced: required status checks (CI exists, `.github/workflows/ci.yml`; making it required is the maintainer's call) and required reviews.
+The repository settings and the rulesets `dev` and `main` enforce the rules
+of this page; read them with `gh api repos/{owner}/{repo}/rulesets`. Change
+them only when the user asks.
 
 ## Commits
 
@@ -93,13 +84,14 @@ repository. An issue is the unit of work handed to an agent: it states its
 goal and how to verify it, and the branch and PR reference it. Prefer issues
 and PRs to plan or to-do files in the repository.
 
-Labels come in three families, one colour each:
+Labels come in three families, one colour each; `gh label list` gives the
+labels and what each one covers:
 
-- `scope: <name>`, one or more: the part of the repository touched: `build`
-  (CMake, presets, vcpkg), `ci`, `config` (editor and tooling configs),
-  `core`, `tests`, `agents` (`AGENTS.md`, `.agents/`), `docs`. The Project's
-  Area field is the product (`Engine`…), not this.
+- `scope: <name>`, one or more: the part of the repository touched. The
+  Project's Area field is the product (`Engine`…), not this.
 - `agent: <name>`, one: the agent suggested by an issue, or that did the work
-  of a PR: `claude-code`, `vibe`.
-- `model: <name>`, one: the model of that agent: `haiku`, `sonnet`, `opus`
-  for Claude Code; `mistral-medium-3.5` for Vibe.
+  of a PR.
+- `model: <name>`, one: the model of that agent.
+
+A new part of the repository, agent or model gets its label, with a
+description and the colour of its family.

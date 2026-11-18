@@ -57,7 +57,8 @@ elevated shell), configure warns and skips the link.
 
 ## 3. Before and after running it
 
-- The presets load the toolchain of the `extern/vcpkg` submodule (see `docs/dependencies.md`): the
+- The presets load the toolchain of the `extern/vcpkg` submodule (see
+  [docs/dependencies.md](../../../docs/dependencies.md)): the
   first configure bootstraps vcpkg, and every configure installs the dependencies of `vcpkg.json` into
   the build directory. The first configure is slow; later ones reuse the vcpkg binary cache.
 - A `Could not find toolchain file` error means the submodule is not checked out: run

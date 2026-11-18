@@ -23,6 +23,6 @@ Applies to every Python file in the repo.
 - The layout is the one `ruff format` produces, except a long list of plain
   values (e.g. codes), which keeps several per line with a trailing
   `# fmt: skip`.
-- A comment says only what the code can't. Docstrings are added on need, not
-  by default: for a substantial class or function whose use the name and the
-  signature don't tell, or for code whose API docs are generated from them.
+- Docstrings are added on need, not by default: for a substantial class or
+  function whose use the name and the signature don't tell, or for code whose
+  API docs are generated from them.

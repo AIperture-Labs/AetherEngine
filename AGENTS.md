@@ -16,7 +16,8 @@ For every agent, on every task:
 6. Thou shalt not handle errors that cannot happen.
 7. Thou shalt be concise and compact, in writing and in code, without
    repetition, and rewrite in 50 lines what thou wrote in 200.
-8. Thou shalt let the code explain itself, without an avalanche of comments.
+8. Thou shalt let the code explain itself, without an avalanche of comments:
+   a comment says why, never what.
 9. Thou shalt follow the coding rules strictly. Where none exists, thou shalt
    neither invent one nor mix styles, but ask, and the rule gets added to
    `.agents/`.
@@ -79,31 +80,29 @@ read the matching one before editing a file in that language.
 
 Formatting is owned by the language's formatter (clang-format for C and C++,
 the Python and Lua formatters for theirs). `.editorconfig` sets indentation
-and line length only for the file types that have no formatter (CMake, just,
-JSON, TOML, YAML, Markdown): add a section there only for such a type, never
+and line length only for the file types that have no formatter (CMake, JSON,
+TOML, YAML, Markdown): add a section there only for such a type, never
 for a language that has a formatter.
+
+A formatter or linter config is never edited to make code pass. Format and
+lint only the files of the change, never the whole tree.
 
 ## Header Comment
 
-Every source or config file starts with a header comment (copyright, license
-and, if useful, documentation), in the file's comment syntax and after the
-shebang if there is one. Docs and Markdown, generated files and files that
-can't hold comments have none.
-
-- A file starts with the organization line and the license identifier
-  (the project is under the [MPL-2.0](LICENSE)):
-  `Copyright (c) <year> AIperture-Labs <xavier.beheydt@gmail.com>` then
-  `SPDX-License-Identifier: MPL-2.0`.
-- Then, if useful, a `Doc:` line linking the documentation of the format or
-  the tool the file configures.
-- `<year>` is the current year.
-
-Example, in a C++ file:
+Every source or config file starts with a header comment, in the file's
+comment syntax and after the shebang if there is one: the organization line
+with the current year, then the license identifier (the project is under the
+[MPL-2.0](LICENSE)). In a C++ file:
 
 ```cpp
 // Copyright (c) 2026 AIperture-Labs <xavier.beheydt@gmail.com>
 // SPDX-License-Identifier: MPL-2.0
 ```
+
+Then, if useful, a `Doc:` line linking the documentation of the format or
+the tool the file configures, or a `Docs:` block, one link per line, when
+there are several. Docs and Markdown, generated files and files that can't
+hold comments have no header.
 
 ## Skills
 
