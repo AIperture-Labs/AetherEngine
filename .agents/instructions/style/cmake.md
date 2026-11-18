@@ -16,9 +16,8 @@ Applies to every `CMakeLists.txt` and `.cmake` file in the repo, never to
   comment on its role, and `message(STATUS "Configuring ...")`.
 - Targets are `aether_<module>`, with an alias `AetherEngine::<module>`; link
   and consume the alias.
-- Target-based CMake only: `target_*` commands with explicit
-  `PUBLIC`/`PRIVATE`/`INTERFACE`, never directory-wide `include_directories`,
-  `add_definitions` or `link_libraries`.
+- `target_*` commands only, never their directory-wide forms
+  (`include_directories`, `add_compile_definitions`, `link_libraries`…).
 - List sources explicitly, one per line; no `file(GLOB)`.
 - Every first-party target calls `aether_enable_warnings(<target>)`
   (`cmake/helpers/CompilerWarnings.cmake`).
