@@ -56,6 +56,16 @@ jobs:
         with:
           arch: x64
 
+      # The MS STL only accepts the Clang versions of its time: take the clang-cl that ships with Visual Studio,
+      # which follows it, not the LLVM of the runner image, which is older and comes first on PATH.
+      - name: Use the clang-cl of Visual Studio
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $llvm = "${env:VCINSTALLDIR}Tools\Llvm\x64\bin"
+          & "$llvm\clang-cl.exe" --version
+          Add-Content $env:GITHUB_PATH $llvm
+
       - name: Configure
         env:
           # vcpkg sanitizes PATH; its compiler detection needs clang-cl, found through the Visual Studio environment.
