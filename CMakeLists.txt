@@ -21,15 +21,11 @@ include(BuildProfile)
 include(CompilerWarnings)
 include(CompileCommands)
 include(Coverage)
+include(EngineModule)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
-# Hidden by default so that only symbols marked by each module's generated export macro are public;
-# the shared and static builds then expose the same interface.
-set(CMAKE_CXX_VISIBILITY_PRESET hidden)
-set(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
 
 if(AETHER_EXPORT_COMPILE_COMMANDS)
     link_compile_commands()
