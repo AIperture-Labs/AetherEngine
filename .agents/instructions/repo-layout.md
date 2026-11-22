@@ -9,7 +9,7 @@ nothing fits, ask instead of adding a top-level directory.
 | `extern/vcpkg/` | vcpkg, as a git submodule pinned to the `builtin-baseline` commit |
 | `docs/` | Engine documentation (Markdown) |
 | `sources/` | Engine modules, one directory per module |
-| `tests/` | Unit tests, one directory per module under test (doctest) |
+| `tests/` | Unit tests, one directory per module under test (doctest); `content/`, a content module that CI only builds |
 | `.github/` | GitHub configuration: `workflows/` (CI, see `ci.yml`) |
 | `.agents/` | AI agent instructions (`instructions/`) and skills (`skills/`) |
 | `.worktrees/` | Git worktrees, ignored by git (see [repo-workflow.md](repo-workflow.md)) |
