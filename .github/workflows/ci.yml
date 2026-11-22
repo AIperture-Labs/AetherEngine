@@ -40,15 +40,22 @@ jobs:
         with:
           submodules: true
 
-      - name: Resolve the vcpkg submodule commit
+      # One cache per triplet, vcpkg version and triplet files; its key ends with the hash of its content.
+      - name: Name the vcpkg cache
         id: vcpkg
         shell: bash
-        run: echo "commit=$(git rev-parse HEAD:extern/vcpkg)" >> "$GITHUB_OUTPUT"
+        run: |
+          vcpkg=$(git rev-parse --short HEAD:extern/vcpkg)
+          triplets=$(git rev-parse --short HEAD:cmake/triplets)
+          echo "cache=vcpkg-${{ matrix.triplet }}-$vcpkg-$triplets" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      # No exact key: the newest cache of that name is restored.
+      - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        id: vcpkg-cache
         with:
           path: .vcpkg-cache
-          key: vcpkg-${{ runner.os }}-${{ matrix.triplet }}-${{ hashFiles('vcpkg.json', 'cmake/triplets/**') }}-${{ steps.vcpkg.outputs.commit }}
+          key: ${{ steps.vcpkg.outputs.cache }}-
+          restore-keys: ${{ steps.vcpkg.outputs.cache }}-
 
       # clang-cl needs the MS STL and the Windows SDK of an x64 Visual Studio environment.
       - uses: ilammy/msvc-dev-cmd@c1ed231f339aec74961130db0459823a08f1b215 # v1.9.0
@@ -71,6 +78,15 @@ jobs:
           # vcpkg sanitizes PATH; its compiler detection needs clang-cl, found through the Visual Studio environment.
           VCPKG_KEEP_ENV_VARS: ${{ runner.os == 'Windows' && 'PATH' || '' }}
         run: cmake --preset ${{ matrix.preset }} -DBUILD_TESTS=ON
+
+      # vcpkg rebuilds a package when its compiler or a tool changed: save the cache when it added one.
+      - uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        if: >-
+          steps.vcpkg-cache.outputs.cache-matched-key !=
+          format('{0}-{1}', steps.vcpkg.outputs.cache, hashFiles('.vcpkg-cache/**'))
+        with:
+          path: .vcpkg-cache
+          key: ${{ steps.vcpkg.outputs.cache }}-${{ hashFiles('.vcpkg-cache/**') }}
 
       - name: Build
         run: cmake --build --preset ${{ matrix.preset }}
@@ -98,15 +114,19 @@ jobs:
         with:
           submodules: true
 
-      - name: Resolve the vcpkg submodule commit
+      - name: Name the vcpkg cache
         id: vcpkg
-        run: echo "commit=$(git rev-parse HEAD:extern/vcpkg)" >> "$GITHUB_OUTPUT"
+        run: |
+          vcpkg=$(git rev-parse --short HEAD:extern/vcpkg)
+          triplets=$(git rev-parse --short HEAD:cmake/triplets)
+          echo "cache=vcpkg-x64-linux-clang-$vcpkg-$triplets" >> "$GITHUB_OUTPUT"
 
-      # Same key as the Linux build jobs: restores their vcpkg binary cache.
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      # The cache of the Linux build jobs, which save it.
+      - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .vcpkg-cache
-          key: vcpkg-${{ runner.os }}-x64-linux-clang-${{ hashFiles('vcpkg.json', 'cmake/triplets/**') }}-${{ steps.vcpkg.outputs.commit }}
+          key: ${{ steps.vcpkg.outputs.cache }}-
+          restore-keys: ${{ steps.vcpkg.outputs.cache }}-
 
       - name: Install clang-tidy
         run: pip install clang-tidy==23.1.4
@@ -129,15 +149,19 @@ jobs:
         with:
           submodules: true
 
-      - name: Resolve the vcpkg submodule commit
+      - name: Name the vcpkg cache
         id: vcpkg
-        run: echo "commit=$(git rev-parse HEAD:extern/vcpkg)" >> "$GITHUB_OUTPUT"
+        run: |
+          vcpkg=$(git rev-parse --short HEAD:extern/vcpkg)
+          triplets=$(git rev-parse --short HEAD:cmake/triplets)
+          echo "cache=vcpkg-x64-linux-clang-$vcpkg-$triplets" >> "$GITHUB_OUTPUT"
 
-      # Same key as the Linux build jobs: restores their vcpkg binary cache.
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      # The cache of the Linux build jobs, which save it.
+      - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .vcpkg-cache
-          key: vcpkg-${{ runner.os }}-x64-linux-clang-${{ hashFiles('vcpkg.json', 'cmake/triplets/**') }}-${{ steps.vcpkg.outputs.commit }}
+          key: ${{ steps.vcpkg.outputs.cache }}-
+          restore-keys: ${{ steps.vcpkg.outputs.cache }}-
 
       - name: Configure
         run: cmake --preset x64-coverage-clang
