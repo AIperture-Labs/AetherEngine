@@ -58,7 +58,7 @@ jobs:
 
       # The MS STL only accepts the Clang versions of its time: take the clang-cl that ships with Visual Studio,
       # which follows it, not the LLVM of the runner image, which is older and comes first on PATH.
-      - name: Use the clang-cl of Visual Studio
+      - name: Select clang-cl
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
