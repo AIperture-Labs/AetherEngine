@@ -58,7 +58,7 @@ creating a file or a directory.
 Every code change follows the same loop; a task is done only when one pass
 goes through with everything green:
 
-1. Read the matching [style guide](#style-guide).
+1. Read the matching [coding rules](#coding-rules).
 2. Code the feature, or the fix (a bug starts with a test that reproduces
    it), following the guide.
 3. Lint, with the language's lint [skill](#skills) (`<language>-lint`).
@@ -73,9 +73,9 @@ its check:
 1. [Step] → verify: [check]
 2. [Step] → verify: [check]
 
-## Style Guide
+## Coding Rules
 
-Language-specific rules live in `.agents/instructions/style/<language>.md`;
+Language-specific rules live in `.agents/instructions/coding/<language>.md`;
 read the matching one before editing a file in that language.
 
 Formatting is owned by the language's formatter (clang-format for C and C++,
@@ -134,8 +134,8 @@ instead of improvising the command:
 
 ## New language or feature
 
-Introducing a new language adds both a style guide
-(`.agents/instructions/style/<language>.md`) and its skills
+Introducing a new language adds both its coding rules
+(`.agents/instructions/coding/<language>.md`) and its skills
 (`.agents/skills/<language>-format`, `-lint`, `-test`).
 
 Introducing a new tool or feature (build system, CI, runtime…) adds its

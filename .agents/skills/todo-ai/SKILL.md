@@ -21,7 +21,7 @@ autonomously. Branches, worktrees, commits and PRs follow
 4. **Dispatch.** One subagent per group, run in parallel, each in its own
    worktree and branch (`<type>/<short-description>`, from `dev`). Give each
    one: its TODOs, its plan and task list, and the instruction to follow
-   [AGENTS.md](../../../AGENTS.md) (style guide, lint, test, loop until
+   [AGENTS.md](../../../AGENTS.md) (coding rules, lint, test, loop until
    green). A subagent touches only its group's files and never spawns others.
 5. **Finish.** A subagent removes the `TODO-AI` comment in the change that
    resolves it, and reports: what changed, lint and test results, what is
