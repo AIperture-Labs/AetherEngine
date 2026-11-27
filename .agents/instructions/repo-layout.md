@@ -5,22 +5,25 @@ nothing fits, ask instead of adding a top-level directory.
 
 | Path | Content |
 | --- | --- |
-| `cmake/` | CMake entry points (`Config.cmake`), `helpers/`, find/config `modules/` and vcpkg `triplets/` |
-| `extern/vcpkg/` | vcpkg, as a git submodule pinned to the `builtin-baseline` commit |
+| `cmake/` | `Config.cmake`, the build options |
+| `cmake/helpers/` | CMake functions, included by name |
+| `cmake/triplets/` | vcpkg triplets and their toolchains |
+| `extern/vcpkg/` | vcpkg, a git submodule pinned to the `builtin-baseline` commit |
 | `docs/` | Engine documentation (Markdown) |
-| `sources/` | Engine modules, one directory per module |
-| `tests/` | Unit tests, one directory per module under test (doctest); `content/`, a content module that CI only builds |
-| `.github/` | GitHub configuration: `workflows/` (CI, see `ci.yml`) |
-| `.agents/` | AI agent instructions (`instructions/`) and skills (`skills/`) |
+| `sources/<module>/` | An engine module (see [Modules](#modules)) |
+| `tests/<module>/` | The unit tests of a module (doctest) |
+| `tests/content/` | A content module that CI only builds |
+| `.github/workflows/` | CI (`ci.yml`) |
+| `.agents/instructions/` | Agent instructions |
+| `.agents/instructions/coding/` | Coding rules, one file per language |
+| `.agents/skills/` | Skills, one directory per skill |
+| `.claude/skills` | Link to `.agents/skills`, so Claude Code finds the same skills |
 | `.worktrees/` | Git worktrees, ignored by git (see [repo-workflow.md](repo-workflow.md)) |
-| `out/` | Build directories (`out/build/<preset>/`), ignored by git |
+| `out/build/<preset>/` | Build directories, ignored by git |
 
 Root files: `CMakeLists.txt`, `CMakePresets.json`, `vcpkg.json`,
 `.clang-format`, `.clang-tidy`, `.clangd`, `.editorconfig`, `.gitattributes`,
 `.gitignore`, `.gitmodules`, `AGENTS.md`, `LICENSE`, `README.md`.
-
-`.claude/skills` is a symlink to `.agents/skills`, so Claude Code finds the
-same skills.
 
 ## Modules
 
