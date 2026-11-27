@@ -17,7 +17,8 @@ For every agent, on every task:
 7. Thou shalt be concise and compact, in writing and in code, without
    repetition, and rewrite in 50 lines what thou wrote in 200.
 8. Thou shalt let the code explain itself, without an avalanche of comments:
-   a comment says why, never what.
+   a comment says why, never what, and never repeats a rule of the
+   instructions.
 9. Thou shalt follow the coding rules strictly. Where none exists, thou shalt
    neither invent one nor mix styles, but ask, and the rule gets added to
    `.agents/`.
