@@ -26,7 +26,8 @@ Conventional Commits type. Create it from `dev`; once the branch is merged
 and the user agrees, remove the worktree and its branch:
 
 ```sh
-git worktree add -b feat/my-new-feature .worktrees/feat/my-new-feature dev
+NAME="feat/my-new-feature"
+git worktree add -b ${NAME} .worktrees/${NAME} dev
 git worktree remove .worktrees/feat/my-new-feature
 git branch -d feat/my-new-feature
 ```
