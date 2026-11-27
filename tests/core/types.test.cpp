@@ -4,6 +4,8 @@
 #include <doctest/doctest.h>
 
 #include <aether/core/types.hpp>
+#include <glm/ext/quaternion_float.hpp>
+#include <glm/ext/vector_float3.hpp>
 #include <type_traits>
 
 // The tests assert literal sizes, which are the point.

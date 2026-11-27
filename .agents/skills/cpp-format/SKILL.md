@@ -5,15 +5,14 @@ description: Format C and C++ sources with the repository's clang-format configu
 
 # Format
 
-The style is defined by `.clang-format` at the repository root. Never edit that file to make code
-pass.
+The style is defined by `.clang-format` at the repository root.
 
 ## 1. Select the files
 
-Format only the files you changed, never the whole tree:
+List the files of the change:
 
 ```bash
-git diff --name-only --diff-filter=ACMR HEAD -- '*.c' '*.h' '*.cpp' '*.hpp' '*.cc' '*.cxx' '*.ixx' '*.cppm'
+git diff --name-only --diff-filter=ACMR HEAD -- '*.cpp' '*.hpp'
 ```
 
 Add `--cached` to limit the list to staged files.
@@ -30,19 +29,6 @@ Apply in place:
 
 ```bash
 clang-format -i <files>
-```
-
-Piping the file list, per shell:
-
-```bash
-# bash / zsh
-files=$(git diff --name-only --diff-filter=ACMR HEAD -- '*.cpp' '*.hpp')
-[ -n "$files" ] && clang-format -i $files
-```
-
-```powershell
-# PowerShell
-git diff --name-only --diff-filter=ACMR HEAD -- '*.cpp' '*.hpp' | ForEach-Object { clang-format -i $_ }
 ```
 
 ## 3. Keep the diff clean

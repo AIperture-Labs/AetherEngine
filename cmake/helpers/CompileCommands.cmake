@@ -4,11 +4,11 @@
 #   - https://cmake.org/cmake/help/v4.1/variable/CMAKE_EXPORT_COMPILE_COMMANDS.html
 #   - https://clangd.llvm.org/installation#compile_commandsjson
 
-# link_compile_commands()
+# aether_link_compile_commands()
 #
 # clangd and the other language servers look for compile_commands.json at the repository root, while CMake
 # generates it in the build directory: link the former to the latter.
-function(link_compile_commands)
+function(aether_link_compile_commands)
     file(
         CREATE_LINK
         "${CMAKE_BINARY_DIR}/compile_commands.json"
@@ -16,7 +16,8 @@ function(link_compile_commands)
         SYMBOLIC
         RESULT link_result
     )
-    # Creating a symlink can be denied (e.g. on Windows without Developer Mode); that must not stop the configure.
+    # Creating a symlink can be denied (e.g. on Windows without Developer Mode); that must not stop the
+    # configure.
     if(NOT link_result EQUAL 0)
         message(
             WARNING

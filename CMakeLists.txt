@@ -28,7 +28,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 if(AETHER_EXPORT_COMPILE_COMMANDS)
-    link_compile_commands()
+    aether_link_compile_commands()
 endif()
 
 add_subdirectory(sources)
@@ -38,4 +38,4 @@ if(BUILD_TESTS)
     add_subdirectory(tests)
 endif()
 
-add_coverage_target()
+aether_add_coverage_target()

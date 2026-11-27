@@ -18,5 +18,3 @@ Apply in place:
 ```bash
 stylua <files>
 ```
-
-Format only the files you changed.

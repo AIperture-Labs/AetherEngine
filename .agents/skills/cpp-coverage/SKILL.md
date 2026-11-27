@@ -7,7 +7,7 @@ description: Measure the code coverage of AetherEngine with Clang source-based c
 
 Clang source-based coverage (`-fprofile-instr-generate -fcoverage-mapping`) on the first-party targets,
 Linux and Clang only. The `coverage` target runs the tests, prints the `llvm-cov` summary for `sources/`,
-writes an HTML report and fails below the minimums: lines 85 %, functions 90 %, branches 75 %.
+writes an HTML report and fails below the minimums.
 
 ## 1. Configure and run
 
@@ -16,8 +16,9 @@ cmake --preset x64-coverage-clang
 cmake --build --preset x64-coverage-clang --target coverage
 ```
 
-The preset is Debug with `AETHER_COVERAGE=ON` and `BUILD_TESTS=ON`. See the `cmake-configure` and
-`cmake-build` skills for failures. The tools (`llvm-cov`, `llvm-profdata`) are those found next to the
+The preset is Debug with `AETHER_COVERAGE=ON` and `BUILD_TESTS=ON`. See the
+[cmake-configure](../cmake-configure/SKILL.md) and [cmake-build](../cmake-build/SKILL.md) skills for
+failures. The tools (`llvm-cov`, `llvm-profdata`) are those found next to the
 compiler, else on `PATH`; the configure step prints which.
 
 ## 2. Read the result
@@ -25,12 +26,12 @@ compiler, else on `PATH`; the configure step prints which.
 - The summary is printed per file, then one line per kind with the minimum.
 - The HTML report is `out/build/x64-coverage-clang/coverage/html/index.html`: uncovered lines are red.
 - A failure below a minimum ends with `The code coverage is below the minimum`. Add tests (see the
-  `cpp-test` skill); never lower a threshold to make it pass.
+  [cpp-test](../cpp-test/SKILL.md) skill); never lower a threshold to make it pass.
 
 ## 3. Thresholds
 
 They are the cache variables `AETHER_COVERAGE_MIN_LINES`, `AETHER_COVERAGE_MIN_FUNCTIONS` and
-`AETHER_COVERAGE_MIN_BRANCHES`, defined in `cmake/helpers/Coverage.cmake`, the one place to change them.
+`AETHER_COVERAGE_MIN_BRANCHES`, defined in `cmake/Config.cmake`, the one place to change them.
 To check that the target fails, pass a value above the current one:
 
 ```bash

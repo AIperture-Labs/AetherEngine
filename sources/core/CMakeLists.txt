@@ -26,4 +26,4 @@ configure_file(
 )
 
 # Every module links core, which carries the build profile to all of them.
-apply_build_profile(aether_core)
+aether_apply_build_profile(aether_core)
