@@ -1,4 +1,4 @@
-# C++ style
+# C++ coding rules
 
 Applies to every C++ source and header under `sources/` and `tests/`, never
 to `extern/`. `.clang-format` and `.clang-tidy` at the root are the source of

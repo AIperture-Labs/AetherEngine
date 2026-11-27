@@ -1,4 +1,4 @@
-# CMake style
+# CMake coding rules
 
 Applies to every `CMakeLists.txt` and `.cmake` file in the repo, never to
 `extern/`.

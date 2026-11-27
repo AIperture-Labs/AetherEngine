@@ -1,4 +1,4 @@
-# Python style
+# Python coding rules
 
 Applies to every Python file in the repo.
 

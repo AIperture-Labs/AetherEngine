@@ -1,4 +1,4 @@
-# Lua style
+# Lua coding rules
 
 Applies to every Lua file in the repo: the game scripting runtime and its
 tests. Never to `extern/`.
