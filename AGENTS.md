@@ -80,9 +80,9 @@ read the matching one before editing a file in that language.
 
 Formatting is owned by the language's formatter (clang-format for C and C++,
 the Python and Lua formatters for theirs). `.editorconfig` sets indentation
-and line length only for the file types that have no formatter (CMake, JSON,
-TOML, YAML, Markdown): add a section there only for such a type, never
-for a language that has a formatter.
+and line length for every file type. For a language with a formatter, it
+takes the same values as the formatter's config, which stays the reference:
+an editor without the formatter installed still gets the basics.
 
 A formatter or linter config is never edited to make code pass. Format and
 lint only the files of the change, never the whole tree.
