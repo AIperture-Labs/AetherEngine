@@ -5,8 +5,7 @@ tests. Never to `extern/`.
 
 - Lua 5.4 syntax, unless the embedded runtime chosen for the engine says
   otherwise; then this page changes with it.
-- Four spaces for indentation, no tabs, lines up to 120 characters: same as
-  C++.
+- Four spaces for indentation, no tabs, lines up to 120 characters.
 - `local` by default; a global is a bug. A module is a local table returned at
   the end of the file.
 - Names: `snake_case` for functions, variables and modules; `PascalCase` for
