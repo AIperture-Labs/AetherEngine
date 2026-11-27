@@ -4,9 +4,9 @@ Applies to every `CMakeLists.txt` and `.cmake` file in the repo, never to
 `extern/`.
 
 - `cmake_minimum_required(VERSION 3.31...4.1)` at the top level only.
-- Indentation and line length come from
-  [.editorconfig](../../../.editorconfig). A command that does not fit takes
-  one argument per line, with the closing parenthesis on its own line.
+- Four spaces, 120 columns (also in `.editorconfig`). A command that does
+  not fit takes one argument per line, with the closing parenthesis on its
+  own line.
 - Lowercase commands, uppercase variables and keywords.
 - Functions are named `aether_<verb>_<object>`: CMake functions are global,
   and the prefix keeps them from colliding with those of a project that
