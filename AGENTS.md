@@ -12,7 +12,8 @@ For every agent, on every task:
 4. Thou shalt stop and ask when something is unclear, saying exactly what.
 5. Thou shalt do only what is asked: no hidden feature, no extra option or
    flexibility, except what a `TODO-AI` comment asks (see the
-   [todo-ai](.agents/skills/todo-ai/SKILL.md) skill).
+   [todo-ai](.agents/skills/todo-ai/SKILL.md) skill). A `TODO-HUMAN` is
+   never filled by an agent (see [Learning Mode](#learning-mode)).
 6. Thou shalt not handle errors that cannot happen.
 7. Thou shalt be concise and compact, in writing and in code, without
    repetition, and rewrite in 50 lines what thou wrote in 200.
@@ -71,6 +72,12 @@ its check:
 
 1. [Step] → verify: [check]
 2. [Step] → verify: [check]
+
+## Learning Mode
+
+On an issue labelled `owner: human`, the maintainer implements and the agent
+teaches and reviews: read
+[teaching.md](.agents/instructions/teaching.md) before working on one.
 
 ## Style Guide
 

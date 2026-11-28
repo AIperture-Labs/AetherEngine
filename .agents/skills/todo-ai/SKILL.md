@@ -6,7 +6,9 @@ description: Resolve the `TODO-AI` comments left in the repo, grouped logically,
 # TODO-AI
 
 Resolve the `TODO-AI: <description>` comments the user left in files, nearly
-autonomously. Branches, worktrees, commits and PRs follow
+autonomously. `TODO-HUMAN` comments are the maintainer's exercises (see
+`.agents/instructions/teaching.md`): skip them, never resolve one.
+Branches, worktrees, commits and PRs follow
 `.agents/instructions/repo-workflow.md`.
 
 1. **Collect.** `grep -rn "TODO-AI" --exclude-dir=.git --exclude-dir=.worktrees`.
